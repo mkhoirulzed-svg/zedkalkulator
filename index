@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kalkulator Syringe Pump</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+input, select, button {
+  margin: 8px 0;
+  padding: 8px;
+}
+.result-box {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Kalkulator Dosis Syringe Pump</h2>
+
+<label>Jenis Obat:</label><br>
+<select id="drugSelect">
+  <option value="NE">Norepinefrin</option>
+  <option value="Dopamin">Dopamin</option>
+  <option value="Dobutamin">Dobutamin</option>
+  <option value="Nicardipin">Nicardipin</option>
+</select><br>
+
+<label>Berat Badan (kg):</label><br>
+<input type="number" id="weightInput" placeholder="Masukkan BB" min="1"><br>
+
+<button onclick="calculate()">Hitung</button>
+<button onclick="window.print()">Print</button>
+
+<div id="result" class="result-box"></div>
+
+
+<script>
+function calculate() {
+  const drug = document.getElementById("drugSelect").value;
+  const bb = parseFloat(document.getElementById("weightInput").value);
+  let minDose, maxDose, conc;
+
+  if (!bb || bb <= 0) {
+    document.getElementById("result").innerHTML = "Berat badan tidak valid.";
+    return;
+  }
+
+  // rentang dosis & konsentrasi
+  if (drug === "NE") {
+    minDose = 0.05;
+    maxDose = 1;
+    conc = 1600; // mcg/ml (4mg/50ml)
+  } else if (drug === "Dopamin") {
+    minDose = 1;
+    maxDose = 20;
+    conc = 4000; // mcg/ml (200mg/50ml)
+  } else if (drug === "Dobutamin") {
+    minDose = 1;
+    maxDose = 20;
+    conc = 5000; // mcg/ml (250mg/50ml)
+  } else if (drug === "Nicardipin") {
+    minDose = 0.5;
+    maxDose = 10;
+    conc = 200; // mcg/ml (10mg/50ml)
+  }
+
+  let html = `<h3>Hasil Perhitungan ${drug}</h3>`;
+  html += `<p>BB: ${bb} kg</p>`;
+  html += `<p>Konsentrasi: ${conc} mcg/ml</p>`;
+  html += `<hr>`;
+
+  for (let dose = minDose; dose <= maxDose + 0.0001; dose += minDose) {
+    let mlHour = (dose * bb * 60) / conc;
+    html += `${dose.toFixed(2)} mcg/kg/menit = <b>${mlHour.toFixed(2)} ml/jam</b><br>`;
+  }
+
+  document.getElementById("result").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
