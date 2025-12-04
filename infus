@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kalkulator Kecepatan Infus - ZEDose</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
+
+  <!-- BACKDROP untuk menu -->
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- SIDE MENU -->
+  <aside
+    id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
+  >
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">
+        Menu Kalkulator
+      </div>
+      <button
+        type="button"
+        onclick="toggleMenu()"
+        class="p-1 rounded-md hover:bg-teal-200"
+      >
+        <span class="sr-only">Tutup menu</span>
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <!-- Ganti href sesuai nama file masing-masing -->
+      <a href="infus.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200 font-medium">
+        <span class="mr-2">💧</span> Kalkulator Tetesan Infus
+      </a>
+      <a href="index.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
+        <span class="mr-2">🧪</span> Kalkulator Infuspump
+      </a>
+      <a href="anestesi.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
+        <span class="mr-2">💤</span> Kalkulator EBV, ABL, MABL dll
+      </a>
+      <a href="luka-bakar.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
+        <span class="mr-2">🔥</span> Kalkulator Luka Bakar
+      </a>
+    </nav>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="w-full max-w-2xl flex flex-col gap-3 relative">
+    <!-- TOP BAR dengan tombol menu -->
+    <header class="flex items-center justify-between mb-2">
+      <button
+        type="button"
+        onclick="toggleMenu()"
+        class="p-2 rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <span class="sr-only">Buka menu</span>
+        <!-- ikon tiga garis -->
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800"></div>
+      </button>
+
+      <div class="text-xs sm:text-sm text-slate-500">
+        ZEDose Tools
+      </div>
+    </header>
+
+    <!-- Kartu utama -->
+    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <header class="mb-4 sm:mb-6">
+        <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
+          ZEDose Calc - Kalkulator Kecepatan Infus
+        </h1>
+        <p class="mt-1 text-xs sm:text-sm text-slate-500">
+          Hitung kecepatan infus (tetes/menit) berdasarkan volume cairan, lama waktu, dan faktor tetes.
+        </p>
+      </header>
+
+      <form id="infusForm" onsubmit="event.preventDefault(); hitungInfus();" class="space-y-4 sm:space-y-5">
+        <!-- Volume -->
+        <div class="space-y-1">
+          <label for="volumeInput" class="block text-sm font-medium text-slate-700">
+            Volume cairan (ml)
+          </label>
+          <input
+            type="number"
+            id="volumeInput"
+            min="1"
+            step="1"
+            placeholder="contoh: 500"
+            class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- Waktu -->
+        <div class="space-y-1">
+          <span class="block text-sm font-medium text-slate-700">
+            Lama pemberian
+          </span>
+          <div class="mt-1 flex gap-2">
+            <div class="flex-1">
+              <label for="jamInput" class="sr-only">Jam</label>
+              <input
+                type="number"
+                id="jamInput"
+                min="0"
+                step="1"
+                placeholder="Jam"
+                class="block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+            <div class="flex-1">
+              <label for="menitInput" class="sr-only">Menit</label>
+              <input
+                type="number"
+                id="menitInput"
+                min="0"
+                step="1"
+                placeholder="Menit"
+                class="block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <p class="text-[11px] sm:text-xs text-slate-500">
+            Contoh: 1 jam 30 menit → isi Jam = 1, Menit = 30.
+          </p>
+        </div>
+
+        <!-- Faktor tetes -->
+        <div class="space-y-1">
+          <label for="faktorSelect" class="block text-sm font-medium text-slate-700">
+            Faktor tetes (gtt/ml)
+          </label>
+          <select
+            id="faktorSelect"
+            class="mt-1 block w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="10">10 gtt/ml (makro)</option>
+            <option value="15">15 gtt/ml (makro)</option>
+            <option value="20" selected>20 gtt/ml (makro, default)</option>
+            <option value="60">60 gtt/ml (mikro)</option>
+          </select>
+        </div>
+
+        <!-- Tombol -->
+        <div class="flex flex-col sm:flex-row-reverse sm:justify-end gap-2 pt-2">
+          <button
+            type="submit"
+            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Hitung
+          </button>
+          <button
+            type="button"
+            onclick="resetInfus()"
+            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm sm:text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+
+      <!-- Hasil -->
+      <section
+        id="result"
+        class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"
+      >
+        <!-- Hasil perhitungan akan tampil di sini -->
+      </section>
+    </div>
+
+    <footer class="text-center text-[10px] sm:text-xs text-slate-500 leading-snug">
+      <div>Created by Muhmmad Khairul Zed, S.Kep.,Ners</div>
+      <div>IGD RSUD dr Doris Sylvanus Kalimantan Tengah</div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      const backdrop = document.getElementById('backdrop');
+      const isOpen = !menu.classList.contains('-translate-x-full');
+
+      if (isOpen) {
+        menu.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      } else {
+        menu.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      }
+    }
+
+    function hitungInfus() {
+      const volume = parseFloat(document.getElementById('volumeInput').value);
+      const jam    = parseFloat(document.getElementById('jamInput').value) || 0;
+      const menit  = parseFloat(document.getElementById('menitInput').value) || 0;
+      const faktor = parseFloat(document.getElementById('faktorSelect').value);
+      const resultDiv = document.getElementById('result');
+
+      if (!volume || volume <= 0) {
+        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Volume cairan tidak valid.</p>";
+        return;
+      }
+
+      const totalMenit = (jam * 60) + menit;
+      if (!totalMenit || totalMenit <= 0) {
+        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Waktu infus tidak valid. Isi jam/menit dengan benar.</p>";
+        return;
+      }
+
+      // Rumus: tetes/menit = (volume (ml) × faktor tetes) / total menit
+      const tetesPerMenit = (volume * faktor) / totalMenit;
+
+      const html = `
+        <h3 class="text-base sm:text-lg font-semibold text-slate-900 mb-1">
+          Hasil Perhitungan Kecepatan Infus
+        </h3>
+        <p class="text-xs text-slate-600 mb-1">
+          Volume: <span class="font-semibold">${volume} ml</span>,
+          Waktu: <span class="font-semibold">${jam || 0} jam ${menit || 0} menit</span>,
+          Faktor tetes: <span class="font-semibold">${faktor} gtt/ml</span>
+        </p>
+        <hr class="my-2 border-slate-200">
+        <p class="mt-1 text-sm sm:text-base">
+          Kecepatan infus: <span class="font-bold text-slate-900">${tetesPerMenit.toFixed(1)} tetes/menit</span>
+        </p>
+      `;
+
+      resultDiv.innerHTML = html;
+    }
+
+    function resetInfus() {
+      const form = document.getElementById('infusForm');
+      form.reset();
+      document.getElementById('faktorSelect').value = "20";
+      document.getElementById('result').innerHTML = "";
+    }
+  </script>
+</body>
+</html>
