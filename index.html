@@ -256,8 +256,8 @@
     // Configuration: presets map per drug
     const DRUG_PRESETS = {
       "Adrenalin": [
-        {label: "1 ampul (4 mg / 50 ml → 200 mcg/ml)", mcgPerMl: 200, doseMg: 4, volMl:50},
-        {label: "2 ampul (8 mg / 50 ml → 200 mcg/ml)", mcgPerMl: 200, doseMg: 8, volMl:50}
+        {label: "1 ampul (4 mg / 50 ml → 80 mcg/ml)", mcgPerMl: 80, doseMg: 4, volMl:50},
+        {label: "2 ampul (8 mg / 50 ml → 160 mcg/ml)", mcgPerMl: 160, doseMg: 8, volMl:50}
       ],
       "Dopamin": [
         {label: "1 ampul (200 mg / 50 ml → 4000 mcg/ml)", mcgPerMl: 4000, doseMg:200, volMl:50}
@@ -266,7 +266,7 @@
         {label: "1 ampul (250 mg / 50 ml → 5000 mcg/ml)", mcgPerMl: 5000, doseMg:250, volMl:50}
       ],
       "Milrinone": [
-        {label: "10 mg / 50 ml → 200 mcg/ml", mcgPerMl:200, doseMg:10, volMl:50}
+        {label: "20 mg / 50 ml → 400 mcg/ml", mcgPerMl:400, doseMg:10, volMl:50}
       ],
       "Herbeser": [
         {label: "1 ampul (50 mg / 50 ml → 1000 mcg/ml)", mcgPerMl:1000, doseMg:50, volMl:50}
@@ -576,7 +576,7 @@
         });
       } else if (drug === "NTG") {
         // NTG tanpa BB : mcg/menit (tidak pakai BB)
-        const ntgDoses = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+        const ntgDoses = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
         ntgDoses.forEach((dose) => {
           // ml/hour = (mcg/min * 60) / (mcg/ml)
           const mlHour = (dose * 60) / conc;
