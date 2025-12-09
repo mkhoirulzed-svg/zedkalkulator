@@ -275,7 +275,7 @@ function calculate() {
   } else {
     // Jika dosis kosong → tampilkan tabel standar seperti sebelumnya
     if (d === "NTG") {
-      [10, 20, 30, 40, 50, 60, 80, 100].forEach(x => {
+      [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 100].forEach(x => {
         const mlH = (x * 60) / c;
         html += row(x + " mcg/menit", mlH);
       });
