@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Protap Insulin - ZEDose Tools</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-btn.active {
+      background-color: #3b82f6; /* bg-blue-500 */
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-4 sm:p-6">
+
+  <!-- BACKDROP -->
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- SIDE MENU -->
+ <aside id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+
+     <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💧 Kalkulator Tetesan Infus
+      </a>
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+        🧪 Syringe Pump - Tanpa BB
+      </a>
+      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        🧪 Syringe Pump - Dengan BB
+      </a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💤 EBV | ABL | MABL
+      </a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        💊  Kalkulator Insulin
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <div class="w-full max-w-3xl flex flex-col gap-4 relative">
+
+    <!-- HEADER -->
+    <header class="flex items-center justify-between mb-1">
+      <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200 focus:ring-2 focus:ring-blue-500">
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800"></div>
+      </button>
+      <div class="text-xs sm:text-sm text-slate-500">ZEDose Tools</div>
+    </header>
+
+    <!-- TAB MENU -->
+    <div class="flex gap-2 mb-2">
+      <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm" onclick="showPage('insulinIV', this)">Protap 1</button>
+      <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm" onclick="showPage('syringePump', this)">Protap 2</button>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+    </main>
+
+    <footer class="text-center text-[10px] sm:text-xs text-slate-500 leading-snug">
+      <div>Created by Muhammad Khairul Zed, S.Kep.,Ners</div>
+      <div>IGD RSUD dr Doris Sylvanus Kalimantan Tengah</div>
+    </footer>
+
+  </div>
+
+<script>
+/* ========== DATA PROTAP ========== */
+const tabelInsulinIV = [
+  { label: "< 60", min: -Infinity, max: 59, vals: ["Hipoglikemia → terapi dextrose","","",""]},
+  { label: "60 - 70", min: 60, max: 70, vals: [0,0,0,0]},
+  { label: "70 - 109", min: 71, max: 109, vals: [0.2,0.5,1,1.5]},
+  { label: "110 - 119", min: 110, max: 119, vals: [0.5,1,2,3]},
+  { label: "120 - 149", min: 120, max: 149, vals: [1,1.5,3,5]},
+  { label: "150 - 179", min: 150, max: 179, vals: [1.5,2,4,7]},
+  { label: "180 - 209", min: 180, max: 209, vals: [2,3,5,9]},
+  { label: "210 - 239", min: 210, max: 239, vals: [2,4,6,12]},
+  { label: "240 - 269", min: 240, max: 269, vals: [3,5,8,16]},
+  { label: "270 - 299", min: 270, max: 299, vals: [3,6,10,20]},
+  { label: "300 - 329", min: 300, max: 329, vals: [4,7,12,24]},
+  { label: "330 - 359", min: 330, max: 359, vals: [4,8,14,28]},
+  { label: ">= 360", min: 360, max: Infinity, vals: [6,12,16,28]}
+];
+
+const syringePump = [
+  { gds: "< 150", rate: "0 Unit" },
+  { gds: "151 – 200", rate: "0.5 Unit" },
+  { gds: "201 – 250", rate: "1 Unit" },
+  { gds: "251 – 300", rate: "2 Unit" },
+  { gds: "301 – 350", rate: "3 Unit" },
+  { gds: "> 350", rate: "4 Unit" },
+];
+
+/* ========== RENDER FUNCTIONS ========== */
+function renderInsulinIV() {
+  konten.innerHTML = `
+    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 1</h1>
+    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr. Regy, Sp.PD, dr. Dayang, Sp.PD, dr. Maria, Sp.PD, dr. Didin, Sp.PD</p>
+    <div class="overflow-auto border rounded-lg">
+      <table class="min-w-full text-sm table-fixed">
+        <thead class="bg-teal-50">
+          <tr>
+            <th class="px-3 py-2 text-left">GDR (mg/dL)</th>
+            <th class="px-3 py-2">Alg 1</th>
+            <th class="px-3 py-2">Alg 2</th>
+            <th class="px-3 py-2">Alg 3</th>
+            <th class="px-3 py-2">Alg 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tabelInsulinIV.map((r,i)=>`
+            <tr class="${i%2?'bg-slate-50':''}">
+              <td class="px-3 py-2 font-medium">${r.label}</td>
+              <td class="px-3 py-2">${r.vals[0] || ""}</td>
+              <td class="px-3 py-2">${r.vals[1] || ""}</td>
+              <td class="px-3 py-2">${r.vals[2] || ""}</td>
+              <td class="px-3 py-2">${r.vals[3] || ""}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderSyringePump() {
+  konten.innerHTML = `
+    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 2</h1>
+    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr.Dessy, Sp.PD, dr.Dayang,Sp.PD</p>
+      <table class="min-w-full text-sm">
+        <thead class="bg-teal-50">
+          <tr><th class="px-3 py-2 text-left">GDS</th><th class="px-3 py-2 text-left">Kecepatan Pump</th></tr>
+        </thead>
+        <tbody>
+          ${syringePump.map((r,i)=>`
+            <tr class="${i%2?'bg-slate-50':''}">
+              <td class="px-3 py-2">${r.gds}</td><td class="px-3 py-2">${r.rate}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ========== PAGE HANDLER ========== */
+function showPage(page, el) {
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  el.classList.add("active");
+
+  if(page === "insulinIV") renderInsulinIV();
+  if(page === "syringePump") renderSyringePump();
+}
+
+// Default page load
+const firstTab = document.querySelector(".tab-btn");
+firstTab.classList.add("active");
+renderInsulinIV();
+
+/* ========== SIDEBAR ========== */
+function toggleMenu(){
+  document.getElementById("sideMenu").classList.toggle("-translate-x-full");
+  document.getElementById("backdrop").classList.toggle("hidden");
+}
+</script>
+
+</body>
+</html>
