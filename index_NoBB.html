@@ -107,14 +107,32 @@
 
         <!-- Wrapper Furosemide -->
         <div id="concWrapperFuro" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">Konsentrasi Furosemide</label>
-          <select id="furoConcPreset"
-            class="w-full mt-1 px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm">
-            <option value="2400">6amp/50ml (120 mg/50 ml → 2400 mcg/ml)</option>
-            <option value="4800">12amp/50ml (240 mg/50 ml → 4800 mcg/ml)</option>
-            <option value="10000">Murni 10amp/20ml (200 mg/20 ml → 10000 mcg/ml)</option>
-          </select>
-        </div>
+  <label class="text-sm font-medium text-slate-700">Konsentrasi Furosemide</label>
+
+  <div class="flex gap-2">
+    <select id="furoConcPreset"
+      class="flex-1 px-3 py-2 rounded-lg border text-sm shadow-sm">
+      <option value="2400">6 ampul (120 mg/50 ml → 2,4 mg/ml)</option>
+      <option value="4800">12 ampul (240 mg/50 ml → 4,8 mg/ml)</option>
+      <option value="10000">10 ampul murni(200 mg/20 ml → 10 mg/ml)</option>
+    </select>
+
+    <button type="button" onclick="toggleFuroCustom()"
+      class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">
+      Custom
+    </button>
+  </div>
+
+  <div id="furoCustomWrapper" class="hidden mt-2">
+    <div class="grid grid-cols-2 gap-2">
+      <input type="number" id="furoCustomDose" placeholder="Dosis (mg)"
+        class="rounded-lg border px-3 py-2 text-sm" />
+      <input type="number" id="furoCustomVolume" placeholder="Volume (ml)"
+        class="rounded-lg border px-3 py-2 text-sm" />
+    </div>
+  </div>
+</div>
+
 
         <!-- INPUT DOSIS (OPSIONAL) -->
         <div>
@@ -165,6 +183,12 @@ function toggleMenu() {
 function togglePPICustom() {
   ppiCustomWrapper.classList.toggle("hidden");
   ppiConc.classList.toggle("hidden");
+    
+}
+    
+function toggleFuroCustom() {
+  furoCustomWrapper.classList.toggle("hidden");
+  furoConcPreset.classList.toggle("hidden");
 }
 
 function setDefaultConc() {
@@ -224,8 +248,17 @@ function getConc() {
 
   // Furosemide pakai preset sendiri
   if (d === "Furosemide") {
+  if (!furoConcPreset.classList.contains("hidden")) {
     return parseFloat(furoConcPreset.value);
   }
+
+  const mg = parseFloat(furoCustomDose.value);
+  const ml = parseFloat(furoCustomVolume.value);
+  if (isNaN(mg) || isNaN(ml) || ml <= 0) return NaN;
+
+  return (mg * 1000) / ml; // mg → mcg/ml
+}
+
 
   // NTG / PPI / Lansoprazole: preset atau custom
   if (!ppiConc.classList.contains("hidden")) {
