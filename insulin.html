@@ -4,12 +4,40 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Protap Insulin - ZEDose Tools</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind CSS v4 via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
   <style>
     .tab-btn.active {
       background-color: #3b82f6; /* bg-blue-500 */
       color: white;
       font-weight: bold;
+    }
+
+    /* Print: hanya elemen .print-area yang terlihat, tapi tanpa membuat parent-nya display:none */
+    @media print {
+      /* Sembunyikan semua secara visual */
+      body * {
+        visibility: hidden;
+      }
+
+      /* Tampilkan kembali area yang akan diprint */
+      .print-area,
+      .print-area * {
+        visibility: visible;
+      }
+
+      /* Posisikan area cetak memenuhi halaman */
+      .print-area {
+        position: absolute !important;
+        inset: 0;
+        width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: white !important;
+      }
     }
   </style>
 </head>
@@ -20,7 +48,7 @@
   <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
 
   <!-- SIDE MENU -->
- <aside id="sideMenu"
+  <aside id="sideMenu"
     class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
       <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
@@ -30,7 +58,7 @@
       </button>
     </div>
 
-     <nav class="p-4 text-sm space-y-1 text-slate-800">
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
       <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         💧 Kalkulator Tetesan Infus
       </a>
@@ -80,6 +108,9 @@
   </div>
 
 <script>
+// Pastikan elemen konten ter-referensi dengan aman
+const konten = document.getElementById('konten');
+
 /* ========== DATA PROTAP ========== */
 const tabelInsulinIV = [
   { label: "< 60", min: -Infinity, max: 59, vals: ["Hipoglikemia → terapi dextrose","","",""]},
@@ -108,10 +139,24 @@ const syringePump = [
 
 /* ========== RENDER FUNCTIONS ========== */
 function renderInsulinIV() {
+  if (!konten) return;
   konten.innerHTML = `
     <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 1</h1>
     <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr. Regy, Sp.PD, dr. Dayang, Sp.PD, dr. Maria, Sp.PD, dr. Didin, Sp.PD</p>
-    <div class="overflow-auto border rounded-lg">
+
+    <div class="mb-3 flex items-center gap-3">
+      <label class="text-sm text-slate-600">Pilih Algoritma</label>
+      <select id="algSelect" class="px-2 py-1 border rounded bg-white text-sm">
+        <option value="">-- Pilih Algoritma --</option>
+        <option value="0">Algoritma 1</option>
+        <option value="1">Algoritma 2</option>
+        <option value="2">Algoritma 3</option>
+        <option value="3">Algoritma 4</option>
+      </select>
+      <button id="insClearBtn" class="ml-2 px-3 py-1 text-sm rounded border bg-white hidden" onclick="clearAlgSelect()">Clear</button>
+    </div>
+
+    <div id="insFullTable" class="overflow-auto border rounded-lg mb-4">
       <table class="min-w-full text-sm table-fixed">
         <thead class="bg-teal-50">
           <tr>
@@ -135,13 +180,94 @@ function renderInsulinIV() {
         </tbody>
       </table>
     </div>
+
+    <!-- Area that will show filtered algorithm-only table + print button -->
+    <div id="insAlgViewContainer" class="hidden">
+      <div class="mb-3 text-sm text-slate-600" id="insAlgTitle"></div>
+      <div id="insAlgPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
+        <!-- Injected algorithm-only table will appear here -->
+      </div>
+      <div class="flex gap-2">
+        <button id="insPrintBtn" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printElement('insAlgPrintArea')">Print Algoritma</button>
+        <button class="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="showPage('insulinIV', document.querySelector('.tab-btn'))">Kembali</button>
+      </div>
+    </div>
+  `;
+
+  const selectEl = document.getElementById('algSelect');
+  if (selectEl) {
+    selectEl.addEventListener('change', (e)=>{
+      const val = e.target.value;
+      const clearBtn = document.getElementById('insClearBtn');
+      const fullTable = document.getElementById('insFullTable');
+      const container = document.getElementById('insAlgViewContainer');
+
+      if(val === "") {
+        if (container) container.classList.add('hidden');
+        if (clearBtn) clearBtn.classList.add('hidden');
+        if (fullTable) fullTable.classList.remove('hidden');
+      } else {
+        if (clearBtn) clearBtn.classList.remove('hidden');
+        if (fullTable) fullTable.classList.add('hidden');
+        if (container) container.classList.remove('hidden');
+        renderInsulinAlgTable(parseInt(val,10));
+      }
+    });
+  }
+}
+
+function clearAlgSelect(){
+  const sel = document.getElementById('algSelect');
+  if (!sel) return;
+  sel.value = "";
+  sel.dispatchEvent(new Event('change'));
+}
+
+function renderInsulinAlgTable(algIndex){
+  const title = `Algoritma ${algIndex + 1}`;
+  const titleEl = document.getElementById('insAlgTitle');
+  if (titleEl) titleEl.textContent = `Menampilkan: ${title} — hanya kolom GDR dan ${title}`;
+  const container = document.getElementById('insAlgPrintArea');
+  if (!container) return;
+
+  const rows = tabelInsulinIV.map((r,i)=>`
+    <tr class="${i%2?'bg-slate-50':''}">
+      <td class="px-3 py-2 font-medium">${r.label}</td>
+      <td class="px-3 py-2">${formatVal(r.vals[algIndex])}</td>
+    </tr>
+  `).join("");
+
+  container.innerHTML = `
+    <table class="min-w-full text-sm">
+      <thead class="bg-teal-50">
+        <tr>
+          <th class="px-3 py-2 text-left">GDR (mg/dL)</th>
+          <th class="px-3 py-2 text-left">Alg ${algIndex + 1}</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+      </tbody>
+    </table>
   `;
 }
 
+function formatVal(v){
+  if(v === "" || v === undefined || v === null) return "";
+  if(typeof v === 'string') return v;
+  if(typeof v === 'number'){
+    return Number.isInteger(v) ? v.toString() : v.toString().replace(/(?:\.0+|(\.\d+?)0+)$/,'$1');
+  }
+  return v;
+}
+
 function renderSyringePump() {
+  if (!konten) return;
   konten.innerHTML = `
     <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 2</h1>
     <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr.Dessy, Sp.PD, dr.Dayang,Sp.PD</p>
+
+    <div id="syringePrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
       <table class="min-w-full text-sm">
         <thead class="bg-teal-50">
           <tr><th class="px-3 py-2 text-left">GDS</th><th class="px-3 py-2 text-left">Kecepatan Pump</th></tr>
@@ -154,28 +280,53 @@ function renderSyringePump() {
         </tbody>
       </table>
     </div>
+
+    <div class="flex gap-2">
+      <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printElement('syringePrintArea')">Print Protap 2</button>
+      <button class="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="showPage('syringePump', document.querySelectorAll('.tab-btn')[1])">Kembali</button>
+    </div>
   `;
 }
 
 /* ========== PAGE HANDLER ========== */
 function showPage(page, el) {
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-  el.classList.add("active");
+  if(el) el.classList.add("active");
 
   if(page === "insulinIV") renderInsulinIV();
   if(page === "syringePump") renderSyringePump();
 }
 
 // Default page load
-const firstTab = document.querySelector(".tab-btn");
-firstTab.classList.add("active");
-renderInsulinIV();
+window.addEventListener('DOMContentLoaded', () => {
+  const firstTab = document.querySelector(".tab-btn");
+  if (firstTab) firstTab.classList.add("active");
+  renderInsulinIV();
+});
 
 /* ========== SIDEBAR ========== */
 function toggleMenu(){
   document.getElementById("sideMenu").classList.toggle("-translate-x-full");
   document.getElementById("backdrop").classList.toggle("hidden");
 }
+
+/* ========== PRINT HELPERS ========== */
+function printElement(elementId){
+  const el = document.getElementById(elementId);
+  if(!el){
+    alert('Elemen untuk dicetak tidak ditemukan.');
+    return;
+  }
+
+  // Pastikan elemen target punya kelas print-area
+  if (!el.classList.contains('print-area')) {
+    el.classList.add('print-area');
+  }
+
+  // Trigger print - CSS @media print akan mengatur elemen yang tampil
+  window.print();
+}
+
 </script>
 
 </body>
