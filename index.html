@@ -9,649 +9,364 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <!-- Favicon -->
-<link rel="icon" type="image/png" href="512x512.png">
-<link rel="apple-touch-icon" href="512x512.png">
-<link rel="manifest" href="manifest.json">
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="manifest" href="manifest.json">
+
+  <style>.hidden { display: none; }</style>
 </head>
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
-  <style>
-    .hidden { display: none; }
-    .small { font-size: 12px; }
-  </style>
-</head>
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
-
-  <!-- BACKDROP untuk menu -->
+  <!-- BACKDROP -->
   <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
 
   <!-- SIDE MENU -->
-  <aside
-    id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
-  >
+  <aside id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
       <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button type="button" onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
         <span class="sr-only">Tutup menu</span>
         <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
         <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
       </button>
     </div>
-
     <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="infus.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
-        <span class="mr-2">💧</span> Kalkulator Tetesan Infus
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💧 Kalkulator Tetesan Infus
       </a>
-      <a href="index.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200 font-medium">
-        <span class="mr-2">🧪</span> Kalkulator Syringe Pump
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+        🧪 Syringe Pump - Tanpa BB
       </a>
-      <a href="anestesi.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
-        <span class="mr-2">💤</span> Kalkulator EBV, ABL, MABL dll
+      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        🧪 Syringe Pump - Dengan BB
       </a>
-      <a href="luka-bakar.html" class="flex items-center px-2 py-2 rounded-md hover:bg-teal-200">
-        <span class="mr-2">🔥</span> Kalkulator Luka Bakar
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💤 EBV | ABL | MABL
+      </a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💊  Kalkulator Insulin
       </a>
     </nav>
   </aside>
 
-  <!-- Container utama -->
+  <!-- MAIN CONTAINER -->
   <div class="w-full max-w-2xl flex flex-col gap-3">
-
-    <!-- TOP BAR -->
     <header class="flex items-center justify-between mb-2">
-      <button type="button" onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <span class="sr-only">Buka menu</span>
+      <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200">
         <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
         <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
         <div class="w-5 h-0.5 bg-slate-800"></div>
       </button>
-
       <div class="text-xs sm:text-sm text-slate-500">ZEDose Tools</div>
     </header>
 
-    <!-- Kartu utama -->
+    <!-- CARD -->
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <header class="mb-4 sm:mb-6">
-        <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">Kalkulator Obat Syringe Pump </h1>
-        <p class="mt-1 text-xs sm:text-sm text-slate-500">Hitung kecepatan Obat berdasarkan Berat Badan. Klik custom untuk menambahkan pengenceran secara manual</p>
+        <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat berdasarkan BB.</p>
       </header>
 
-      <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4 sm:space-y-5">
-        <!-- Pilih obat -->
+      <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
+
+        <!-- Drug Select -->
         <div class="space-y-1">
-          <label for="drugSelect" class="block text-sm font-medium text-slate-700">Pilih obat</label>
-          <select id="drugSelect" onchange="setDefaultConc()" class="mt-1 block w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <label class="text-sm font-medium text-slate-700">Pilih obat</label>
+          <select id="drugSelect" onchange="setDefaultConc()"
+            class="w-full rounded-lg border px-3 py-2 shadow-sm">
             <option value="">-- Pilih obat --</option>
             <option value="NE">Norepinefrin (NE)</option>
             <option value="Adrenalin">Adrenalin</option>
             <option value="Dopamin">Dopamin</option>
             <option value="Dobutamin">Dobutamin</option>
             <option value="Milrinone">Milrinone</option>
-            <option value="PPI">OMZ / Panto </option>
             <option value="Nicardipin">Nicardipin</option>
             <option value="Herbeser">Herbeser</option>
-            <option value="NTG">NTG (tanpa BB)</option>
             <option value="NTG_BB">NTG (dengan BB)</option>
-            <option value="Furosemide">Furosemide</option>
           </select>
         </div>
 
-        <!-- Berat badan -->
+        <!-- Weight -->
         <div id="weightWrapper" class="space-y-1">
-          <label for="weightInput" class="block text-sm font-medium text-slate-700">Berat badan (kg)</label>
-          <input type="number" id="weightInput" min="0" step="0.1" placeholder="contoh: 60" class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+          <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
+          <input id="weightInput" type="number" min="1"
+            class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
         </div>
 
-        <!-- NE wrapper (preset + custom) -->
+        <!-- NE -->
         <div id="concWrapperNE" class="hidden space-y-1">
-          <label class="block text-sm font-medium text-slate-700">Konsentrasi Norepinefrin (preset / custom)</label>
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Norepinefrin</label>
           <div class="flex gap-2">
-            <select id="neConc" class="flex-1 mt-1 block rounded-lg border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+            <select id="neConc"
+              class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
               <option value="80">1 ampul (4 mg/50 ml → 80 mcg/ml)</option>
               <option value="160">2 ampul (8 mg/50 ml → 160 mcg/ml)</option>
             </select>
-            <button type="button" id="neToggleBtn" onclick="toggleNEMode()" class="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium">Custom</button>
+            <button id="neToggleBtn" type="button" onclick="toggleNEMode()"
+              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
           </div>
           <div id="neCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="neCustomDose" min="0" step="0.1" placeholder="Dosis (mg)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-              <input type="number" id="neCustomVolume" min="0" step="1" placeholder="Volume (ml)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
+              <input id="neCustomDose" type="number" placeholder="mg"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="neCustomVolume" type="number" placeholder="ml"
+                class="rounded-lg border px-3 py-2 text-sm" />
             </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Masukkan mg dan ml → konsentrasi dihitung otomatis.</p>
           </div>
         </div>
 
-        <!-- Nicardipin wrapper (preset + custom) -->
+        <!-- Nicardipine -->
         <div id="concWrapperNica" class="hidden space-y-1">
-          <label class="block text-sm font-medium text-slate-700">Konsentrasi Nicardipin (preset / custom)</label>
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Nicardipin</label>
           <div class="flex gap-2">
-            <select id="nicaConc" class="flex-1 mt-1 block rounded-lg border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
+            <select id="nicaConc"
+              class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
               <option value="200">1 ampul (10 mg/50 ml → 200 mcg/ml)</option>
               <option value="400">2 ampul (20 mg/50 ml → 400 mcg/ml)</option>
             </select>
-            <button type="button" id="nicaToggleBtn" onclick="toggleNicaMode()" class="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium">Custom</button>
+            <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()"
+              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
           </div>
           <div id="nicaCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="nicaCustomDose" min="0" step="0.1" placeholder="Dosis (mg)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-              <input type="number" id="nicaCustomVolume" min="0" step="1" placeholder="Volume (ml)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
+              <input id="nicaCustomDose" type="number" placeholder="mg"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="nicaCustomVolume" type="number" placeholder="ml"
+                class="rounded-lg border px-3 py-2 text-sm" />
             </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Masukkan mg dan ml → konsentrasi dihitung otomatis.</p>
           </div>
         </div>
 
-        <!-- PPI wrapper -->
-        <div id="concWrapperPPI" class="hidden space-y-1">
-          <label class="block text-sm font-medium text-slate-700">Konsentrasi PPI (preset / custom)</label>
-          <div class="flex gap-2">
-            <select id="ppiConc" class="flex-1 mt-1 block rounded-lg border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
-              <option value="800">1 vial (40 mg/50 ml → 800 mcg/ml)</option>
-              <option value="1600">2 vial (80 mg/50 ml → 1600 mcg/ml)</option>
-            </select>
-            <button type="button" id="ppiToggleBtn" onclick="togglePPIMode()" class="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium">Custom</button>
-          </div>
-          <div id="ppiCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="ppiCustomDose" min="0" step="0.1" placeholder="Dosis (mg)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-              <input type="number" id="ppiCustomVolume" min="0" step="1" placeholder="Volume (ml)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Masukkan mg dan ml → konsentrasi dihitung otomatis.</p>
-          </div>
-        </div>
-
-        <!-- Other drugs wrapper (dynamic preset + custom) -->
+        <!-- Generic Others -->
         <div id="concWrapperOther" class="hidden space-y-1">
-          <label class="block text-sm font-medium text-slate-700">Konsentrasi <span id="drugNameLabel"></span> (preset / custom)</label>
-
-          <!-- Preset area will be generated dynamically -->
-          <div id="otherPresetArea" class="space-y-2">
-            <!-- Example structure:
-              <div class="flex gap-2">
-                <select id="otherPresetSelect" class="..."> <option value="200">... </select>
-                <button onclick="toggleOtherMode()">Custom</button>
-              </div>
-            -->
-          </div>
-
-          <!-- Custom mg/ml -->
+          <label class="text-sm font-medium text-slate-700">
+            Konsentrasi <span id="drugNameLabel"></span>
+          </label>
+          <div id="otherPresetArea" class="space-y-2"></div>
           <div id="otherCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="otherCustomDose" min="0" step="0.1" placeholder="Dosis (mg)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-              <input type="number" id="otherCustomVolume" min="0" step="1" placeholder="Volume (ml)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
+              <input id="otherCustomDose" type="number" placeholder="mg"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="otherCustomVolume" type="number" placeholder="ml"
+                class="rounded-lg border px-3 py-2 text-sm" />
             </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Masukkan mg dan ml → konsentrasi dihitung otomatis.</p>
           </div>
         </div>
 
-        <!-- Furosemide wrapper -->
-        <div id="concWrapperFuro" class="hidden space-y-1">
-          <label class="block text-sm font-medium text-slate-700">Konsentrasi Furosemide (preset / custom)</label>
-          <div class="flex gap-2">
-            <select id="furoConcPreset" class="flex-1 mt-1 block rounded-lg border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
-              <option value="2400">6 ampul (120 mg/50 ml → 2400 mcg/ml)</option>
-              <option value="4800">12 ampul (240 mg/50 ml → 4800 mcg/ml)</option>
-              <option value="10000">10 ampul murni (200 mg/20 ml → 10000 mcg/ml)</option>
-            </select>
-            <button type="button" id="furoToggleBtn" onclick="toggleFuroMode()" class="mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium">Custom</button>
-          </div>
-          <div id="furoCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="furoCustomDose" min="0" step="0.1" placeholder="Dosis (mg)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-              <input type="number" id="furoCustomVolume" min="0" step="1" placeholder="Volume (ml)" class="rounded-lg border-slate-300 px-3 py-2 text-sm" />
-            </div>
-            <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Masukkan mg dan ml → konsentrasi dihitung otomatis.</p>
-          </div>
-        </div>
-
-        <!-- Tombol -->
-        <div class="flex flex-col sm:flex-row-reverse sm:justify-end gap-2 pt-2">
-          <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700">
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row-reverse gap-2 pt-2">
+          <button type="submit"
+            class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-lg">
             Hitung
           </button>
-          <button type="button" onclick="printResultOnly()" class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm sm:text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50">
+          <button type="button" onclick="printResultOnly()"
+            class="border bg-white font-medium px-4 py-2.5 rounded-lg text-slate-700">
             Print hasil
           </button>
         </div>
       </form>
 
-      <!-- Hasil -->
-      <section id="result" class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]">
-        <!-- Hasil perhitungan akan tampil di sini -->
+      <section id="result"
+        class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]">
       </section>
     </div>
 
-    <footer class="text-center text-[10px] sm:text-xs text-slate-500 leading-snug">
+    <footer class="text-[10px] text-center text-slate-500">
       <div>Created by Muhammad Khairul Zed, S.Kep.,Ners</div>
-      <div>IGD RSUD dr Doris Sylvanus Kalimantan Tengah</div>
+      <div>IGD RSUD dr Doris Sylvanus Kalteng</div>
     </footer>
   </div>
 
-  <!-- Script utama -->
-  <script>
-    // Helper toggles
-    function toggleMenu() {
-      const menu = document.getElementById('sideMenu');
-      const backdrop = document.getElementById('backdrop');
-      const isOpen = !menu.classList.contains('-translate-x-full');
-      if (isOpen) {
-        menu.classList.add('-translate-x-full'); backdrop.classList.add('hidden');
-      } else {
-        menu.classList.remove('-translate-x-full'); backdrop.classList.remove('hidden');
-      }
-    }
+<script>
+function toggleMenu(){
+  const m=document.getElementById('sideMenu');
+  const b=document.getElementById('backdrop');
+  const o=!m.classList.contains('-translate-x-full');
+  if(o){m.classList.add('-translate-x-full');b.classList.add('hidden')}
+  else{m.classList.remove('-translate-x-full');b.classList.remove('hidden')}
+}
 
-    // Toggle functions
-    function toggleNEMode() { document.getElementById("neCustomWrapper").classList.toggle("hidden"); document.getElementById("neConc").classList.toggle("hidden"); document.getElementById("neToggleBtn").textContent = document.getElementById("neCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset"; }
-    function toggleNicaMode() { document.getElementById("nicaCustomWrapper").classList.toggle("hidden"); document.getElementById("nicaConc").classList.toggle("hidden"); document.getElementById("nicaToggleBtn").textContent = document.getElementById("nicaCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset"; }
-    function togglePPIMode() { document.getElementById("ppiCustomWrapper").classList.toggle("hidden"); document.getElementById("ppiConc").classList.toggle("hidden"); document.getElementById("ppiToggleBtn").textContent = document.getElementById("ppiCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset"; }
-    function toggleFuroMode() { document.getElementById("furoCustomWrapper").classList.toggle("hidden"); document.getElementById("furoConcPreset").classList.toggle("hidden"); document.getElementById("furoToggleBtn").textContent = document.getElementById("furoCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset"; }
-    function toggleOtherMode() { document.getElementById("otherCustomWrapper").classList.toggle("hidden"); const btn = document.getElementById("otherToggleBtn"); if (btn) btn.textContent = document.getElementById("otherCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset"; }
+// Toggles
+function toggleNEMode(){toggleDual('ne')}
+function toggleNicaMode(){toggleDual('nica')}
+function toggleDual(prefix){
+  const wrap=document.getElementById(prefix+"CustomWrapper");
+  const sel=document.getElementById(prefix+"Conc");
+  const btn=document.getElementById(prefix+"ToggleBtn");
+  wrap.classList.toggle("hidden");
+  sel.classList.toggle("hidden");
+  btn.textContent=wrap.classList.contains("hidden")?"Custom":"Pakai preset";
+}
 
-    // Configuration: presets map per drug
-    const DRUG_PRESETS = {
-      "Adrenalin": [
-        {label: "1 ampul (4 mg / 50 ml → 80 mcg/ml)", mcgPerMl: 80, doseMg: 4, volMl:50},
-        {label: "2 ampul (8 mg / 50 ml → 160 mcg/ml)", mcgPerMl: 160, doseMg: 8, volMl:50}
-      ],
-      "Dopamin": [
-        {label: "1 ampul (200 mg / 50 ml → 4000 mcg/ml)", mcgPerMl: 4000, doseMg:200, volMl:50}
-      ],
-      "Dobutamin": [
-        {label: "1 ampul (250 mg / 50 ml → 5000 mcg/ml)", mcgPerMl: 5000, doseMg:250, volMl:50}
-      ],
-      "Milrinone": [
-        {label: "20 mg / 50 ml → 400 mcg/ml", mcgPerMl:400, doseMg:10, volMl:50}
-      ],
-      "Herbeser": [
-        {label: "1 ampul (50 mg / 50 ml → 1000 mcg/ml)", mcgPerMl:1000, doseMg:50, volMl:50}
-      ],
-      "NTG": [
-        {label: "1 ampul (10 mg / 50 ml → 200 mcg/ml)", mcgPerMl:200, doseMg:10, volMl:50}
-      ],
-      "NTG_BB": [
-        {label: "5 ampul (50 mg / 50 ml → 1000 mcg/ml)", mcgPerMl:1000, doseMg:50, volMl:50}
-      ],
-      "Furosemide": [
-        {label: "6 ampul (120 mg / 50 ml → 2400 mcg/ml)", mcgPerMl:2400, doseMg:120, volMl:50},
-        {label: "12 ampul (240 mg / 50 ml → 4800 mcg/ml)", mcgPerMl:4800, doseMg:240, volMl:50},
-        {label: "200 mg / 20 ml → 10000 mcg/ml", mcgPerMl:10000, doseMg:200, volMl:20}
-      ],
-      // keep NE and Nicardipin handled separately (they have own wrappers)
-    };
+const DRUG_PRESETS={
+  "Adrenalin":[
+  { label: "1 ampul (4 mg/50 ml → 80 mcg/ml)", mcgPerMl: 80 },
+  { label: "2 ampul (8 mg/50 ml → 160 mcg/ml)", mcgPerMl: 160 }],
+  "Dopamin":[{label:"1 ampul (200 mg/50 ml → 4000 mcg/ml)",mcgPerMl:4000}],
+  "Dobutamin":[{label:"1 ampul (250 mg/50 ml → 5000 mcg/ml)",mcgPerMl:5000}],
+  "Milrinone":[{label:"20 mg/50 ml → 400 mcg/ml",mcgPerMl:400}],
+  "Herbeser":[{label:"1 ampul (50 mg/50 ml → 1000 mcg/ml)",mcgPerMl:1000}],
+  "NTG_BB":[{label:"5 ampul (50 mg/50 ml → 1000 mcg/ml)",mcgPerMl:1000}]
+};
 
-    // When user picks drug: show correct wrapper and presets
-    function setDefaultConc() {
-      hideAllConcWrappers();
-      document.getElementById("weightWrapper").classList.remove("hidden");
+function setDefaultConc(){
+  hideAllConcWrappers();
+  document.getElementById("weightWrapper").classList.remove("hidden");
+  const drug=document.getElementById("drugSelect").value;
+  const presetArea=document.getElementById("otherPresetArea");
+  presetArea.innerHTML="";
+  if(!drug)return;
 
-      const drug = document.getElementById("drugSelect").value;
-      const otherPresetArea = document.getElementById("otherPresetArea");
-      otherPresetArea.innerHTML = ""; // clear
+  if(drug==="NE"){document.getElementById("concWrapperNE").classList.remove("hidden");return}
+  if(drug==="Nicardipin"){document.getElementById("concWrapperNica").classList.remove("hidden");return}
 
-      if (!drug) {
-        return;
-      }
+  document.getElementById("concWrapperOther").classList.remove("hidden");
+  document.getElementById("drugNameLabel").textContent=drug;
 
-      // NE (handled)
-      if (drug === "NE") {
-        document.getElementById("concWrapperNE").classList.remove("hidden");
-        return;
-      }
-
-      // Nicardipin
-      if (drug === "Nicardipin") {
-        document.getElementById("concWrapperNica").classList.remove("hidden");
-        return;
-      }
-
-      // PPI
-      if (drug === "PPI") {
-        document.getElementById("concWrapperPPI").classList.remove("hidden");
-        document.getElementById("weightWrapper").classList.add("hidden"); // PPI mg/jam
-        return;
-      }
-
-      // Furosemide
-      if (drug === "Furosemide") {
-        document.getElementById("concWrapperFuro").classList.remove("hidden");
-        document.getElementById("weightWrapper").classList.add("hidden");
-        return;
-      }
-
-      // Other drugs: build preset select if available
-      document.getElementById("concWrapperOther").classList.remove("hidden");
-      document.getElementById("drugNameLabel").textContent = drug;
-
-      // if drug has preset set, build select element and custom toggle
-      if (DRUG_PRESETS[drug]) {
-        const presets = DRUG_PRESETS[drug];
-        const wrapper = document.createElement("div");
-        wrapper.className = "flex gap-2";
-
-        const select = document.createElement("select");
-        select.id = "otherPresetSelect";
-        select.className = "flex-1 mt-1 block rounded-lg border-slate-300 bg-white px-3 py-2 text-sm shadow-sm";
-        presets.forEach((p, idx) => {
-          const opt = document.createElement("option");
-          opt.value = p.mcgPerMl;
-          opt.textContent = p.label;
-          select.appendChild(opt);
-        });
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.id = "otherToggleBtn";
-        btn.className = "mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium";
-        btn.textContent = "Custom";
-        btn.onclick = function() {
-          document.getElementById("otherCustomWrapper").classList.toggle("hidden");
-          select.classList.toggle("hidden");
-          btn.textContent = document.getElementById("otherCustomWrapper").classList.contains("hidden") ? "Custom" : "Pakai preset";
-        };
-
-        wrapper.appendChild(select);
-        wrapper.appendChild(btn);
-        otherPresetArea.appendChild(wrapper);
-
-      } else {
-        // No preset — show a simple input for concentration
-        const wrapper = document.createElement("div");
-        wrapper.className = "flex gap-2";
-        const input = document.createElement("input");
-        input.id = "concInputManual";
-        input.type = "number";
-        input.min = "1";
-        input.step = "1";
-        input.placeholder = "Konsentrasi (mcg/ml)";
-        input.className = "flex-1 mt-1 block rounded-lg border-slate-300 px-3 py-2 text-sm shadow-sm";
-        wrapper.appendChild(input);
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "mt-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium";
-        btn.textContent = "Custom mg/ml";
-        btn.onclick = function() {
-          document.getElementById("otherCustomWrapper").classList.toggle("hidden");
-          input.classList.toggle("hidden");
-        };
-        wrapper.appendChild(btn);
-        otherPresetArea.appendChild(wrapper);
-      }
-
-      // For NTG (no BB) hide weight
-      if (drug === "NTG") {
-        document.getElementById("weightWrapper").classList.add("hidden");
-      }
-
-      // If NTG_BB keep weight visible
-      if (drug === "NTG_BB") {
-        document.getElementById("weightWrapper").classList.remove("hidden");
-      }
-    }
-
-    function hideAllConcWrappers() {
-      document.getElementById("concWrapperNE").classList.add("hidden");
-      document.getElementById("concWrapperNica").classList.add("hidden");
-      document.getElementById("concWrapperPPI").classList.add("hidden");
-      document.getElementById("concWrapperOther").classList.add("hidden");
-      document.getElementById("concWrapperFuro").classList.add("hidden");
-      // hide custom sub-wrappers
-      if (document.getElementById("neCustomWrapper")) document.getElementById("neCustomWrapper").classList.add("hidden");
-      if (document.getElementById("nicaCustomWrapper")) document.getElementById("nicaCustomWrapper").classList.add("hidden");
-      if (document.getElementById("ppiCustomWrapper")) document.getElementById("ppiCustomWrapper").classList.add("hidden");
-      if (document.getElementById("furoCustomWrapper")) document.getElementById("furoCustomWrapper").classList.add("hidden");
-      if (document.getElementById("otherCustomWrapper")) document.getElementById("otherCustomWrapper").classList.add("hidden");
-    }
-
-    // Utility: hitung konsentrasi dari mg dan ml => mcg/ml
-    function calculateConcentration(mg, ml) {
-      if (!mg || !ml || mg <= 0 || ml <= 0) return null;
-      return (mg * 1000) / ml; // mcg/ml
-    }
-
-    // Ambil konsentrasi aktif (mcg/ml) berdasarkan pilihan/preset/custom
-    function getActiveConcentration(drug) {
-      // NE
-      if (drug === "NE") {
-        const isCustom = !document.getElementById("neCustomWrapper").classList.contains("hidden");
-        if (isCustom) {
-          const mg = parseFloat(document.getElementById("neCustomDose").value);
-          const ml = parseFloat(document.getElementById("neCustomVolume").value);
-          const c = calculateConcentration(mg, ml);
-          return c;
-        } else {
-          return parseFloat(document.getElementById("neConc").value);
-        }
-      }
-
-      // Nicardipin
-      if (drug === "Nicardipin") {
-        const isCustom = !document.getElementById("nicaCustomWrapper").classList.contains("hidden");
-        if (isCustom) {
-          const mg = parseFloat(document.getElementById("nicaCustomDose").value);
-          const ml = parseFloat(document.getElementById("nicaCustomVolume").value);
-          return calculateConcentration(mg, ml);
-        } else {
-          return parseFloat(document.getElementById("nicaConc").value);
-        }
-      }
-
-      // PPI
-      if (drug === "PPI") {
-        const isCustom = !document.getElementById("ppiCustomWrapper").classList.contains("hidden");
-        if (isCustom) {
-          const mg = parseFloat(document.getElementById("ppiCustomDose").value);
-          const ml = parseFloat(document.getElementById("ppiCustomVolume").value);
-          return calculateConcentration(mg, ml);
-        } else {
-          return parseFloat(document.getElementById("ppiConc").value);
-        }
-      }
-
-      // Furosemide
-      if (drug === "Furosemide") {
-        const isCustom = !document.getElementById("furoCustomWrapper").classList.contains("hidden");
-        if (isCustom) {
-          const mg = parseFloat(document.getElementById("furoCustomDose").value);
-          const ml = parseFloat(document.getElementById("furoCustomVolume").value);
-          return calculateConcentration(mg, ml);
-        } else {
-          return parseFloat(document.getElementById("furoConcPreset").value);
-        }
-      }
-
-      // Other drugs with preset / custom / manual concentration field
-      const otherPresetSelect = document.getElementById("otherPresetSelect");
-      const manualConcInput = document.getElementById("concInputManual");
-      const customWrapper = document.getElementById("otherCustomWrapper");
-
-      if (otherPresetSelect && !otherPresetSelect.classList.contains("hidden")) {
-        return parseFloat(otherPresetSelect.value);
-      }
-
-      if (manualConcInput && !manualConcInput.classList.contains("hidden")) {
-        return parseFloat(manualConcInput.value);
-      }
-
-      if (customWrapper && !customWrapper.classList.contains("hidden")) {
-        const mg = parseFloat(document.getElementById("otherCustomDose").value);
-        const ml = parseFloat(document.getElementById("otherCustomVolume").value);
-        return calculateConcentration(mg, ml);
-      }
-
-      // fallback: try common input with id concInput if exists
-      const concInput = document.getElementById("concInput");
-      if (concInput) {
-        const val = parseFloat(concInput.value);
-        if (!isNaN(val) && val > 0) return val;
-      }
-
-      return null;
-    }
-
-    // Render row HTML
-    function rowHtml(doseText, doseUnit, mlHour) {
-      return `
-        <div class="flex items-baseline justify-between border-b border-dashed border-slate-200 pb-0.5 text-xs sm:text-sm">
-          <span class="text-slate-600">${doseText} ${doseUnit}</span>
-          <span class="font-semibold text-slate-900">${mlHour.toFixed(2)} ml/jam</span>
-        </div>
-      `;
-    }
-
-    // Main calculate function (renders range depending on drug)
-    function calculate() {
-      const drug = document.getElementById("drugSelect").value;
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "";
-
-      if (!drug) {
-        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Silakan pilih obat terlebih dahulu.</p>";
-        return;
-      }
-
-      const conc = getActiveConcentration(drug);
-      if (!conc || conc <= 0 || isNaN(conc)) {
-        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Konsentrasi tidak valid. Silakan isi/pilih preset atau custom mg/ml.</p>";
-        return;
-      }
-
-      // Weight handling
-      const weightInput = document.getElementById("weightInput");
-      const weight = parseFloat(weightInput ? weightInput.value : 0);
-
-      // Some drugs do not use weight (NTG without BB, PPI, Furosemide etc.)
-      const usesWeight = !(drug === "NTG" || drug === "PPI" || drug === "Furosemide");
-
-      if (usesWeight && (!weight || isNaN(weight) || weight <= 0)) {
-        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Berat badan tidak valid atau belum diisi.</p>";
-        return;
-      }
-
-      // Header
-      let html = `
-        <h3 class="text-base sm:text-lg font-semibold text-slate-900 mb-1">Hasil Perhitungan ${drug}</h3>
-      `;
-      if (usesWeight) {
-        html += `<p class="text-xs text-slate-600">BB: <span class="font-semibold">${weight} kg</span></p>`;
-      } else {
-        html += `<p class="text-xs text-slate-600">(Obat ini tidak menggunakan berat badan)</p>`;
-      }
-      html += `<p class="text-xs text-slate-600">Konsentrasi aktif: <span class="font-semibold">${conc.toFixed(2)} mcg/ml</span></p>`;
-      html += `<hr class="my-2 border-slate-200"><div class="mt-2 space-y-1">`;
-
-      // Perhitungan per obat (rentang dosis yang umum)
-      if (drug === "NE") {
-        // NE dosis mcg/kg/min typical 0.01 - 2
-        // print finer steps near low doses
-        for (let dose = 0.01; dose <= 0.1001; dose += 0.01) {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        }
-        for (let dose = 0.2; dose <= 2.0001; dose += 0.1) {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        }
-      } else if (drug === "Adrenalin") {
-        // Adrenalin (mcg/kg/min) 0.05 - 2
-        for (let dose = 0.05; dose <= 0.6001; dose += 0.05) {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        }
-        for (let dose = 0.7; dose <= 2.0001; dose += 0.1) {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        }
-      } else if (drug === "Milrinone") {
-        const milriDoses = [0.10, 0.375, 0.50, 0.75, 1.00, 1.25, 1.50, 1.75, 2.00];
-        milriDoses.forEach((dose) => {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(3), "mcg/kg/menit", mlHour);
-        });
-      } else if (drug === "NTG") {
-        // NTG tanpa BB : mcg/menit (tidak pakai BB)
-        const ntgDoses = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
-        ntgDoses.forEach((dose) => {
-          // ml/hour = (mcg/min * 60) / (mcg/ml)
-          const mlHour = (dose * 60) / conc;
-          html += rowHtml(dose.toFixed(0), "mcg/menit", mlHour);
-        });
-      } else if (drug === "NTG_BB") {
-        // NTG with BB: mcg/kg/min 0.5 - 3.0
-        const ntgBbDoses = [0.5, 0.6, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0];
-        ntgBbDoses.forEach((dose) => {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        });
-      } else if (drug === "Dopamin" || drug === "Dobutamin" || drug === "Herbeser") {
-        // these use mcg/kg/min typical ranges 1 - 20 (Dobutamin/Dopamin), Herbeser 0.5 - 10
-        let doses = [];
-        if (drug === "Herbeser") {
-          for (let d = 0.5; d <= 10.0001; d += 0.5) doses.push(d);
-        } else {
-          for (let d = 1; d <= 20.0001; d += 1) doses.push(d);
-        }
-        doses.forEach((dose) => {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        });
-      } else if (drug === "PPI" || drug === "Furosemide") {
-        // mg/jam calculations (not using weight)
-        let minDose = (drug === "PPI") ? 6 : 5;
-        let maxDose = (drug === "PPI") ? 30 : 100;
-        let step = (drug === "PPI") ? 2 : 5;
-        for (let dose = minDose; dose <= maxDose + 0.0001; dose += step) {
-          // convert mg/hour -> mcg/hour then divide by mcg/ml => ml/hour
-          const mlHour = (dose * 1000) / conc;
-          html += rowHtml(dose.toFixed(2), "mg/jam", mlHour);
-        }
-      } else {
-        // Generic fallback: mcg/kg/min 0.5 - 10 step 0.5
-        for (let dose = 0.5; dose <= 10.0001; dose += 0.5) {
-          const mlHour = (dose * weight * 60) / conc;
-          html += rowHtml(dose.toFixed(2), "mcg/kg/menit", mlHour);
-        }
-      }
-
-      html += `</div>`;
-      resultDiv.innerHTML = html;
-    }
-
-    // Print result
-    function printResultOnly() {
-      const hasil = document.getElementById("result").innerHTML.trim();
-      if (!hasil) {
-        alert("Belum ada hasil perhitungan yang bisa diprint.");
-        return;
-      }
-      if (typeof Android !== "undefined" && typeof Android.printHTML === "function") {
-        Android.printHTML(hasil); return;
-      }
-      const printWindow = window.open('', '_blank', 'width=800,height=600');
-      if (!printWindow) {
-        alert("Browser memblokir pop-up. Aktifkan pop-up atau gunakan menu Print.");
-        return;
-      }
-      printWindow.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Hasil Perhitungan</title><meta name="viewport" content="width=device-width,initial-scale=1" /><style>body{font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",sans-serif;padding:16px;font-size:13px;}h3{margin-top:0}</style></head><body>${hasil}</body></html>`);
-      printWindow.document.close(); printWindow.focus();
-      setTimeout(()=>printWindow.print(), 300);
-    }
-
-    // Initialize: set default state
-    document.addEventListener("DOMContentLoaded", function() {
-      setDefaultConc();
-      // Ensure otherCustomWrapper exists for toggle logic
-      if (!document.getElementById("otherToggleBtn")) {
-        // no-op: other toggle created dynamically per drug
-      }
+  if(DRUG_PRESETS[drug]){
+    const presets=DRUG_PRESETS[drug];
+    const wrap=document.createElement("div");
+    wrap.className="flex gap-2";
+    const sel=document.createElement("select");
+    sel.id="otherPresetSelect";
+    sel.className="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1";
+    presets.forEach(p=>{
+      const opt=document.createElement("option");
+      opt.value=p.mcgPerMl;
+      opt.textContent=p.label;
+      sel.appendChild(opt);
     });
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.id="otherToggleBtn";
+    btn.className="rounded-lg border px-3 py-2 text-xs mt-1";
+    btn.textContent="Custom";
+    btn.onclick=()=>toggleOtherMode(sel,btn);
+    wrap.appendChild(sel);wrap.appendChild(btn);
+    presetArea.appendChild(wrap);
+  }
+}
 
-  </script>
+function toggleOtherMode(sel,btn){
+  const wrapper=document.getElementById("otherCustomWrapper");
+  wrapper.classList.toggle("hidden");
+  sel.classList.toggle("hidden");
+  btn.textContent=wrapper.classList.contains("hidden")?"Custom":"Pakai preset";
+}
+
+function hideAllConcWrappers(){
+  ["NE","Nica","Other"].forEach(id=>{
+    const el=document.getElementById("concWrapper"+id);
+    if(el)el.classList.add("hidden");
+  });
+  ["ne","nica","other"].forEach(p=>{
+    const c=document.getElementById(p+"CustomWrapper");
+    const s=document.getElementById(p+"Conc");
+    if(c)c.classList.add("hidden");
+    if(s)s.classList.remove("hidden");
+  });
+}
+
+function calculateConcentration(mg,ml){
+  if(!mg||!ml)return null;
+  return (mg*1000)/ml;
+}
+
+function getActiveConcentration(drug){
+  if(drug==="NE"){
+    const custom=!document.getElementById("neCustomWrapper").classList.contains("hidden");
+    if(custom) return calculateConcentration(
+      parseFloat(document.getElementById("neCustomDose").value),
+      parseFloat(document.getElementById("neCustomVolume").value)
+    );
+    return parseFloat(document.getElementById("neConc").value);
+  }
+
+  if(drug==="Nicardipin"){
+    const custom=!document.getElementById("nicaCustomWrapper").classList.contains("hidden");
+    if(custom) return calculateConcentration(
+      parseFloat(document.getElementById("nicaCustomDose").value),
+      parseFloat(document.getElementById("nicaCustomVolume").value)
+    );
+    return parseFloat(document.getElementById("nicaConc").value);
+  }
+
+  const presetSel=document.getElementById("otherPresetSelect");
+  if(presetSel&&!presetSel.classList.contains("hidden"))
+    return parseFloat(presetSel.value);
+
+  if(!document.getElementById("otherCustomWrapper").classList.contains("hidden"))
+    return calculateConcentration(
+      parseFloat(document.getElementById("otherCustomDose").value),
+      parseFloat(document.getElementById("otherCustomVolume").value)
+    );
+
+  return null;
+}
+
+function rowHtml(doseText,unit,mlHour){
+  return `<div class='flex justify-between border-b border-dashed text-xs'>
+    <span>${doseText} ${unit}</span>
+    <span class='font-semibold'>${mlHour.toFixed(2)} ml/jam</span>
+  </div>`;
+}
+
+function calculate(){
+  const drug=document.getElementById("drugSelect").value;
+  const result=document.getElementById("result");
+  result.innerHTML="";
+
+  if(!drug)return result.innerHTML="<p class='text-red-600'>Silakan pilih obat.</p>";
+
+  const conc=getActiveConcentration(drug);
+  if(!conc)return result.innerHTML="<p class='text-red-600'>Isi konsentrasi dengan benar.</p>";
+
+  const weight=parseFloat(document.getElementById("weightInput").value);
+  if(!weight||weight<=0)
+    return result.innerHTML="<p class='text-red-600'>BB tidak valid.</p>";
+
+  let html=`<h3 class='font-semibold mb-1'>Hasil Perhitungan ${drug}</h3>
+  <p class='text-xs'>BB: <b>${weight} kg</b></p>
+  <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p><hr class='my-2'>`;
+
+  let doses=[];
+  if(drug==="NE"){
+    for(let d=0.01;d<=0.1;d+=0.01)doses.push(d);
+    for(let d=0.2;d<=2.000001;d+=0.1)doses.push(d);
+  } else if(drug==="Adrenalin"){
+    for(let d=0.05;d<=0.6;d+=0.05)doses.push(d);
+    for(let d=0.7;d<=2.000001;d+=0.1)doses.push(d);
+  } else if(["Dopamin","Dobutamin"].includes(drug)){
+    for(let d=1;d<=20;d++)doses.push(d);
+  } else if(drug==="Milrinone"){
+    doses=[0.1,0.375,0.5,0.75,1,1.25,1.5,1.75,2];
+  } else if(drug==="Herbeser"){
+    doses=[0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10];
+  } else if(drug==="NTG_BB"){
+    doses=[0.5,0.6,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3];
+  } else {
+    for(let d=0.5;d<=10;d+=0.5)doses.push(d);
+  }
+
+  doses.forEach(d=>{
+    const mlHour=(d*weight*60)/conc;
+    html+=rowHtml(Number(d.toFixed(3)),"mcg/kg/menit",mlHour);
+  });
+  result.innerHTML=html;
+}
+
+function printResultOnly(){
+  const hasil=document.getElementById("result").innerHTML.trim();
+  if(!hasil)return alert("Belum ada hasil.");
+
+  const w=window.open("", "_blank","width=800,height=600");
+  w.document.write(`<!DOCTYPE html><html><head>
+  <meta charset='utf-8'><title>Print</title></head><body>${hasil}</body></html>`);
+  w.print();
+}
+
+document.addEventListener("DOMContentLoaded",setDefaultConc);
+</script>
 </body>
 </html>
