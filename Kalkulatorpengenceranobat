@@ -65,8 +65,11 @@
       <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         💤 EBV | ABL | MABL
       </a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
-        💊 Kalkulator Pengeveran Obat
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💊 Kalkulator Insulin
+      </a>
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        🧪 Kalkulator Insulin
       </a>
     </nav>
   </aside>
