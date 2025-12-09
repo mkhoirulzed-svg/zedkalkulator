@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ZEDose Calc - Tanpa BB</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
+
+  <!-- BACKDROP MENU -->
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- SIDE MENU -->
+  <aside id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💧 Kalkulator Tetesan Infus
+      </a>
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md bg-teal-200 font-medium flex items-center">
+        🧪 Syringe Pump - Tanpa BB
+      </a>
+      <a href="index_BB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        🧪 Syringe Pump - Dengan BB
+      </a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💤 EBV | ABL | MABL
+      </a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💊  Kalkulator Insulin
+      </a>
+    </nav>
+  </aside>
+
+  <!-- CONTAINER -->
+  <div class="w-full max-w-2xl flex flex-col gap-3">
+
+    <!-- TOP BAR -->
+    <header class="flex items-center justify-between mb-2">
+      <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200">
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+        <div class="w-5 h-0.5 bg-slate-800"></div>
+      </button>
+      <div class="text-xs sm:text-sm text-slate-500">ZEDose Tools</div>
+    </header>
+
+    <!-- CARD -->
+    <div class="bg-white shadow-xl rounded-2xl p-4 sm:p-6 border border-slate-200">
+      <h1 class="text-xl sm:text-3xl font-bold text-slate-800">
+        Syringe Pump - Tanpa BB
+      </h1>
+      <p class="text-xs text-slate-500 mt-1">
+        Untuk obat yang tidak memakai berat badan
+      </p>
+
+      <form onsubmit="event.preventDefault(); calculate();" class="space-y-4 mt-4">
+        <div>
+          <label class="text-sm font-medium text-slate-700">Pilih obat</label>
+          <select id="drugSelect" onchange="setDefaultConc()"
+            class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm">
+            <option value="">-- Pilih obat --</option>
+            <option value="NTG">NTG (Tanpa BB)</option>
+            <option value="PPI">OMZ / Panto</option>
+            <option value="Furosemide">Furosemide</option>
+            <option value="Lansoprazole">Lansoprazole</option>
+          </select>
+        </div>
+
+        <!-- Wrapper PPI, NTG, Lansoprazole -->
+        <div id="concWrapperPPI" class="hidden space-y-1">
+          <label id="ppiLabel" class="text-sm font-medium text-slate-700">Konsentrasi</label>
+          <div class="flex gap-2">
+            <select id="ppiConc"
+              class="flex-1 px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm"></select>
+            <button type="button" onclick="togglePPICustom()"
+              class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">
+              Custom
+            </button>
+          </div>
+
+          <div id="ppiCustomWrapper" class="hidden">
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <input type="number" id="ppiCustomDose" placeholder="Dosis (mg)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input type="number" id="ppiCustomVolume" placeholder="Volume (ml)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Wrapper Furosemide -->
+        <div id="concWrapperFuro" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Furosemide</label>
+          <select id="furoConcPreset"
+            class="w-full mt-1 px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm">
+            <option value="2400">6amp/50ml (120 mg/50 ml → 2400 mcg/ml)</option>
+            <option value="4800">12amp/50ml (240 mg/50 ml → 4800 mcg/ml)</option>
+            <option value="10000">Murni 10amp/20ml (200 mg/20 ml → 10000 mcg/ml)</option>
+          </select>
+        </div>
+
+        <!-- INPUT DOSIS (OPSIONAL) -->
+        <div>
+          <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis (opsional)</label>
+          <div class="mt-1 flex items-center gap-2">
+            <input
+              type="number"
+              id="doseInput"
+              step="0.01"
+              min="0"
+              placeholder="Contoh: 20"
+              class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm"
+            />
+            <span id="doseUnit" class="text-xs text-slate-600 whitespace-nowrap">mg/jam</span>
+          </div>
+          <p class="mt-1 text-[11px] text-slate-400">
+            Kosongkan jika ingin melihat tabel dosis standar.
+          </p>
+        </div>
+
+        <button type="submit"
+          class="w-full sm:w-auto bg-blue-600 text-white rounded-lg px-4 py-2 font-medium shadow hover:bg-blue-700">
+          Hitung
+        </button>
+      </form>
+
+      <!-- HASIL -->
+      <section id="result" class="mt-6 rounded-xl border bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
+
+    </div>
+
+    <footer class="text-center text-[10px] sm:text-xs text-slate-500">
+      Created by Muhammad Khairul Zed, S.Kep.,Ners <br>
+      IGD RSUD dr Doris Sylvanus Kalimantan Tengah
+    </footer>
+
+  </div>
+
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("sideMenu");
+  const backdrop = document.getElementById("backdrop");
+  menu.classList.toggle("-translate-x-full");
+  backdrop.classList.toggle("hidden");
+}
+
+function togglePPICustom() {
+  ppiCustomWrapper.classList.toggle("hidden");
+  ppiConc.classList.toggle("hidden");
+}
+
+function setDefaultConc() {
+  concWrapperPPI.classList.add("hidden");
+  concWrapperFuro.classList.add("hidden");
+
+  const d = drugSelect.value;
+  const label = document.getElementById("ppiLabel");
+
+  // Set unit dosis sesuai obat
+  if (d === "NTG") {
+    doseUnit.textContent = "mcg/menit";
+  } else if (d) {
+    doseUnit.textContent = "mg/jam";
+  } else {
+    doseUnit.textContent = "mg/jam";
+  }
+
+  // Opsional: kosongkan input dosis saat ganti obat
+  doseInput.value = "";
+
+  if (d === "NTG") {
+    concWrapperPPI.classList.remove("hidden");
+    label.textContent = "Konsentrasi NTG";
+    ppiConc.innerHTML = '<option value="200">10mg/50ml → 200 mcg/ml</option>';
+    ppiConc.classList.remove("hidden");
+    ppiCustomWrapper.classList.add("hidden");
+  }
+
+  if (d === "PPI") {
+    concWrapperPPI.classList.remove("hidden");
+    label.textContent = "Konsentrasi PPI";
+    ppiConc.innerHTML =
+      '<option value="800">1 vial (40mg/50ml → 0,8 mg/ml)</option>' +
+      '<option value="1600">2 vial (80mg/50ml → 1,6 mg/ml)</option>';
+    ppiConc.classList.remove("hidden");
+    ppiCustomWrapper.classList.add("hidden");
+  }
+
+  if (d === "Lansoprazole") {
+    concWrapperPPI.classList.remove("hidden");
+    label.textContent = "Konsentrasi Lansoprazole";
+    ppiConc.innerHTML =
+      '<option value="600">1 vial (30mg/50ml → 0,6 mg/ml)</option>' +
+      '<option value="1200">2 vial (60mg/50ml → 1,2 mg/ml)</option>';
+    ppiConc.classList.remove("hidden");
+    ppiCustomWrapper.classList.add("hidden");
+  }
+
+  if (d === "Furosemide") {
+    concWrapperFuro.classList.remove("hidden");
+  }
+}
+
+function getConc() {
+  const d = drugSelect.value;
+
+  // Furosemide pakai preset sendiri
+  if (d === "Furosemide") {
+    return parseFloat(furoConcPreset.value);
+  }
+
+  // NTG / PPI / Lansoprazole: preset atau custom
+  if (!ppiConc.classList.contains("hidden")) {
+    return parseFloat(ppiConc.value);
+  }
+
+  const mg = parseFloat(ppiCustomDose.value);
+  const ml = parseFloat(ppiCustomVolume.value);
+  if (isNaN(mg) || isNaN(ml) || ml <= 0) return NaN;
+
+  // mg → mcg
+  return (mg * 1000) / ml;
+}
+
+function calculate() {
+  const d = drugSelect.value;
+  if (!d) {
+    result.innerHTML = "Pilih obat dulu.";
+    return;
+  }
+
+  const c = getConc();
+  if (!c || isNaN(c)) {
+    result.innerHTML = "Konsentrasi belum diatur dengan benar.";
+    return;
+  }
+
+  let html =
+    `<h3 class='font-semibold'>${d}</h3>` +
+    `<p>Konsentrasi: ${c.toFixed(1)} mcg/ml</p><hr>`;
+
+  const customDose = parseFloat(doseInput.value);
+
+  // Jika dosis diisi → tampilkan 1 nilai spesifik
+  if (!isNaN(customDose) && customDose > 0) {
+    let mlH, label;
+    if (d === "NTG") {
+      // Dosis dalam mcg/menit → konversi ke mcg/jam
+      mlH = (customDose * 60) / c;
+      label = `${customDose} mcg/menit`;
+    } else {
+      // Dosis dalam mg/jam
+      mlH = (customDose * 1000) / c; // mg → mcg
+      label = `${customDose} mg/jam`;
+    }
+    html += row(label, mlH);
+  } else {
+    // Jika dosis kosong → tampilkan tabel standar seperti sebelumnya
+    if (d === "NTG") {
+      [10, 20, 30, 40, 50, 60, 80, 100].forEach(x => {
+        const mlH = (x * 60) / c;
+        html += row(x + " mcg/menit", mlH);
+      });
+    } else {
+      for (let x = 6; x <= 30; x += 2) {
+        const mlH = (x * 1000) / c;
+        html += row(x + " mg/jam", mlH);
+      }
+    }
+  }
+
+  result.innerHTML = html;
+}
+
+function row(t, mlh) {
+  return `<div class='flex justify-between border-b py-0.5'>
+            <span>${t}</span>
+            <span class='font-semibold'>${mlh.toFixed(2)} ml/jam</span>
+          </div>`;
+}
+</script>
+
+</body>
+</html>
