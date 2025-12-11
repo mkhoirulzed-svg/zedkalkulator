@@ -1,11 +1,16 @@
-
 {
-  "name": "ZED Kalkulator",
-  "short_name": "ZED Calc",
+  "name": "ZEDose Calc",
+  "short_name": "ZEDose",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f766e",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "192x193.png",
-      "sizes": "192x192",
+      "sizes": "192x193",
       "type": "image/png"
     },
     {
@@ -13,9 +18,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0A6DFF"
+  ]
 }
