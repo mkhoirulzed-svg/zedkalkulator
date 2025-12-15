@@ -84,7 +84,8 @@
         <div class="w-5 h-0.5 bg-slate-800"></div>
       </button>
      <div class="flex items-center gap-2">
-    <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
+   <button class="btn" onclick="installPWA()">📲 Install</button>
+ <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
     <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
   </div>
     </header>
@@ -396,5 +397,23 @@ function printResultOnly(){
 
 document.addEventListener("DOMContentLoaded",setDefaultConc);
 </script>
+  <script>
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+function installPWA(){
+    if(!deferredPrompt){
+        alert("Gunakan menu Tambahkan ke Layar Utama");
+        return;
+    }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => deferredPrompt = null);
+}
+</script>
+
 </body>
 </html>
