@@ -87,19 +87,39 @@
 
 <!-- SIDE MENU -->
 <aside id="sideMenu"
-  class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform">
-  <div class="p-4 border-b flex items-center justify-between">
-    <div class="font-semibold text-sm">Menu Kalkulator</div>
-    <button onclick="toggleMenu()">✕</button>
-  </div>
-  <nav class="p-4 text-sm space-y-1">
-    <a href="infus.html" class="block px-2 py-2 rounded hover:bg-teal-200">💧 Infus</a>
-    <a href="index_NoBB.html" class="block px-2 py-2 rounded hover:bg-teal-200">🧪 SP Non BB</a>
-    <a href="index.html" class="block px-2 py-2 rounded hover:bg-teal-200">🧪 SP BB</a>
-    <a href="insulin.html" class="block px-2 py-2 rounded bg-teal-200">💊 Insulin</a>
-    <a href="about.html" class="block px-2 py-2 rounded hover:bg-teal-200">ℹ️ Tentang</a>
-  </nav>
-</aside>
+    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+        <span class="sr-only">Tutup menu</span>
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💧 Kalkulator Tetesan Infus
+      </a>
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+        🧪 Syringe Pump - Tanpa BB
+      </a>
+      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        🧪 Syringe Pump - Dengan BB
+      </a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💤 EBV | ABL | MABL
+      </a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💊  Kalkulator Insulin
+      </a>
+       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        💉 Kalkulator Pengenceran Obat
+      </a>
+       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+        ℹ️ Tentang Aplikasi
+      </a>
+    </nav>
+  </aside>
 
 <!-- APP WRAPPER -->
 <div class="w-full max-w-md flex flex-col gap-3">
