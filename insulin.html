@@ -10,7 +10,33 @@
 
    <style>
     .hidden { display: none; }
+/* === TAB PROTAP ACTIVE === */
+  .tab-btn {
+    transition: all .15s ease;
+  }
 
+  .tab-btn.active {
+    background-color: #2563eb; /* blue-600 */
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    position: relative;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -4px;
+  height: 3px;
+  background-color: #2563eb;
+  border-radius: 2px;
+}
+
+  .tab-btn:not(.active):hover {
+    background-color: #e5e7eb; /* slate-200 */
+  }
     /* ICON MENU IMG */
     .pos-menu-icon {
       width: 30px;
