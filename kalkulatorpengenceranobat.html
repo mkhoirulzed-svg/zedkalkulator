@@ -47,12 +47,18 @@
 
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-4 sm:p-6">
 
-  <!-- BACKDROP -->
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+<!-- BACKDROP -->
+  <div
+    id="backdrop"
+    class="fixed inset-0 bg-black/30 z-30 hidden"
+    onclick="toggleMenu()"
+  ></div>
 
   <!-- SIDE MENU -->
-  <aside id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+  <aside
+    id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
+  >
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
       <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
       <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
@@ -65,13 +71,13 @@
       <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         Kalkulator Tetesan Infus
       </a>
-      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         Syringe Pump - Tanpa BB
       </a>
       <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         Syringe Pump - Dengan BB
       </a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center font-medium">
         EBV | ABL | MABL
       </a>
       <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
@@ -80,27 +86,57 @@
       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
         Kalkulator Pengenceran Obat
       </a>
-       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         ℹ️ Tentang Aplikasi
       </a>
     </nav>
   </aside>
 
-  <!-- MAIN CONTENT WRAPPER -->
-  <div class="w-full max-w-3xl flex flex-col gap-4 relative">
+  <!-- KONTEN UTAMA -->
+  <div class="w-full max-w-2xl flex flex-col gap-4">
 
-    <!-- HEADER -->
-    <header class="flex items-center justify-between mb-1">
-      <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200 focus:ring-2 focus:ring-blue-500">
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800"></div>
-      </button>
-      <div class="flex items-center gap-2">
-    <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
-    <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
-  </div>
-    </header>
+    <!-- HEADER + POS MENU -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+
+      <header class="flex items-center px-3 py-2">
+        <div class="flex items-center gap-3">
+          <button
+            onclick="toggleMenu()"
+            class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500"
+          >
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800"></div>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
+            <span class="text-xs sm:text-sm text-slate-600 font-medium">
+              ZED Kalkulator
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="pos-menu">
+        <a href="index.html" class="pos-menu-btn">
+          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP BB
+        </a>
+        <a href="index_NoBB.html" class="pos-menu-btn">
+          <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">SP Non BB
+        </a>
+        <a href="infus.html" class="pos-menu-btn">
+          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+        </a>
+        <a href="insulin.html" class="pos-menu-btn">
+          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+        </a>
+        <a href="anestesi.html" class="pos-menu-btn">
+          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">EBV
+        </a>
+      </nav>
+
+    </div>
 
     <!-- MAIN PANEL -->
     <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
