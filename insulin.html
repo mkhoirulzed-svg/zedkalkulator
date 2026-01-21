@@ -2,215 +2,142 @@
 <html lang="id">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Protap Insulin - ZEDose Tools</title>
 
   <!-- Tailwind CSS v4 via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <style>
-   /* TAB PROTAP */
-.tab-btn.active {
-  background-color: #3b82f6; /* bg-blue-500 */
-  color: white;
-  font-weight: bold;
-}
+    /* TAB PROTAP */
+    .tab-btn.active {
+      background-color: #3b82f6;
+      color: white;
+      font-weight: bold;
+    }
 
-/* UTIL */
-.hidden {
-  display: none;
-}
+    .hidden { display: none; }
 
-/* ===============================
-   POS NAV MENU (GLOBAL)
-================================ */
-.pos-menu {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.25rem;
-  margin: 0;
-  border-top: 1px solid #e5e7eb;
-}
+    /* POS MENU */
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
 
-.pos-menu-btn {
-  flex: 1;
-  padding: 0.6rem 0.2rem 0.5rem;
-  text-align: center;
-  color: #6b7280;
-  font-size: 0.7rem;
-  font-weight: 500;
-  position: relative;
-  transition: color .15s;
-}
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+    }
 
-.pos-menu-btn:hover {
-  color: #2563eb;
-}
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
 
-.pos-menu-btn.active {
-  color: #2563eb;
-  font-weight: 600;
-}
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
 
-.pos-menu-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -1px;
-  height: 3px;
-  background: #2563eb;
-  border-radius: 2px;
-}
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
 
-.pos-menu-icon {
-  width: 30px;
-  height: 22px;
-  margin: 0 auto 2px;
-  display: block;
-  opacity: .55;
-}
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
 
-.pos-menu-btn.active .pos-menu-icon {
-  opacity: 1;
-}
-
-/* ===============================
-   PRINT ONLY
-================================ */
-@media print {
-
-  body * {
-    visibility: hidden;
-  }
-
-  .print-area,
-  .print-area * {
-    visibility: visible;
-  }
-
-  .print-area {
-    position: absolute !important;
-    inset: 0;
-    width: 100% !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    background: white !important;
-  }
-}
-
-
+    /* PRINT */
+    @media print {
+      body * { visibility: hidden; }
+      .print-area, .print-area * { visibility: visible; }
+      .print-area {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        margin: 0;
+        background: white;
+      }
+    }
   </style>
 </head>
 
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-4 sm:p-6">
 
-  <!-- BACKDROP -->
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+<!-- BACKDROP -->
+<div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
 
-  <!-- SIDE MENU -->
-  <aside id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
-        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
-      </button>
-    </div>
+<!-- SIDE MENU -->
+<aside id="sideMenu"
+  class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform">
+  <div class="p-4 border-b flex items-center justify-between">
+    <div class="font-semibold text-sm">Menu Kalkulator</div>
+    <button onclick="toggleMenu()">✕</button>
+  </div>
+  <nav class="p-4 text-sm space-y-1">
+    <a href="infus.html" class="block px-2 py-2 rounded hover:bg-teal-200">💧 Infus</a>
+    <a href="index_NoBB.html" class="block px-2 py-2 rounded hover:bg-teal-200">🧪 SP Non BB</a>
+    <a href="index.html" class="block px-2 py-2 rounded hover:bg-teal-200">🧪 SP BB</a>
+    <a href="insulin.html" class="block px-2 py-2 rounded bg-teal-200">💊 Insulin</a>
+    <a href="about.html" class="block px-2 py-2 rounded hover:bg-teal-200">ℹ️ Tentang</a>
+  </nav>
+</aside>
 
-    <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💧 Kalkulator Tetesan Infus
+<!-- APP WRAPPER -->
+<div class="w-full max-w-md flex flex-col gap-3">
+
+  <!-- HEADER -->
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <header class="flex items-center gap-3 px-3 py-2">
+      <button onclick="toggleMenu()" class="p-2 rounded hover:bg-slate-100">☰</button>
+      <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
+      <span class="text-sm text-slate-600 font-medium">ZEDose Tools</span>
+    </header>
+
+    <nav class="pos-menu">
+      <a href="index.html" class="pos-menu-btn">
+        <img src="Asset/SP.svg" class="pos-menu-icon">SP BB
       </a>
-      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
-        🧪 Syringe Pump - Tanpa BB
+      <a href="index_NoBB.html" class="pos-menu-btn">
+        <img src="Asset/SPnoBB.svg" class="pos-menu-icon">SP Non BB
       </a>
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        🧪 Syringe Pump - Dengan BB
+      <a href="infus.html" class="pos-menu-btn">
+        <img src="Asset/infus.svg" class="pos-menu-icon">Infus
       </a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💤 EBV | ABL | MABL
+      <a href="insulin.html" class="pos-menu-btn active">
+        <img src="Asset/insulin.svg" class="pos-menu-icon">Insulin
       </a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
-        💊  Kalkulator Insulin
-      </a>
-       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💉 Kalkulator Pengenceran Obat
-      </a>
-       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
-        ℹ️ Tentang Aplikasi
+      <a href="anestesi.html" class="pos-menu-btn">
+        <img src="Asset/Perdarahan.svg" class="pos-menu-icon">EBV
       </a>
     </nav>
-  </aside>
+  </div>
 
-<!-- HEADER GLOBAL ZEDOSE -->
-<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-
-  <!-- BAR ATAS -->
-  <header class="flex items-center px-3 py-2">
-    <div class="flex items-center gap-3">
-
-      <!-- tombol menu -->
-      <button
-        onclick="toggleMenu()"
-        class="p-2 rounded-lg hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800"></div>
-      </button>
-
-      <!-- logo -->
-      <div class="flex items-center gap-2">
-        <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
-        <span class="text-xs sm:text-sm text-slate-600 font-medium">
-          ZEDose Tools
-        </span>
-      </div>
-
-    </div>
-  </header>
-
-  <!-- NAV SVG (GLOBAL MENU) -->
-  <nav class="pos-menu border-t border-slate-200">
-
-    <a href="index.html" class="pos-menu-btn">
-      <img src="Asset/SP.svg" class="pos-menu-icon" alt="">
-      SP BB
-    </a>
-
-    <a href="index_NoBB.html" class="pos-menu-btn">
-      <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">
-      SP Non BB
-    </a>
-
-    <a href="infus.html" class="pos-menu-btn">
-      <img src="Asset/infus.svg" class="pos-menu-icon" alt="">
-      Infus
-    </a>
-
-    <a href="insulin.html" class="pos-menu-btn active">
-      <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">
-      Insulin
-    </a>
-
-    <a href="anestesi.html" class="pos-menu-btn">
-      <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">
-      EBV
-    </a>
-
-  </nav>
-
-</div>
-
-    <!-- TAB MENU -->
-    <div class="flex gap-2 mb-2">
-      <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm" onclick="showPage('insulinIV', this)">Protap 1</button>
-      <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm" onclick="showPage('syringePump', this)">Protap 2</button>
-    </div>
-
+  <!-- TAB -->
+  <div class="flex gap-2 mb-2">
+    <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
+      onclick="showPage('insulinIV', this)">Protap 1</button>
+    <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
+      onclick="showPage('syringePump', this)">Protap 2</button>
+  </div>
     <!-- MAIN PANEL -->
     <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
     </main>
