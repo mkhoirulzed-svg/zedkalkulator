@@ -498,23 +498,30 @@ function printResultOnly(){
 
 document.addEventListener("DOMContentLoaded",setDefaultConc);
 </script>
-  <script>
-let deferredPrompt = null;
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
 
-window.addEventListener("beforeinstallprompt", e => {
+  window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-});
+    installBtn.classList.remove("hidden");
+  });
 
-function installPWA(){
-    if(!deferredPrompt){
-        alert("Gunakan menu Tambahkan ke Layar Utama");
-        return;
-    }
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => deferredPrompt = null);
-}
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      installBtn.classList.add("hidden");
+    }
+
+    deferredPrompt = null;
+  });
 </script>
+
 
 </body>
 </html>
