@@ -8,53 +8,59 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <style>
-     .hidden { display: none; }
+ <style>
+  .hidden { display: none; }
 
-  /* === GRID MENU ICON === */
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .menu-icon-btn {
+  /* === POS TAB MENU === */
+  .pos-menu {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    padding: 0.75rem 0.5rem;
-    border-radius: 0.75rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 1px 2px rgba(0,0,0,.06);
-    transition: background .15s, transform .1s;
+    justify-content: space-between;
+    gap: 0.25rem;
+    margin: 0.5rem 0 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .pos-menu-btn {
+    flex: 1;
+    padding: 0.6rem 0.2rem 0.5rem;
     text-align: center;
+    color: #6b7280;
+    font-size: 0.7rem;
+    font-weight: 500;
+    position: relative;
+    transition: color .15s;
   }
 
-  .menu-icon-btn:hover {
-    background: #f1f5ff;
+  .pos-menu-btn svg {
+    width: 22px;
+    height: 22px;
+    margin: 0 auto 0.15rem;
+    display: block;
+    stroke-width: 1.8;
   }
 
-  .menu-icon-btn:active {
-    transform: scale(0.96);
-  }
-
-  .menu-icon {
-    width: 26px;
-    height: 26px;
+  .pos-menu-btn:hover {
     color: #2563eb;
   }
 
-  .menu-label {
-    font-size: 0.7rem;
+  /* ACTIVE STATE */
+  .pos-menu-btn.active {
+    color: #2563eb;
     font-weight: 600;
-    color: #1e293b;
-    line-height: 1.1;
   }
-  </style>
+
+  .pos-menu-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    bottom: -1px;
+    height: 3px;
+    background: #2563eb;
+    border-radius: 2px;
+  }
+</style>
+
 </head>
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
@@ -126,61 +132,56 @@
     <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
  </div>
     </header>
-<!-- MENU BUTTON -->
-<!-- MENU BUTTON -->
-<div class="menu-grid">
+<!-- POS STYLE MENU -->
+<nav class="pos-menu">
 
-  <a href="index_NoBB.html" class="menu-icon-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="1.8"
-         class="menu-icon">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M7 3h10M7 7h10M9 21V7m6 14V7M5 21h14"/>
-    </svg>
-    <span class="menu-label">SP<br>Tanpa BB</span>
-  </a>
-
-  <a href="index.html" class="menu-icon-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="1.8"
-         class="menu-icon">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M4 21h16M6 17h12M9 13h6M10 3h4v6h-4z"/>
-    </svg>
-    <span class="menu-label">SP<br>Dengan BB</span>
-  </a>
-
-  <a href="infus.html" class="menu-icon-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="1.8"
-         class="menu-icon">
+  <a href="infus.html" class="pos-menu-btn active">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
             d="M12 3v18M8 7h8M8 11h8"/>
     </svg>
-    <span class="menu-label">Tetesan<br>Infus</span>
+    Infus
   </a>
 
-  <a href="insulin.html" class="menu-icon-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="1.8"
-         class="menu-icon">
+  <a href="index_NoBB.html" class="pos-menu-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
-            d="M8 21V3m8 18V3M4 7h16"/>
+            d="M7 3h10M7 7h10M9 21V7m6 14V7"/>
     </svg>
-    <span class="menu-label">Kalkulator<br>Insulin</span>
+    SP Non BB
   </a>
 
-  <a href="anestesi.html" class="menu-icon-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="1.8"
-         class="menu-icon">
+  <a href="index.html" class="pos-menu-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M10 3h4v6h-4zM6 21h12"/>
+    </svg>
+    SP BB
+  </a>
+
+  <a href="insulin.html" class="pos-menu-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M8 21V3m8 18V3"/>
+    </svg>
+    Insulin
+  </a>
+
+  <a href="anestesi.html" class="pos-menu-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
+         viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round"
             d="M12 3v18M4 12h16"/>
     </svg>
-    <span class="menu-label">EBV<br>ABL</span>
+    EBV
   </a>
 
-</div>
+</nav>
+
 
 
     <!-- Kartu utama -->
