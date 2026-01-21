@@ -28,6 +28,61 @@
         visibility: visible;
       }
 
+       .hidden { display: none; }
+
+    /* ICON MENU IMG */
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
+
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
+
+    /* === POS TAB MENU === */
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
+
+    .pos-menu-btn:hover {
+      color: #2563eb;
+    }
+
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
+
       /* Posisikan area cetak memenuhi halaman */
       .print-area {
         position: absolute !important;
@@ -39,6 +94,7 @@
         background: white !important;
       }
     }
+
   </style>
 </head>
 
@@ -83,21 +139,49 @@
     </nav>
   </aside>
 
-  <!-- MAIN CONTENT WRAPPER -->
-  <div class="w-full max-w-3xl flex flex-col gap-4 relative">
+ <!-- HEADER -->
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
 
-    <!-- HEADER -->
-    <header class="flex items-center justify-between mb-1">
-      <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-200 focus:ring-2 focus:ring-blue-500">
+  <!-- BAR ATAS -->
+  <header class="flex items-center px-3 py-2">
+    <div class="flex items-center gap-3">
+      <button onclick="toggleMenu()"
+        class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
         <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
         <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
         <div class="w-5 h-0.5 bg-slate-800"></div>
       </button>
-       <div class="flex items-center gap-2">
-    <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
-    <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
-  </div>
-    </header>
+
+      <div class="flex items-center gap-2">
+        <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
+        <span class="text-xs sm:text-sm text-slate-600 font-medium">
+          ZEDose Tools
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV SVG -->
+  <nav class="pos-menu border-t border-slate-200">
+    <a href="index.html" class="pos-menu-btn">
+      <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP BB
+    </a>
+    <a href="index_NoBB.html" class="pos-menu-btn">
+      <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">SP Non BB
+    </a>
+    <a href="infus.html" class="pos-menu-btn">
+      <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+    </a>
+    <a href="insulin.html" class="pos-menu-btn active">
+      <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+    </a>
+    <a href="anestesi.html" class="pos-menu-btn">
+      <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">EBV
+    </a>
+  </nav>
+
+</div>
+
 
     <!-- TAB MENU -->
     <div class="flex gap-2 mb-2">
