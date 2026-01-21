@@ -10,6 +10,48 @@
 
   <style>
     .hidden { display: none; }
+    .app-header{
+  position:fixed;
+  top:0;left:0;right:0;
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  padding:10px 12px 0;
+  border-bottom:1px solid #e5e7eb;
+  z-index:1000;
+}
+.app-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  color:#1a56db;
+  margin-bottom:6px;
+}
+.app-brand img{ height:32px; }
+.app-menu{ display:flex; }
+.app-menu a{
+  flex:1;
+  padding:10px 0;
+  text-align:center;
+  text-decoration:none;
+  color:#64748b;
+  font-size:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+.app-menu a svg{
+  width:20px;height:20px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+}
+.app-menu a.active{
+  color:#1a56db;
+  border-bottom:3px solid #1a56db;
+}
   </style>
 </head>
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
@@ -61,7 +103,64 @@
       </a>
     </nav>
   </aside>
+<!-- ===== HEADER ===== -->
+<div class="app-header">
+  <div class="app-brand">
+    <img src="logo.png" alt="Logo">
+    <span>Kasir Alkes PKY</span>
+  </div>
 
+  <div class="app-menu">
+
+    <!-- KASIR -->
+    <a href="index.html">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="6" rx="2"/>
+        <path d="M4 10h16l-1.5 8a2 2 0 0 1-2 1.6H7.5a2 2 0 0 1-2-1.6L4 10Z"/>
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="15" cy="21" r="1"/>
+      </svg>
+      <span>Kasir</span>
+    </a>
+
+    <!-- INPUT / KEUANGAN -->
+    <a href="Keuangan.html">
+      <svg viewBox="0 0 24 24">
+        <rect x="4" y="3" width="16" height="18" rx="2"/>
+        <path d="M8 7h8M8 11h8M8 15h5"/>
+      </svg>
+      <span>Input</span>
+    </a>
+
+    <!-- TRANSAKSI -->
+    <a href="transaksi.html">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <span>Transaksi</span>
+    </a>
+
+    <!-- PESANAN -->
+    <a href="pesanan.html">
+      <svg viewBox="0 0 24 24">
+        <path d="M6 2h12l2 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6l2-4Z"/>
+        <path d="M6 6h12M9 10h6M9 14h6"/>
+      </svg>
+      <span>Pesanan</span>
+    </a>
+<!-- STOK -->
+    <a href="stok.html" class="active">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 7l9-4 9 4-9 4-9-4Z"/>
+        <path d="M3 12l9 4 9-4"/>
+        <path d="M3 17l9 4 9-4"/>
+      </svg>
+      <span>Stok</span>
+    </a>
+    
+  </div>
+</div>
+  
   <!-- KONTEN UTAMA -->
   <div class="w-full max-w-2xl flex flex-col gap-3 relative">
     <!-- TOP BAR dengan tombol menu -->
