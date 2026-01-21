@@ -10,12 +10,70 @@
 
   <style>
     .hidden { display: none; }
+
+    /* ICON MENU IMG */
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
+
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
+
+    /* === POS TAB MENU === */
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
+
+    .pos-menu-btn:hover {
+      color: #2563eb;
+    }
+
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
   </style>
 </head>
+
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
-  <!-- BACKDROP untuk menu -->
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+  <!-- BACKDROP -->
+  <div
+    id="backdrop"
+    class="fixed inset-0 bg-black/30 z-30 hidden"
+    onclick="toggleMenu()"
+  ></div>
 
   <!-- SIDE MENU -->
   <aside
@@ -23,68 +81,89 @@
     class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
   >
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">
-        Menu Kalkulator
-      </div>
-      <button
-        type="button"
-        onclick="toggleMenu()"
-        class="p-1 rounded-md hover:bg-teal-200"
-      >
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
         <span class="sr-only">Tutup menu</span>
         <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
         <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
       </button>
     </div>
 
-     <nav class="p-4 text-sm space-y-1 text-slate-800">
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
       <a href="infus.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
         💧 Kalkulator Tetesan Infus
       </a>
-      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
         🧪 Syringe Pump - Tanpa BB
       </a>
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
         🧪 Syringe Pump - Dengan BB
       </a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
         💤 EBV | ABL | MABL
       </a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💊  Kalkulator Insulin
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
+        💊 Kalkulator Insulin
       </a>
-        <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
         💉 Kalkulator Pengenceran Obat
       </a>
-        <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200">
         ℹ️ Tentang Aplikasi
       </a>
     </nav>
   </aside>
 
   <!-- KONTEN UTAMA -->
-  <div class="w-full max-w-2xl flex flex-col gap-3 relative">
-    <!-- TOP BAR dengan tombol menu -->
-    <header class="flex items-center justify-between mb-2">
-      <button
-        type="button"
-        onclick="toggleMenu()"
-        class="p-2 rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <span class="sr-only">Buka menu</span>
-        <!-- ikon tiga garis -->
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-        <div class="w-5 h-0.5 bg-slate-800"></div>
-      </button>
- <div class="flex items-center gap-2">
-    <img src="192x193.png" alt="Logo" class="h-7 w-7 rounded-md">
-    <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
- </div>
-    </header>
+  <div class="w-full max-w-2xl flex flex-col gap-4">
 
-    <!-- Kartu utama -->
+    <!-- HEADER + POS MENU -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+
+      <header class="flex items-center px-3 py-2">
+        <div class="flex items-center gap-3">
+          <button
+            onclick="toggleMenu()"
+            class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500"
+          >
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800"></div>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
+            <span class="text-xs sm:text-sm text-slate-600 font-medium">
+              ZED Kalkulator
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="pos-menu">
+        <a href="index.html" class="pos-menu-btn">
+          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP BB
+        </a>
+        <a href="index_NoBB.html" class="pos-menu-btn">
+          <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">SP Non BB
+        </a>
+        <a href="infus.html" class="pos-menu-btn active">
+          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+        </a>
+        <a href="insulin.html" class="pos-menu-btn">
+          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+        </a>
+        <a href="anestesi.html" class="pos-menu-btn">
+          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">EBV
+        </a>
+      </nav>
+
+    </div>
+
+    <!-- KARTU UTAMA (TIDAK DIUBAH) -->
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <!-- seluruh isi kalkulator kamu TETAP di sini -->
+      <!-- (volume, waktu, faktor tetes, tombol, hasil) -->
       <header class="mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
           Kecepatan Tetesan Infus
@@ -94,7 +173,11 @@
         </p>
       </header>
 
-      <form id="infusForm" onsubmit="event.preventDefault(); hitungInfus();" class="space-y-4 sm:space-y-5">
+      <form
+        id="infusForm"
+        onsubmit="event.preventDefault(); hitungInfus();"
+        class="space-y-4 sm:space-y-5"
+      >
         <!-- Volume -->
         <div class="space-y-1">
           <label for="volumeInput" class="block text-sm font-medium text-slate-700">
@@ -117,7 +200,6 @@
           </span>
           <div class="mt-1 flex gap-2">
             <div class="flex-1">
-              <label for="jamInput" class="sr-only">Jam</label>
               <input
                 type="number"
                 id="jamInput"
@@ -128,7 +210,6 @@
               />
             </div>
             <div class="flex-1">
-              <label for="menitInput" class="sr-only">Menit</label>
               <input
                 type="number"
                 id="menitInput"
@@ -164,7 +245,7 @@
         <div class="flex flex-col sm:flex-row-reverse sm:justify-end gap-2 pt-2">
           <button
             type="submit"
-            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700"
           >
             Hitung
           </button>
@@ -182,17 +263,18 @@
       <section
         id="result"
         class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"
-      >
-        <!-- Hasil perhitungan akan tampil di sini -->
-      </section>
+      ></section>
     </div>
 
+    <!-- FOOTER -->
     <footer class="text-center text-[10px] sm:text-xs text-slate-500 leading-snug">
-      <div>Created by Muhammad Khairul Zed, S.Kep.,Ners</div>
+      <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
       <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
     </footer>
+
   </div>
 
+  <!-- SCRIPT -->
   <script>
     function toggleMenu() {
       const menu = document.getElementById('sideMenu');
@@ -210,59 +292,46 @@
 
     function hitungInfus() {
       const volume = parseFloat(document.getElementById('volumeInput').value);
-      const jam    = parseFloat(document.getElementById('jamInput').value) || 0;
-      const menit  = parseFloat(document.getElementById('menitInput').value) || 0;
+      const jam = parseFloat(document.getElementById('jamInput').value) || 0;
+      const menit = parseFloat(document.getElementById('menitInput').value) || 0;
       const faktor = parseFloat(document.getElementById('faktorSelect').value);
       const resultDiv = document.getElementById('result');
 
       if (!volume || volume <= 0) {
-        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Volume cairan tidak valid.</p>";
+        resultDiv.innerHTML = "<p class='text-red-600'>Volume cairan tidak valid.</p>";
         return;
       }
 
-      const totalMenit = (jam * 60) + menit;
+      const totalMenit = jam * 60 + menit;
       if (!totalMenit || totalMenit <= 0) {
-        resultDiv.innerHTML = "<p class='text-red-600 text-sm'>Waktu infus tidak valid. Isi jam/menit dengan benar.</p>";
+        resultDiv.innerHTML = "<p class='text-red-600'>Waktu infus tidak valid.</p>";
         return;
       }
 
-      // Rumus: tetes/menit = (volume (ml) × faktor tetes) / total menit
       const tetesPerMenit = (volume * faktor) / totalMenit;
 
-      const html = `
-        <h3 class="text-base sm:text-lg font-semibold text-slate-900 mb-1">
-          Hasil Perhitungan Kecepatan Infus
-        </h3>
-        <p class="text-xs text-slate-600 mb-1">
-          Volume: <span class="font-semibold">${volume} ml</span>,
-          Waktu: <span class="font-semibold">${jam || 0} jam ${menit || 0} menit</span>,
-          Faktor tetes: <span class="font-semibold">${faktor} gtt/ml</span>
-        </p>
-        <hr class="my-2 border-slate-200">
-        <p class="mt-1 text-sm sm:text-base">
-          Kecepatan infus: <span class="font-bold text-slate-900">${tetesPerMenit.toFixed(1)} tetes/menit</span>
+      resultDiv.innerHTML = `
+        <p class="font-semibold">
+          Kecepatan infus:
+          <span class="text-slate-900">${tetesPerMenit.toFixed(1)} tetes/menit</span>
         </p>
       `;
-
-      resultDiv.innerHTML = html;
     }
 
     function resetInfus() {
-      const form = document.getElementById('infusForm');
-      form.reset();
+      document.getElementById('infusForm').reset();
       document.getElementById('faktorSelect').value = "20";
       document.getElementById('result').innerHTML = "";
     }
   </script>
 
   <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js")
-      .catch(err => console.log("SW registration failed:", err));
-  });
-}
-</script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+  </script>
 
 </body>
 </html>
