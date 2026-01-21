@@ -11,6 +11,19 @@
  <style>
   .hidden { display: none; }
 
+   /* ICON MENU IMG */
+.pos-menu-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0 auto 2px;
+  display: block;
+  opacity: .55;
+}
+
+.pos-menu-btn.active .pos-menu-icon {
+  opacity: 1;
+}
+
   /* === POS TAB MENU === */
   .pos-menu {
     display: flex;
@@ -132,51 +145,29 @@
     <span class="text-xs sm:text-sm text-slate-600 font-medium">ZEDose Tools</span>
  </div>
     </header>
+
+    
 <!-- POS STYLE MENU -->
 <nav class="pos-menu">
 
-  <a href="infus.html" class="pos-menu-btn active">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-         viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M12 3v18M8 7h8M8 11h8"/>
-    </svg>
-    Infus
-  </a>
-
-  <a href="index_NoBB.html" class="pos-menu-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-         viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M7 3h10M7 7h10M9 21V7m6 14V7"/>
-    </svg>
-    SP Non BB
-  </a>
-
   <a href="index.html" class="pos-menu-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-         viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M10 3h4v6h-4zM6 21h12"/>
-    </svg>
+    <img src="Asset/SP.svg" class="pos-menu-icon" alt="">
     SP BB
   </a>
-
+  <a href="index_NoBB.html" class="pos-menu-btn">
+    <img src="Asset/SP.svg" class="pos-menu-icon" alt="">
+    SP Non BB
+  </a>
+ <a href="infus.html" class="pos-menu-btn active">
+    <img src="Asset/infus.svg" class="pos-menu-icon" alt="">
+    Infus
+  </a>
   <a href="insulin.html" class="pos-menu-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-         viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M8 21V3m8 18V3"/>
-    </svg>
+    <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">
     Insulin
   </a>
-
   <a href="anestesi.html" class="pos-menu-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor"
-         viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M12 3v18M4 12h16"/>
-    </svg>
+    <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">
     EBV
   </a>
 
