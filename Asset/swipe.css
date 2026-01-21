@@ -1,0 +1,31 @@
+body {
+    overflow-x: hidden;
+  }
+
+  .page-slide {
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 9999;
+    transition: transform 0.3s ease-out;
+  }
+
+  .slide-in-right {
+    transform: translateX(100%);
+  }
+
+  .slide-in-left {
+    transform: translateX(-100%);
+  }
+
+  .slide-center {
+    transform: translateX(0);
+  }
+
+  .slide-out-left {
+    transform: translateX(-100%);
+  }
+
+  .slide-out-right {
+    transform: translateX(100%);
+  }
