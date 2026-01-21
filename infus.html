@@ -17,7 +17,8 @@
 
 <!-- Warna tema (opsional tapi bagus) -->
 <meta name="theme-color" content="#0f766e">
-  <style>
+ <link rel="stylesheet" href="Asset/swipe.css">
+ <style>
     .hidden { display: none; }
 @font-face {
   font-family: 'Archicoco';
@@ -80,39 +81,6 @@
       background: #2563eb;
       border-radius: 2px;
     }
-
-
-body {
-    overflow-x: hidden;
-  }
-
-  .page-slide {
-    position: fixed;
-    inset: 0;
-    background: white;
-    z-index: 9999;
-    transition: transform 0.3s ease-out;
-  }
-
-  .slide-in-right {
-    transform: translateX(100%);
-  }
-
-  .slide-in-left {
-    transform: translateX(-100%);
-  }
-
-  .slide-center {
-    transform: translateX(0);
-  }
-
-  .slide-out-left {
-    transform: translateX(-100%);
-  }
-
-  .slide-out-right {
-    transform: translateX(100%);
-  }
   </style>
 </head>
 
@@ -390,79 +358,9 @@ body {
         navigator.serviceWorker.register("sw.js").catch(() => {});
       });
     }
+ </script>
 
- 
-
-
-  const pages = [
-    "index.html",
-    "index_NoBB.html",
-    "infus.html",
-    "insulin.html",
-    "anestesi.html"
-  ];
-
-  const currentPage = location.pathname.split("/").pop();
-  const currentIndex = pages.indexOf(currentPage);
-
-  let startX = 0;
-  let endX = 0;
-  let isAnimating = false;
-
-  document.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  document.addEventListener("touchend", e => {
-    endX = e.changedTouches[0].clientX;
-    handleSwipe();
-  }, { passive: true });
-
-  function handleSwipe() {
-    if (isAnimating) return;
-
-    const diff = startX - endX;
-    const threshold = 80;
-
-    if (Math.abs(diff) < threshold) return;
-
-    if (diff > 0 && currentIndex < pages.length - 1) {
-      slideTo(pages[currentIndex + 1], "left");
-    }
-
-    if (diff < 0 && currentIndex > 0) {
-      slideTo(pages[currentIndex - 1], "right");
-    }
-  }
-
-  function slideTo(url, direction) {
-    isAnimating = true;
-
-    const iframe = document.createElement("iframe");
-    iframe.src = url;
-    iframe.className = "page-slide";
-    iframe.style.border = "none";
-
-    iframe.classList.add(
-      direction === "left" ? "slide-in-right" : "slide-in-left"
-    );
-
-    document.body.appendChild(iframe);
-
-    requestAnimationFrame(() => {
-      iframe.classList.remove("slide-in-right", "slide-in-left");
-      iframe.classList.add("slide-center");
-
-      document.body.classList.add(
-        direction === "left" ? "slide-out-left" : "slide-out-right"
-      );
-    });
-
-    setTimeout(() => {
-      window.location.href = url;
-    }, 300);
-  }
-  </script>
+<script src="Asset/swipe.js" defer></script>
 
 </body>
 </html>
