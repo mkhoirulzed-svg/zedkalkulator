@@ -3,19 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Kalkulator Kecepatan Infus - ZEDose</title>
+  <title>Asidosis & Alkalosis</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="manifest" href="manifest.json">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#0f766e">
 
+  <link rel="stylesheet" href="Asset/swipe.css">
 
   <style>
-    .hidden { display: none; }
+   .hidden { display: none; }
+@font-face {
+  font-family: 'Archicoco';
+  src: url('./Asset/Archicoco.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 
     /* ICON MENU IMG */
     .pos-menu-icon {
@@ -69,60 +81,108 @@
       background: #2563eb;
       border-radius: 2px;
     }
-  </style>
+
+/* === FOOTER MENU === */
+.footer-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.footer-menu a {
+  flex: 1;
+  text-align: center;
+  padding: 0.65rem 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: color .15s;
+  position: relative;
+}
+
+.footer-menu a:hover {
+  color: #2563eb;
+}
+
+.footer-menu a.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.footer-menu a.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 0;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 0 0 2px 2px;
+}
+</style>
+
 </head>
 
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
-  <!-- BACKDROP -->
-  <div
+<!-- BACKDROP -->
+<div
     id="backdrop"
     class="fixed inset-0 bg-black/30 z-30 hidden"
     onclick="toggleMenu()"
   ></div>
 
   <!-- SIDE MENU -->
-  <aside id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+  <aside
+    id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
+  >
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
       <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
       <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="sr-only">Tutup menu</span>
         <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
         <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
       </button>
     </div>
+
     <nav class="p-4 text-sm space-y-1 text-slate-800">
+       <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        Syringe Pump - Dengan BB
+      </a>
+      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        Syringe Pump - Tanpa BB
+      </a>
       <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💧 Kalkulator Tetesan Infus
+        Kalkulator Tetesan Infus
       </a>
-      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
-        🧪 Syringe Pump - Tanpa BB
-      </a>
-      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
-        🧪 Syringe Pump - Dengan BB
+ <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        Kalkulator Insulin
       </a>
       <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💤 EBV | ABL | MABL
+        EBV | ABL | MABL
       </a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💊  Kalkulator Insulin
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+        Kalkulator Pengenceran Obat
       </a>
-       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        💉 Kalkulator Pengenceran Obat
+        <a href="asidosis.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        Kalkulator AGD/ABG
       </a>
-       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 font-medium flex items-center">
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         ℹ️ Tentang Aplikasi
       </a>
     </nav>
   </aside>
+  
+<div class="w-full max-w-2xl flex flex-col gap-4 pb-16">
 
-
-  <!-- KONTEN UTAMA -->
-  <div class="w-full max-w-2xl flex flex-col gap-4">
-
-    <!-- HEADER + POS MENU -->
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+<!-- HEADER + POS MENU -->
+ <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
 
       <header class="flex items-center px-3 py-2">
         <div class="flex items-center gap-3">
@@ -137,11 +197,9 @@
 
           <div class="flex items-center gap-2">
             <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
-         <span class="px-4 py-1.5 rounded-xl bg-blue-100 text-blue-800
-             text-lg sm:text-xl font-normal tracking-wide shadow-sm"
-      style="font-family: 'Special Gothic Expanded One', system-ui, sans-serif;">
-  Zed Kalkulator
-</span>
+            <span class="text-xs sm:text-sm text-slate-600 font-medium">
+              ZED Kalkulator
+            </span>
           </div>
         </div>
       </header>
@@ -153,7 +211,7 @@
         <a href="index_NoBB.html" class="pos-menu-btn">
           <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">SP Non BB
         </a>
-        <a href="infus.html" class="pos-menu-btn active">
+        <a href="infus.html" class="pos-menu-btn">
           <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
         </a>
         <a href="insulin.html" class="pos-menu-btn">
@@ -166,178 +224,184 @@
 
     </div>
 
-    <!-- KARTU UTAMA (TIDAK DIUBAH) -->
-    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <!-- seluruh isi kalkulator kamu TETAP di sini -->
-      <!-- (volume, waktu, faktor tetes, tombol, hasil) -->
-      <header class="mb-4 sm:mb-6">
-        <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
-          Kecepatan Tetesan Infus
-        </h1>
-        <p class="mt-1 text-xs sm:text-sm text-slate-500">
-          Hitung kecepatan infus (tetes/menit) berdasarkan volume cairan, lama waktu, dan faktor tetes.
-        </p>
-      </header>
+<!-- KARTU UTAMA -->
+<div class="bg-white shadow-xl border rounded-2xl p-4 sm:p-6">
 
-      <form
-        id="infusForm"
-        onsubmit="event.preventDefault(); hitungInfus();"
-        class="space-y-4 sm:space-y-5"
-      >
-        <!-- Volume -->
-        <div class="space-y-1">
-          <label for="volumeInput" class="block text-sm font-medium text-slate-700">
-            Volume cairan (ml)
-          </label>
-          <input
-            type="number"
-            id="volumeInput"
-            min="1"
-            step="1"
-            placeholder="contoh: 500"
-            class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          />
-        </div>
+<header class="mb-4">
+  <h1 class="text-xl sm:text-3xl font-bold text-slate-800">
+    Kalkulator Asidosis & Alkalosis
+  </h1>
+  <p class="text-sm text-slate-500">
+    Interpretasi gas darah arteri (ABG)
+  </p>
+</header>
 
-        <!-- Waktu -->
-        <div class="space-y-1">
-          <span class="block text-sm font-medium text-slate-700">
-            Lama pemberian
-          </span>
-          <div class="mt-1 flex gap-2">
-            <div class="flex-1">
-              <input
-                type="number"
-                id="jamInput"
-                min="0"
-                step="1"
-                placeholder="Jam"
-                class="block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div class="flex-1">
-              <input
-                type="number"
-                id="menitInput"
-                min="0"
-                step="1"
-                placeholder="Menit"
-                class="block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          <p class="text-[11px] sm:text-xs text-slate-500">
-            Contoh: 1 jam 30 menit → isi Jam = 1, Menit = 30.
-          </p>
-        </div>
+<form onsubmit="event.preventDefault(); analisaABG();" class="space-y-4">
 
-        <!-- Faktor tetes -->
-        <div class="space-y-1">
-          <label for="faktorSelect" class="block text-sm font-medium text-slate-700">
-            Faktor tetes (gtt/ml)
-          </label>
-          <select
-            id="faktorSelect"
-            class="mt-1 block w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="10">10 gtt/ml (makro)</option>
-            <option value="15">15 gtt/ml (makro)</option>
-            <option value="20" selected>20 gtt/ml (makro, default)</option>
-            <option value="60">60 gtt/ml (mikro)</option>
-          </select>
-        </div>
+  <div>
+    <label class="text-sm font-medium">pH</label>
+    <input id="ph" type="number" step="0.01" placeholder="7.40"
+      class="w-full rounded-lg border px-3 py-2">
+  </div>
 
-        <!-- Tombol -->
-        <div class="flex flex-col sm:flex-row-reverse sm:justify-end gap-2 pt-2">
-          <button
-            type="submit"
-            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700"
-          >
-            Hitung
-          </button>
-          <button
-            type="button"
-            onclick="resetInfus()"
-            class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm sm:text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-          >
-            Reset
-          </button>
-        </div>
-      </form>
+  <div>
+    <label class="text-sm font-medium">PaCO₂ (mmHg)</label>
+    <input id="pco2" type="number" step="1" placeholder="40"
+      class="w-full rounded-lg border px-3 py-2">
+  </div>
 
-      <!-- Hasil -->
-      <section
-        id="result"
-        class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"
-      ></section>
-    </div>
+  <div>
+    <label class="text-sm font-medium">HCO₃⁻ (mEq/L)</label>
+    <input id="hco3" type="number" step="1" placeholder="24"
+      class="w-full rounded-lg border px-3 py-2">
+  </div>
 
-    <!-- FOOTER -->
-    <footer class="text-center text-[10px] sm:text-xs text-slate-500 leading-snug">
-      <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
-      <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
-    </footer>
+  <button class="w-full bg-blue-600 text-white py-2 rounded-lg">
+    Analisa
+  </button>
+</form>
+
+<section id="hasil" class="mt-4 bg-slate-50 border rounded-xl p-3 text-sm"></section>
+</div>
+
+ <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
+  <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
+  <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
+  <div>
+    Powered by 
+    <a 
+  href="https://www.alkespky.store" 
+  target="_blank" 
+  class="text-blue-500 hover:underline"
+  style="font-family: 'Archicoco', cursive;"
+>
+  AlkesPky
+</a>
+  </div>
+</footer>
 
   </div>
 
-  <!-- SCRIPT -->
-  <script>
-    function toggleMenu() {
-      const menu = document.getElementById('sideMenu');
-      const backdrop = document.getElementById('backdrop');
-      const isOpen = !menu.classList.contains('-translate-x-full');
+<script>
+function toggleMenu(){
+  document.getElementById('sideMenu').classList.toggle('-translate-x-full');
+  document.getElementById('backdrop').classList.toggle('hidden');
+}
 
-      if (isOpen) {
-        menu.classList.add('-translate-x-full');
-        backdrop.classList.add('hidden');
-      } else {
-        menu.classList.remove('-translate-x-full');
-        backdrop.classList.remove('hidden');
+function analisaABG() {
+  const ph = parseFloat(document.getElementById('ph').value);
+  const pco2 = parseFloat(document.getElementById('pco2').value);
+  const hco3 = parseFloat(document.getElementById('hco3').value);
+  const out = document.getElementById('hasil');
+
+  if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) {
+    out.innerHTML = `<p class="text-red-600">Semua nilai harus diisi.</p>`;
+    return;
+  }
+
+  // =====================
+  // Status pH
+  // =====================
+  let statusPH = "";
+  if (ph < 7.35) statusPH = "Asidosis";
+  else if (ph > 7.45) statusPH = "Alkalosis";
+  else statusPH = "Normal";
+
+  // =====================
+  // Tentukan gangguan utama
+  // =====================
+  let gangguan = "";
+  let kompensasi = "";
+
+  // ===== ASIDOSIS =====
+  if (statusPH === "Asidosis") {
+
+    if (pco2 > 45) {
+      gangguan = "Asidosis Respiratorik";
+
+      if (hco3 >= 22 && hco3 <= 26) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (hco3 > 26) {
+        kompensasi = "Terkompensasi sebagian";
+      }
+
+    } else if (hco3 < 22) {
+      gangguan = "Asidosis Metabolik";
+
+      if (pco2 >= 35 && pco2 <= 45) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (pco2 < 35) {
+        kompensasi = "Terkompensasi sebagian";
       }
     }
+  }
 
-    function hitungInfus() {
-      const volume = parseFloat(document.getElementById('volumeInput').value);
-      const jam = parseFloat(document.getElementById('jamInput').value) || 0;
-      const menit = parseFloat(document.getElementById('menitInput').value) || 0;
-      const faktor = parseFloat(document.getElementById('faktorSelect').value);
-      const resultDiv = document.getElementById('result');
+  // ===== ALKALOSIS =====
+  else if (statusPH === "Alkalosis") {
 
-      if (!volume || volume <= 0) {
-        resultDiv.innerHTML = "<p class='text-red-600'>Volume cairan tidak valid.</p>";
-        return;
+    if (pco2 < 35) {
+      gangguan = "Alkalosis Respiratorik";
+
+      if (hco3 >= 22 && hco3 <= 26) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (hco3 < 22) {
+        kompensasi = "Terkompensasi sebagian";
       }
 
-      const totalMenit = jam * 60 + menit;
-      if (!totalMenit || totalMenit <= 0) {
-        resultDiv.innerHTML = "<p class='text-red-600'>Waktu infus tidak valid.</p>";
-        return;
+    } else if (hco3 > 26) {
+      gangguan = "Alkalosis Metabolik";
+
+      if (pco2 >= 35 && pco2 <= 45) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (pco2 > 45) {
+        kompensasi = "Terkompensasi sebagian";
       }
-
-      const tetesPerMenit = (volume * faktor) / totalMenit;
-
-      resultDiv.innerHTML = `
-        <p class="font-semibold">
-          Kecepatan infus:
-          <span class="text-slate-900">${tetesPerMenit.toFixed(1)} tetes/menit</span>
-        </p>
-      `;
     }
+  }
 
-    function resetInfus() {
-      document.getElementById('infusForm').reset();
-      document.getElementById('faktorSelect').value = "20";
-      document.getElementById('result').innerHTML = "";
+  // ===== pH NORMAL → kompensasi sempurna =====
+  else {
+    if (pco2 > 45 && hco3 > 26) {
+      gangguan = "Asidosis Respiratorik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 < 35 && hco3 < 22) {
+      gangguan = "Alkalosis Respiratorik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 < 35 && hco3 < 22) {
+      gangguan = "Asidosis Metabolik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 > 45 && hco3 > 26) {
+      gangguan = "Alkalosis Metabolik";
+      kompensasi = "Terkompensasi sempurna";
+    } else {
+      gangguan = "Normal";
+      kompensasi = "-";
     }
-  </script>
+  }
 
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
-      });
-    }
-  </script>
+  // =====================
+  // OUTPUT
+  // =====================
+  out.innerHTML = `
+    <p><b>Status pH:</b> ${statusPH}</p>
+    <p><b>Gangguan utama:</b> ${gangguan || "-"}</p>
+    <p><b>Status kompensasi:</b> ${kompensasi || "-"}</p>
+  `;
+}
+</script>
+
+<script src="Asset/swipe.js" defer></script>
+<nav class="footer-menu">
+  <a href="home.html">
+    Home
+  </a>
+  <a href="list.html">
+    List Kalkulator
+  </a>
+  <a href="tentang.html">
+    Disclaimer
+  </a>
+</nav>
 
 </body>
 </html>
