@@ -140,6 +140,15 @@ html, body {
   background: #2563eb;
   border-radius: 0 0 2px 2px;
 }
+    /* === FOOTER MENU EMBED (NON FIXED) === */
+.footer-menu.embed {
+  position: static;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-top: 0.75rem;
+}
+
 </style>
 
 
@@ -280,6 +289,15 @@ html, body {
 <section id="hasil" class="mt-4 bg-slate-50 border rounded-xl p-3 text-sm"></section>
 </div>
 
+<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+  <nav class="footer-menu embed">
+    <a href="home.html">Home</a>
+    <a href="list.html">List Kalkulator</a>
+    <a href="tentang.html">Disclaimer</a>
+  </nav>
+</div>
+
+  
  <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
   <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
   <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
@@ -407,17 +425,6 @@ function analisaABG() {
 </script>
 
 <script src="Asset/swipe.js" defer></script>
-<nav class="footer-menu">
-  <a href="home.html">
-    Home
-  </a>
-  <a href="list.html">
-    List Kalkulator
-  </a>
-  <a href="tentang.html">
-    Disclaimer
-  </a>
-</nav>
 
 </body>
 </html>
