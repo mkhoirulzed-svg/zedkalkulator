@@ -7,10 +7,8 @@
 </head>
 <body>
 
-<!-- =====================================================
-     KONTEN HALAMAN (AKAN MASUK KE LAYOUT)
-     ===================================================== -->
-<template id="page-view">
+<!-- KONTEN DISIMPAN TERSEMBUNYI -->
+<div id="page-view" style="display:none">
 
   <header class="mb-4">
     <h1 class="text-xl sm:text-2xl font-bold text-slate-800">
@@ -96,13 +94,11 @@
     </a>
 
   </div>
+</div>
 
-</template>
-
-<!-- =====================================================
-     LOAD LAYOUT + INJECT KONTEN
-     ===================================================== -->
 <script>
+const pageContent = document.getElementById('page-view').innerHTML;
+
 fetch('layout.html')
   .then(res => res.text())
   .then(layout => {
@@ -112,9 +108,8 @@ fetch('layout.html')
 
     window.addEventListener('DOMContentLoaded', () => {
       const slot = document.getElementById('page-content');
-      const view = document.getElementById('page-view');
-      if (slot && view) {
-        slot.innerHTML = view.innerHTML;
+      if (slot) {
+        slot.innerHTML = pageContent;
       }
     });
   });
@@ -122,4 +117,3 @@ fetch('layout.html')
 
 </body>
 </html>
-
