@@ -156,7 +156,7 @@ function toggleMenu(){
   document.getElementById('backdrop').classList.toggle('hidden');
 }
 
-function analisaABG(){
+function analisaABG() {
   const ph = parseFloat(document.getElementById('ph').value);
   const pco2 = parseFloat(document.getElementById('pco2').value);
   const hco3 = parseFloat(document.getElementById('hco3').value);
@@ -167,24 +167,93 @@ function analisaABG(){
     return;
   }
 
+  // =====================
+  // Status pH
+  // =====================
   let statusPH = "";
   if (ph < 7.35) statusPH = "Asidosis";
   else if (ph > 7.45) statusPH = "Alkalosis";
   else statusPH = "Normal";
 
-  let gangguan = "-";
+  // =====================
+  // Tentukan gangguan utama
+  // =====================
+  let gangguan = "";
+  let kompensasi = "";
 
+  // ===== ASIDOSIS =====
   if (statusPH === "Asidosis") {
-    gangguan = pco2 > 45 ? "Asidosis Respiratorik" : "Asidosis Metabolik";
+
+    if (pco2 > 45) {
+      gangguan = "Asidosis Respiratorik";
+
+      if (hco3 >= 22 && hco3 <= 26) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (hco3 > 26) {
+        kompensasi = "Terkompensasi sebagian";
+      }
+
+    } else if (hco3 < 22) {
+      gangguan = "Asidosis Metabolik";
+
+      if (pco2 >= 35 && pco2 <= 45) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (pco2 < 35) {
+        kompensasi = "Terkompensasi sebagian";
+      }
+    }
   }
 
-  if (statusPH === "Alkalosis") {
-    gangguan = pco2 < 35 ? "Alkalosis Respiratorik" : "Alkalosis Metabolik";
+  // ===== ALKALOSIS =====
+  else if (statusPH === "Alkalosis") {
+
+    if (pco2 < 35) {
+      gangguan = "Alkalosis Respiratorik";
+
+      if (hco3 >= 22 && hco3 <= 26) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (hco3 < 22) {
+        kompensasi = "Terkompensasi sebagian";
+      }
+
+    } else if (hco3 > 26) {
+      gangguan = "Alkalosis Metabolik";
+
+      if (pco2 >= 35 && pco2 <= 45) {
+        kompensasi = "Tidak terkompensasi";
+      } else if (pco2 > 45) {
+        kompensasi = "Terkompensasi sebagian";
+      }
+    }
   }
 
+  // ===== pH NORMAL → kompensasi sempurna =====
+  else {
+    if (pco2 > 45 && hco3 > 26) {
+      gangguan = "Asidosis Respiratorik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 < 35 && hco3 < 22) {
+      gangguan = "Alkalosis Respiratorik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 < 35 && hco3 < 22) {
+      gangguan = "Asidosis Metabolik";
+      kompensasi = "Terkompensasi sempurna";
+    } else if (pco2 > 45 && hco3 > 26) {
+      gangguan = "Alkalosis Metabolik";
+      kompensasi = "Terkompensasi sempurna";
+    } else {
+      gangguan = "Normal";
+      kompensasi = "-";
+    }
+  }
+
+  // =====================
+  // OUTPUT
+  // =====================
   out.innerHTML = `
     <p><b>Status pH:</b> ${statusPH}</p>
-    <p><b>Gangguan utama:</b> ${gangguan}</p>
+    <p><b>Gangguan utama:</b> ${gangguan || "-"}</p>
+    <p><b>Status kompensasi:</b> ${kompensasi || "-"}</p>
   `;
 }
 </script>
