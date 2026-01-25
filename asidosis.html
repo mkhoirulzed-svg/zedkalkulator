@@ -157,24 +157,34 @@ function toggleMenu(){
 }
 
 function analisaABG(){
-  const ph = parseFloat(phInput.value);
-  const pco2 = parseFloat(pco2Input.value);
-  const hco3 = parseFloat(hco3Input.value);
+  const ph = parseFloat(document.getElementById('ph').value);
+  const pco2 = parseFloat(document.getElementById('pco2').value);
+  const hco3 = parseFloat(document.getElementById('hco3').value);
   const out = document.getElementById('hasil');
 
-  let statusPH = ph < 7.35 ? "Asidosis" : ph > 7.45 ? "Alkalosis" : "Normal";
-
-  let primer = "";
-  if(statusPH === "Asidosis"){
-    primer = pco2 > 45 ? "Asidosis Respiratorik" : "Asidosis Metabolik";
+  if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) {
+    out.innerHTML = `<p class="text-red-600">Semua nilai harus diisi.</p>`;
+    return;
   }
-  if(statusPH === "Alkalosis"){
-    primer = pco2 < 35 ? "Alkalosis Respiratorik" : "Alkalosis Metabolik";
+
+  let statusPH = "";
+  if (ph < 7.35) statusPH = "Asidosis";
+  else if (ph > 7.45) statusPH = "Alkalosis";
+  else statusPH = "Normal";
+
+  let gangguan = "-";
+
+  if (statusPH === "Asidosis") {
+    gangguan = pco2 > 45 ? "Asidosis Respiratorik" : "Asidosis Metabolik";
+  }
+
+  if (statusPH === "Alkalosis") {
+    gangguan = pco2 < 35 ? "Alkalosis Respiratorik" : "Alkalosis Metabolik";
   }
 
   out.innerHTML = `
     <p><b>Status pH:</b> ${statusPH}</p>
-    <p><b>Gangguan utama:</b> ${primer || "-"}</p>
+    <p><b>Gangguan utama:</b> ${gangguan}</p>
   `;
 }
 </script>
