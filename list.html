@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar Kalkulator | ZED Kalkulator</title>
+</head>
+<body>
+
+<!-- =====================================================
+     KONTEN HALAMAN (AKAN MASUK KE LAYOUT)
+     ===================================================== -->
+<template id="page-view">
+
+  <header class="mb-4">
+    <h1 class="text-xl sm:text-2xl font-bold text-slate-800">
+      Daftar Kalkulator
+    </h1>
+    <p class="text-sm text-slate-500">
+      Semua fitur yang tersedia di ZED Kalkulator
+    </p>
+  </header>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+    <a href="index.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Syringe Pump – Dengan BB
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Perhitungan dosis syringe pump berbasis berat badan
+      </div>
+    </a>
+
+    <a href="index_NoBB.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Syringe Pump – Tanpa BB
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Perhitungan syringe pump tanpa input berat badan
+      </div>
+    </a>
+
+    <a href="infus.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Kalkulator Tetesan Infus
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Hitung tetesan infus makro & mikro
+      </div>
+    </a>
+
+    <a href="insulin.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Kalkulator Insulin
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Perhitungan dosis insulin klinis
+      </div>
+    </a>
+
+    <a href="anestesi.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        EBV | ABL | MABL
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Estimasi volume darah dan batas perdarahan
+      </div>
+    </a>
+
+    <a href="kalkulatorpengenceranobat.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Kalkulator Pengenceran Obat
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Membantu pengenceran obat injeksi dengan aman
+      </div>
+    </a>
+
+    <a href="asidosis.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Kalkulator AGD / ABG
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Interpretasi asidosis dan alkalosis
+      </div>
+    </a>
+
+    <a href="about.html" class="border rounded-xl p-4 hover:bg-slate-50 transition">
+      <div class="font-semibold text-slate-800">
+        Tentang Aplikasi
+      </div>
+      <div class="text-xs text-slate-500 mt-1">
+        Informasi dan tujuan pengembangan aplikasi
+      </div>
+    </a>
+
+  </div>
+
+</template>
+
+<!-- =====================================================
+     LOAD LAYOUT + INJECT KONTEN
+     ===================================================== -->
+<script>
+fetch('layout.html')
+  .then(res => res.text())
+  .then(layout => {
+    document.open();
+    document.write(layout);
+    document.close();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const slot = document.getElementById('page-content');
+      const view = document.getElementById('page-view');
+      if (slot && view) {
+        slot.innerHTML = view.innerHTML;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
 
