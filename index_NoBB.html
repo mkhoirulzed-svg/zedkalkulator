@@ -364,8 +364,10 @@ function setDefaultConc() {
     concWrapperPPI.classList.remove("hidden");
     label.textContent = "Konsentrasi Lansoprazole";
     ppiConc.innerHTML =
-      '<option value="600">1 vial (30mg/50ml → 0,6 mg/ml)</option>' +
-      '<option value="1200">2 vial (60mg/50ml → 1,2 mg/ml)</option>';
+      ppiConc.innerHTML =
+  '<option value="600">1 vial (30mg/50ml → 0,6 mg/ml)</option>' +
+  '<option value="1200">2 vial (60mg/50ml → 1,2 mg/ml)</option>' +
+  '<option value="3000">2 vial (60mg/20ml → 3 mg/ml)</option>';
     ppiConc.classList.remove("hidden");
     ppiCustomWrapper.classList.add("hidden");
   }
