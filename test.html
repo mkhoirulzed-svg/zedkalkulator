@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Asidosis & Alkalosis</title>
+  <title>ZED Kalkulator</title>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSGRFKN6V0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PSGRFKN6V0');
+</script>
+  
+  
   <!-- Tailwind CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="512x512.png">
   <link rel="apple-touch-icon" href="512x512.png">
   <link rel="manifest" href="manifest.json">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#0f766e">
+<link rel="stylesheet" href="Asset/swipe.css">
 
-  <link rel="stylesheet" href="Asset/swipe.css">
-
-  <style>
-.hidden { display: none; }
-
+  <style>.hidden { display: none; }
 @font-face {
   font-family: 'Archicoco';
   src: url('./Asset/Archicoco.otf') format('truetype');
@@ -29,135 +35,75 @@
   font-display: swap;
 }
 
-/* =====================================================
-   OVERRIDE UNTUK SWIPE (WAJIB – JANGAN DIHAPUS)
-   ===================================================== */
-html, body {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
+ @import url('https://fonts.cdnfonts.com/css/poppins');
+    /* ICON MENU IMG */
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
 
-/* =====================================================
-   ICON MENU IMG
-   ===================================================== */
-.pos-menu-icon {
-  width: 30px;
-  height: 22px;
-  margin: 0 auto 2px;
-  display: block;
-  opacity: .55;
-}
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
 
-.pos-menu-btn.active .pos-menu-icon {
-  opacity: 1;
-}
+    /* === POS TAB MENU === */
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
 
-/* =====================================================
-   POS TAB MENU (HEADER)
-   ===================================================== */
-.pos-menu {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.25rem;
-  margin: 0;
-  border-top: 1px solid #e5e7eb;
-}
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
 
-.pos-menu-btn {
-  flex: 1;
-  padding: 0.6rem 0.2rem 0.5rem;
-  text-align: center;
-  color: #6b7280;
-  font-size: 0.7rem;
-  font-weight: 500;
-  position: relative;
-  transition: color .15s;
-}
+    .pos-menu-btn:hover {
+      color: #2563eb;
+    }
 
-.pos-menu-btn:hover {
-  color: #2563eb;
-}
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
 
-.pos-menu-btn.active {
-  color: #2563eb;
-  font-weight: 600;
-}
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }</style>
+  
+<!-- iPhone Icon -->
+<link rel="apple-touch-icon" href="192x193.png">
 
-.pos-menu-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -1px;
-  height: 3px;
-  background: #2563eb;
-  border-radius: 2px;
-}
+<!-- PWA iOS Compatibility -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-/* =====================================================
-   FOOTER MENU (BOTTOM NAV)
-   ===================================================== */
-.footer-menu {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  z-index: 50;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.footer-menu a {
-  flex: 1;
-  text-align: center;
-  padding: 0.65rem 0.2rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: #6b7280;
-  transition: color .15s;
-  position: relative;
-}
-
-.footer-menu a:hover {
-  color: #2563eb;
-}
-
-.footer-menu a.active {
-  color: #2563eb;
-  font-weight: 600;
-}
-
-.footer-menu a.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  top: 0;
-  height: 3px;
-  background: #2563eb;
-  border-radius: 0 0 2px 2px;
-}
-    /* === FOOTER MENU EMBED (NON FIXED) === */
-.footer-menu.embed {
-  position: static;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  margin-top: 0.75rem;
-}
-
-</style>
-
+<!-- Warna tema (opsional tapi bagus) -->
+<meta name="theme-color" content="#0f766e">
 
 </head>
-
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
-<!-- BACKDROP -->
-<div
+  <!-- BACKDROP -->
+  <div
     id="backdrop"
     class="fixed inset-0 bg-black/30 z-30 hidden"
     onclick="toggleMenu()"
@@ -177,7 +123,7 @@ html, body {
     </div>
 
     <nav class="p-4 text-sm space-y-1 text-slate-800">
-       <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
+     <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
         Syringe Pump - Dengan BB
       </a>
       <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
@@ -195,7 +141,7 @@ html, body {
       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         Kalkulator Pengenceran Obat
       </a>
-        <a href="asidosis.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
+        <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
         Kalkulator AGD/ABG
       </a>
       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
@@ -203,11 +149,12 @@ html, body {
       </a>
     </nav>
   </aside>
-  
-<div class="w-full max-w-2xl flex flex-col gap-4 pb-16">
 
-<!-- HEADER + POS MENU -->
- <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+  <!-- KONTEN UTAMA -->
+  <div class="w-full max-w-2xl flex flex-col gap-4">
+
+    <!-- HEADER + POS MENU -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
 
       <header class="flex items-center px-3 py-2">
         <div class="flex items-center gap-3">
@@ -222,15 +169,27 @@ html, body {
 
           <div class="flex items-center gap-2">
             <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
-            <span class="text-xs sm:text-sm text-slate-600 font-medium">
-              ZED Kalkulator
-            </span>
+           <span
+  class="text-xs sm:text-sm text-slate-600 font-medium"
+  style="font-family: 'Poppins', sans-serif;"
+>
+  ZED Kalkulator
+</span>
+
+
           </div>
+            <button
+    id="installBtn"
+    class="hidden flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium shadow active:scale-95"
+  >
+    Install Aplikasi
+  </button>
         </div>
+       
       </header>
 
       <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn">
+        <a href="index.html" class="pos-menu-btn active">
           <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP BB
         </a>
         <a href="index_NoBB.html" class="pos-menu-btn">
@@ -249,56 +208,118 @@ html, body {
 
     </div>
 
-<!-- KARTU UTAMA -->
-<div class="bg-white shadow-xl border rounded-2xl p-4 sm:p-6">
+    <!-- CARD -->
+    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <header class="mb-4 sm:mb-6">
+        <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat berdasarkan BB.</p>
+      </header>
 
-<header class="mb-4">
-  <h1 class="text-xl sm:text-3xl font-bold text-slate-800">
-    Kalkulator Asidosis & Alkalosis
-  </h1>
-  <p class="text-sm text-slate-500">
-    Interpretasi gas darah arteri (ABG)
-  </p>
-</header>
+      <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
 
-<form onsubmit="event.preventDefault(); analisaABG();" class="space-y-4">
+        <!-- Drug Select -->
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-slate-700">Pilih obat</label>
+          <select id="drugSelect" onchange="setDefaultConc()"
+            class="w-full rounded-lg border px-3 py-2 shadow-sm">
+            <option value="">-- Pilih obat --</option>
+            <option value="NE">Norepinefrin (NE)</option>
+            <option value="Adrenalin">Adrenalin</option>
+            <option value="Dopamin">Dopamin</option>
+            <option value="Dobutamin">Dobutamin</option>
+            <option value="Milrinone">Milrinone</option>
+            <option value="Nicardipin">Nicardipin</option>
+            <option value="Herbeser">Herbeser</option>
+            <option value="NTG_BB">NTG (dengan BB)</option>
+          </select>
+        </div>
 
-  <div>
-    <label class="text-sm font-medium">pH</label>
-    <input id="ph" type="number" step="0.01" placeholder="7.40"
-      class="w-full rounded-lg border px-3 py-2">
-  </div>
+        <!-- Weight -->
+        <div id="weightWrapper" class="space-y-1">
+          <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
+          <input id="weightInput" type="number" min="1"
+            class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
+        </div>
 
-  <div>
-    <label class="text-sm font-medium">PaCO₂ (mmHg)</label>
-    <input id="pco2" type="number" step="1" placeholder="40"
-      class="w-full rounded-lg border px-3 py-2">
-  </div>
+        <!-- NE -->
+        <div id="concWrapperNE" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Norepinefrin</label>
+          <div class="flex gap-2">
+            <select id="neConc"
+              class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
+              <option value="80">1 ampul (4 mg/50 ml → 80 mcg/ml)</option>
+              <option value="160">2 ampul (8 mg/50 ml → 160 mcg/ml)</option>
+            </select>
+            <button id="neToggleBtn" type="button" onclick="toggleNEMode()"
+              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
+          </div>
+          <div id="neCustomWrapper" class="hidden">
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <input id="neCustomDose" type="number" placeholder="dosis (mg)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="neCustomVolume" type="number" placeholder="volume(ml)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
 
-  <div>
-    <label class="text-sm font-medium">HCO₃⁻ (mEq/L)</label>
-    <input id="hco3" type="number" step="1" placeholder="24"
-      class="w-full rounded-lg border px-3 py-2">
-  </div>
+        <!-- Nicardipine -->
+        <div id="concWrapperNica" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Nicardipin</label>
+          <div class="flex gap-2">
+            <select id="nicaConc"
+              class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
+              <option value="200">1 ampul (10 mg/50 ml → 200 mcg/ml)</option>
+              <option value="400">2 ampul (20 mg/50 ml → 400 mcg/ml)</option>
+            </select>
+            <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()"
+              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
+          </div>
+          <div id="nicaCustomWrapper" class="hidden">
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <input id="nicaCustomDose" type="number" placeholder="Dosis (mg)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="nicaCustomVolume" type="number" placeholder="Volume (ml)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
 
-  <button class="w-full bg-blue-600 text-white py-2 rounded-lg">
-    Analisa
-  </button>
-</form>
+        <!-- Generic Others -->
+        <div id="concWrapperOther" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">
+            Konsentrasi <span id="drugNameLabel"></span>
+          </label>
+          <div id="otherPresetArea" class="space-y-2"></div>
+          <div id="otherCustomWrapper" class="hidden">
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <input id="otherCustomDose" type="number" placeholder="dosis (mg)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="otherCustomVolume" type="number" placeholder="volume (ml)"
+                class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
 
-<section id="hasil" class="mt-4 bg-slate-50 border rounded-xl p-3 text-sm"></section>
-</div>
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row-reverse gap-2 pt-2">
+          <button type="submit"
+            class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-lg">
+            Hitung
+          </button>
+          <button type="button" onclick="printResultOnly()"
+            class="border bg-white font-medium px-4 py-2.5 rounded-lg text-slate-700">
+            Print hasil
+          </button>
+        </div>
+      </form>
 
-<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-  <nav class="footer-menu embed">
-    <a href="home.html">Home</a>
-    <a href="list.html">List Kalkulator</a>
-    <a href="tentang.html">Disclaimer</a>
-  </nav>
-</div>
+      <section id="result"
+        class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]">
+      </section>
+    </div>
 
-  
- <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
+   <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
   <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
   <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
   <div>
@@ -318,112 +339,219 @@ html, body {
 
 <script>
 function toggleMenu(){
-  document.getElementById('sideMenu').classList.toggle('-translate-x-full');
-  document.getElementById('backdrop').classList.toggle('hidden');
+  const m=document.getElementById('sideMenu');
+  const b=document.getElementById('backdrop');
+  const o=!m.classList.contains('-translate-x-full');
+  if(o){m.classList.add('-translate-x-full');b.classList.add('hidden')}
+  else{m.classList.remove('-translate-x-full');b.classList.remove('hidden')}
 }
 
-function analisaABG() {
-  const ph = parseFloat(document.getElementById('ph').value);
-  const pco2 = parseFloat(document.getElementById('pco2').value);
-  const hco3 = parseFloat(document.getElementById('hco3').value);
-  const out = document.getElementById('hasil');
-
-  if (isNaN(ph) || isNaN(pco2) || isNaN(hco3)) {
-    out.innerHTML = `<p class="text-red-600">Semua nilai harus diisi.</p>`;
-    return;
-  }
-
-  // =====================
-  // Status pH
-  // =====================
-  let statusPH = "";
-  if (ph < 7.35) statusPH = "Asidosis";
-  else if (ph > 7.45) statusPH = "Alkalosis";
-  else statusPH = "Normal";
-
-  // =====================
-  // Tentukan gangguan utama
-  // =====================
-  let gangguan = "";
-  let kompensasi = "";
-
-  // ===== ASIDOSIS =====
-  if (statusPH === "Asidosis") {
-
-    if (pco2 > 45) {
-      gangguan = "Asidosis Respiratorik";
-
-      if (hco3 >= 22 && hco3 <= 26) {
-        kompensasi = "Tidak terkompensasi";
-      } else if (hco3 > 26) {
-        kompensasi = "Terkompensasi sebagian";
-      }
-
-    } else if (hco3 < 22) {
-      gangguan = "Asidosis Metabolik";
-
-      if (pco2 >= 35 && pco2 <= 45) {
-        kompensasi = "Tidak terkompensasi";
-      } else if (pco2 < 35) {
-        kompensasi = "Terkompensasi sebagian";
-      }
-    }
-  }
-
-  // ===== ALKALOSIS =====
-  else if (statusPH === "Alkalosis") {
-
-    if (pco2 < 35) {
-      gangguan = "Alkalosis Respiratorik";
-
-      if (hco3 >= 22 && hco3 <= 26) {
-        kompensasi = "Tidak terkompensasi";
-      } else if (hco3 < 22) {
-        kompensasi = "Terkompensasi sebagian";
-      }
-
-    } else if (hco3 > 26) {
-      gangguan = "Alkalosis Metabolik";
-
-      if (pco2 >= 35 && pco2 <= 45) {
-        kompensasi = "Tidak terkompensasi";
-      } else if (pco2 > 45) {
-        kompensasi = "Terkompensasi sebagian";
-      }
-    }
-  }
-
-  // ===== pH NORMAL → kompensasi sempurna =====
-  else {
-    if (pco2 > 45 && hco3 > 26) {
-      gangguan = "Asidosis Respiratorik";
-      kompensasi = "Terkompensasi sempurna";
-    } else if (pco2 < 35 && hco3 < 22) {
-      gangguan = "Alkalosis Respiratorik";
-      kompensasi = "Terkompensasi sempurna";
-    } else if (pco2 < 35 && hco3 < 22) {
-      gangguan = "Asidosis Metabolik";
-      kompensasi = "Terkompensasi sempurna";
-    } else if (pco2 > 45 && hco3 > 26) {
-      gangguan = "Alkalosis Metabolik";
-      kompensasi = "Terkompensasi sempurna";
-    } else {
-      gangguan = "Normal";
-      kompensasi = "-";
-    }
-  }
-
-  // =====================
-  // OUTPUT
-  // =====================
-  out.innerHTML = `
-    <p><b>Status pH:</b> ${statusPH}</p>
-    <p><b>Gangguan utama:</b> ${gangguan || "-"}</p>
-    <p><b>Status kompensasi:</b> ${kompensasi || "-"}</p>
-  `;
+// Toggles
+function toggleNEMode(){toggleDual('ne')}
+function toggleNicaMode(){toggleDual('nica')}
+function toggleDual(prefix){
+  const wrap=document.getElementById(prefix+"CustomWrapper");
+  const sel=document.getElementById(prefix+"Conc");
+  const btn=document.getElementById(prefix+"ToggleBtn");
+  wrap.classList.toggle("hidden");
+  sel.classList.toggle("hidden");
+  btn.textContent=wrap.classList.contains("hidden")?"Custom":"Pakai preset";
 }
+
+const DRUG_PRESETS={
+  "Adrenalin":[
+  { label: "1 ampul (4 mg/50 ml → 80 mcg/ml)", mcgPerMl: 80 },
+  { label: "2 ampul (8 mg/50 ml → 160 mcg/ml)", mcgPerMl: 160 }],
+  "Dopamin":[{label:"1 ampul (200 mg/50 ml → 4000 mcg/ml)",mcgPerMl:4000}],
+  "Dobutamin":[{label:"1 ampul (250 mg/50 ml → 5000 mcg/ml)",mcgPerMl:5000}],
+  "Milrinone":[{label:"20 mg/50 ml → 400 mcg/ml",mcgPerMl:400}],
+  "Herbeser":[{label:"1 ampul (50 mg/50 ml → 1000 mcg/ml)",mcgPerMl:1000}],
+  "NTG_BB":[
+  { label:"1 ampul (10 mg/50 ml → 200 mcg/ml)", mcgPerMl:200 },
+  { label:"5 ampul (50 mg/50 ml → 1000 mcg/ml)", mcgPerMl:1000 }]
+};
+
+function setDefaultConc(){
+  hideAllConcWrappers();
+  document.getElementById("weightWrapper").classList.remove("hidden");
+  const drug=document.getElementById("drugSelect").value;
+  const presetArea=document.getElementById("otherPresetArea");
+  presetArea.innerHTML="";
+  if(!drug)return;
+
+  if(drug==="NE"){document.getElementById("concWrapperNE").classList.remove("hidden");return}
+  if(drug==="Nicardipin"){document.getElementById("concWrapperNica").classList.remove("hidden");return}
+
+  document.getElementById("concWrapperOther").classList.remove("hidden");
+  document.getElementById("drugNameLabel").textContent=drug;
+
+  if(DRUG_PRESETS[drug]){
+    const presets=DRUG_PRESETS[drug];
+    const wrap=document.createElement("div");
+    wrap.className="flex gap-2";
+    const sel=document.createElement("select");
+    sel.id="otherPresetSelect";
+    sel.className="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1";
+    presets.forEach(p=>{
+      const opt=document.createElement("option");
+      opt.value=p.mcgPerMl;
+      opt.textContent=p.label;
+      sel.appendChild(opt);
+    });
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.id="otherToggleBtn";
+    btn.className="rounded-lg border px-3 py-2 text-xs mt-1";
+    btn.textContent="Custom";
+    btn.onclick=()=>toggleOtherMode(sel,btn);
+    wrap.appendChild(sel);wrap.appendChild(btn);
+    presetArea.appendChild(wrap);
+  }
+}
+
+function toggleOtherMode(sel,btn){
+  const wrapper=document.getElementById("otherCustomWrapper");
+  wrapper.classList.toggle("hidden");
+  sel.classList.toggle("hidden");
+  btn.textContent=wrapper.classList.contains("hidden")?"Custom":"Pakai preset";
+}
+
+function hideAllConcWrappers(){
+  ["NE","Nica","Other"].forEach(id=>{
+    const el=document.getElementById("concWrapper"+id);
+    if(el)el.classList.add("hidden");
+  });
+  ["ne","nica","other"].forEach(p=>{
+    const c=document.getElementById(p+"CustomWrapper");
+    const s=document.getElementById(p+"Conc");
+    if(c)c.classList.add("hidden");
+    if(s)s.classList.remove("hidden");
+  });
+}
+
+function calculateConcentration(mg,ml){
+  if(!mg||!ml)return null;
+  return (mg*1000)/ml;
+}
+
+function getActiveConcentration(drug){
+  if(drug==="NE"){
+    const custom=!document.getElementById("neCustomWrapper").classList.contains("hidden");
+    if(custom) return calculateConcentration(
+      parseFloat(document.getElementById("neCustomDose").value),
+      parseFloat(document.getElementById("neCustomVolume").value)
+    );
+    return parseFloat(document.getElementById("neConc").value);
+  }
+
+  if(drug==="Nicardipin"){
+    const custom=!document.getElementById("nicaCustomWrapper").classList.contains("hidden");
+    if(custom) return calculateConcentration(
+      parseFloat(document.getElementById("nicaCustomDose").value),
+      parseFloat(document.getElementById("nicaCustomVolume").value)
+    );
+    return parseFloat(document.getElementById("nicaConc").value);
+  }
+
+  const presetSel=document.getElementById("otherPresetSelect");
+  if(presetSel&&!presetSel.classList.contains("hidden"))
+    return parseFloat(presetSel.value);
+
+  if(!document.getElementById("otherCustomWrapper").classList.contains("hidden"))
+    return calculateConcentration(
+      parseFloat(document.getElementById("otherCustomDose").value),
+      parseFloat(document.getElementById("otherCustomVolume").value)
+    );
+
+  return null;
+}
+
+function rowHtml(doseText,unit,mlHour){
+  return `<div class='flex justify-between border-b border-dashed text-xs'>
+    <span>${doseText} ${unit}</span>
+    <span class='font-semibold'>${mlHour.toFixed(2)} ml/jam</span>
+  </div>`;
+}
+
+function calculate(){
+  const drug=document.getElementById("drugSelect").value;
+  const result=document.getElementById("result");
+  result.innerHTML="";
+
+  if(!drug)return result.innerHTML="<p class='text-red-600'>Silakan pilih obat.</p>";
+
+  const conc=getActiveConcentration(drug);
+  if(!conc)return result.innerHTML="<p class='text-red-600'>Isi konsentrasi dengan benar.</p>";
+
+  const weight=parseFloat(document.getElementById("weightInput").value);
+  if(!weight||weight<=0)
+    return result.innerHTML="<p class='text-red-600'>BB tidak valid.</p>";
+
+  let html=`<h3 class='font-semibold mb-1'>Hasil Perhitungan ${drug}</h3>
+  <p class='text-xs'>BB: <b>${weight} kg</b></p>
+  <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p><hr class='my-2'>`;
+
+  let doses=[];
+  if(drug==="NE"){
+    for(let d=0.01;d<=0.1;d+=0.01)doses.push(d);
+    for(let d=0.2;d<=2.000001;d+=0.1)doses.push(d);
+  } else if(drug==="Adrenalin"){
+    for(let d=0.05;d<=0.6;d+=0.05)doses.push(d);
+    for(let d=0.7;d<=2.000001;d+=0.1)doses.push(d);
+  } else if(["Dopamin","Dobutamin"].includes(drug)){
+    for(let d=1;d<=20;d++)doses.push(d);
+  } else if(drug==="Milrinone"){
+    doses=[0.1,0.375,0.5,0.75,1,1.25,1.5,1.75,2];
+  } else if(drug==="Herbeser"){
+    doses=[0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10];
+  } else if(drug==="NTG_BB"){
+    doses=[0.25,0.5,0.6,0.75,1,1.25,1.5,1.75,2,2.25,2.5,2.75,3];
+  } else {
+    for(let d=0.5;d<=10;d+=0.5)doses.push(d);
+  }
+
+  doses.forEach(d=>{
+    const mlHour=(d*weight*60)/conc;
+    html+=rowHtml(Number(d.toFixed(3)),"mcg/kg/menit",mlHour);
+  });
+  result.innerHTML=html;
+}
+
+function printResultOnly(){
+  const hasil=document.getElementById("result").innerHTML.trim();
+  if(!hasil)return alert("Belum ada hasil.");
+
+  const w=window.open("", "_blank","width=800,height=600");
+  w.document.write(`<!DOCTYPE html><html><head>
+  <meta charset='utf-8'><title>Print</title></head><body>${hasil}</body></html>`);
+  w.print();
+}
+
+document.addEventListener("DOMContentLoaded",setDefaultConc);
 </script>
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
 
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.classList.remove("hidden");
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      installBtn.classList.add("hidden");
+    }
+
+    deferredPrompt = null;
+  });
+</script>
 <script src="Asset/swipe.js" defer></script>
 
 </body>
