@@ -467,10 +467,10 @@ function getActiveConcentration(drug){
 }
 
 function rowHtml(doseText,unit,mlHour){
-  return `<div class='flex justify-between border-b border-dashed text-xs'>
-    <span>${doseText} ${unit}</span>
-    <span class='font-semibold'>${mlHour.toFixed(2)} ml/jam</span>
-  </div>`;
+  return `<tr>
+    <td>${doseText} ${unit}</td>
+    <td>${mlHour.toFixed(2)} ml/jam</td>
+  </tr>`;
 }
 
 function calculate(){
@@ -493,8 +493,17 @@ let html=`<h3 class='font-semibold mb-1'>${drug}</h3>
 <p class='text-xs'>BB: <b>${weight} kg</b></p>
 <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
 <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p>
-<hr class='my-2'>`;
+<hr class='my-2'>
 
+<table class="result-table">
+  <thead>
+    <tr>
+      <th>Dosis</th>
+      <th>Kecepatan</th>
+    </tr>
+  </thead>
+  <tbody>
+`;
 
   let doses=[];
   if(drug==="NE"){
@@ -519,6 +528,7 @@ let html=`<h3 class='font-semibold mb-1'>${drug}</h3>
     const mlHour=(d*weight*60)/conc;
     html+=rowHtml(Number(d.toFixed(3)),"mcg/kg/menit",mlHour);
   });
+  html += `</tbody></table>`;
   result.innerHTML=html;
 }
 
@@ -535,6 +545,25 @@ function printResultOnly(){
 <title>Print</title>
 
 <style>
+.result-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.result-table th{
+  border: 1px solid #000;
+  padding: 4px;
+  text-align: left;
+  background: #f0f0f0;
+}
+
+.result-table td{
+  border: 1px solid #000;
+  padding: 4px;
+}
+
 body{
   font-family: Arial, Helvetica, sans-serif;
   padding: 10px;
