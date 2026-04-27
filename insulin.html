@@ -434,33 +434,53 @@ function renderSyringePump() {
   konten.innerHTML = `
     <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 3</h1>
     <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">
-      Rapid-Acting Insulin (AC & HS)
+      dr. Didin Sp.PD
     </p>
 
-    <div id="rapidPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
-      <table class="min-w-full text-sm">
-        <thead class="bg-teal-50">
-          <tr>
-            <th class="px-3 py-2">BG</th>
-            <th class="px-3 py-2">Sensitif</th>
-            <th class="px-3 py-2">Normal</th>
-            <th class="px-3 py-2">Resisten</th>
-            <th class="px-3 py-2">HS</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${RapidActing.map((r,i)=>`
-            <tr class="${i%2?'bg-slate-50':''}">
-              <td class="px-3 py-2">${r.bg}</td>
-              <td class="px-3 py-2">${r.sens} U</td>
-              <td class="px-3 py-2">${r.normal} U</td>
-              <td class="px-3 py-2">${r.resist} U</td>
-              <td class="px-3 py-2">${r.hs === "-" ? "-" : r.hs + " U"}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
+   <div id="rapidPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
+
+  <h2 class="text-sm font-semibold text-center mb-2">
+    Short/Rapid-Acting Insulin* Dose
+  </h2>
+
+  <table class="min-w-full text-xs border-collapse text-center">
+    
+    <thead class="bg-teal-50">
+      <!-- BARIS 1 -->
+      <tr>
+        <th rowspan="2" class="px-2 py-2 border">BG<br>(mg/dL)</th>
+        <th colspan="3" class="px-2 py-2 border">AC</th>
+        <th rowspan="2" class="px-2 py-2 border">HS</th>
+      </tr>
+
+      <!-- BARIS 2 -->
+      <tr>
+        <th class="px-2 py-2 border">Highly Insulin Sensitive</th>
+        <th class="px-2 py-2 border">
+          Normal Insulin Sensitivity<br>
+          <span class="text-[10px]">(for most patients)</span>
+        </th>
+        <th class="px-2 py-2 border">Highly Insulin Resistant</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      ${RapidActing.map((r,i)=>`
+        <tr class="${i%2?'bg-slate-50':''}">
+          <td class="px-2 py-2 border">${r.bg}</td>
+          <td class="px-2 py-2 border">${r.sens}U</td>
+          <td class="px-2 py-2 border font-semibold">${r.normal}U</td>
+          <td class="px-2 py-2 border">${r.resist}U</td>
+          <td class="px-2 py-2 border">
+            ${r.hs === "-" ? "" : r.hs + "U"}
+          </td>
+        </tr>
+      `).join("")}
+    </tbody>
+
+  </table>
+</div>
+
 
     <div class="flex gap-2">
       <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
