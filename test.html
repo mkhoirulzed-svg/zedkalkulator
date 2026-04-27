@@ -255,9 +255,9 @@
           </div>
           <div id="neCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="neCustomDose" type="number" placeholder="dosis (mg)"
+              <input id="neCustomDose" type="number" placeholder="mg"
                 class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="neCustomVolume" type="number" placeholder="volume(ml)"
+              <input id="neCustomVolume" type="number" placeholder="ml"
                 class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
@@ -277,9 +277,9 @@
           </div>
           <div id="nicaCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="nicaCustomDose" type="number" placeholder="Dosis (mg)"
+              <input id="nicaCustomDose" type="number" placeholder="mg"
                 class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="nicaCustomVolume" type="number" placeholder="Volume (ml)"
+              <input id="nicaCustomVolume" type="number" placeholder="ml"
                 class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
@@ -293,9 +293,9 @@
           <div id="otherPresetArea" class="space-y-2"></div>
           <div id="otherCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="otherCustomDose" type="number" placeholder="dosis (mg)"
+              <input id="otherCustomDose" type="number" placeholder="mg"
                 class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="otherCustomVolume" type="number" placeholder="volume (ml)"
+              <input id="otherCustomVolume" type="number" placeholder="ml"
                 class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
@@ -487,9 +487,14 @@ function calculate(){
   if(!weight||weight<=0)
     return result.innerHTML="<p class='text-red-600'>BB tidak valid.</p>";
 
-  let html=`<h3 class='font-semibold mb-1'>Hasil Perhitungan ${drug}</h3>
-  <p class='text-xs'>BB: <b>${weight} kg</b></p>
-  <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p><hr class='my-2'>`;
+  const concLabel = getConcentrationLabel(drug);
+
+let html=`<h3 class='font-semibold mb-1'>Hasil Perhitungan ${drug}</h3>
+<p class='text-xs'>BB: <b>${weight} kg</b></p>
+<p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+<p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p>
+<hr class='my-2'>`;
+
 
   let doses=[];
   if(drug==="NE"){
@@ -551,6 +556,38 @@ document.addEventListener("DOMContentLoaded",setDefaultConc);
 
     deferredPrompt = null;
   });
+
+  function getConcentrationLabel(drug){
+  if(drug==="NE"){
+    if(!document.getElementById("neConc").classList.contains("hidden")){
+      return document.getElementById("neConc").selectedOptions[0].text;
+    } else {
+      return "Custom: " + 
+        document.getElementById("neCustomDose").value + " mg / " +
+        document.getElementById("neCustomVolume").value + " ml";
+    }
+  }
+
+  if(drug==="Nicardipin"){
+    if(!document.getElementById("nicaConc").classList.contains("hidden")){
+      return document.getElementById("nicaConc").selectedOptions[0].text;
+    } else {
+      return "Custom: " + 
+        document.getElementById("nicaCustomDose").value + " mg / " +
+        document.getElementById("nicaCustomVolume").value + " ml";
+    }
+  }
+
+  const presetSel=document.getElementById("otherPresetSelect");
+  if(presetSel && !presetSel.classList.contains("hidden")){
+    return presetSel.selectedOptions[0].text;
+  }
+
+  return "Custom: " + 
+    document.getElementById("otherCustomDose").value + " mg / " +
+    document.getElementById("otherCustomVolume").value + " ml";
+}
+
 </script>
 <script src="Asset/swipe.js" defer></script>
 
