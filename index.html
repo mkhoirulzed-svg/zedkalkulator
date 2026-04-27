@@ -87,7 +87,37 @@
       height: 3px;
       background: #2563eb;
       border-radius: 2px;
-    }</style>
+    }
+  
+  .result-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.result-table th,
+.result-table td{
+  border-bottom: 0.5px dashed #ccc;
+  padding: 4px 8px; /* 🔥 ini bikin gak mepet */
+}
+
+.result-table th{
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.result-table td:first-child{
+  width: 65%;
+}
+
+.result-table td:last-child{
+  width: 35%;
+  text-align: right; /* 🔥 ini penting */
+  font-weight: 600;
+}
+</style>
   
 <!-- iPhone Icon -->
 <link rel="apple-touch-icon" href="192x193.png">
@@ -247,8 +277,8 @@
           <div class="flex gap-2">
             <select id="neConc"
               class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
-              <option value="80">1 ampul (4 mg/50 ml → 80 mcg/ml)</option>
-              <option value="160">2 ampul (8 mg/50 ml → 160 mcg/ml)</option>
+              <option value="80">1 ampul (4 mg/50 ml)</option>
+              <option value="160">2 ampul (8 mg/50 ml)</option>
             </select>
             <button id="neToggleBtn" type="button" onclick="toggleNEMode()"
               class="border rounded-lg px-3 py-2 text-xs">Custom</button>
@@ -269,8 +299,8 @@
           <div class="flex gap-2">
             <select id="nicaConc"
               class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
-              <option value="200">1 ampul (10 mg/50 ml → 200 mcg/ml)</option>
-              <option value="400">2 ampul (20 mg/50 ml → 400 mcg/ml)</option>
+              <option value="200">1 ampul (10 mg/50 ml)</option>
+              <option value="400">2 ampul (20 mg/50 ml)</option>
             </select>
             <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()"
               class="border rounded-lg px-3 py-2 text-xs">Custom</button>
@@ -360,15 +390,15 @@ function toggleDual(prefix){
 
 const DRUG_PRESETS={
   "Adrenalin":[
-  { label: "1 ampul (4 mg/50 ml → 80 mcg/ml)", mcgPerMl: 80 },
-  { label: "2 ampul (8 mg/50 ml → 160 mcg/ml)", mcgPerMl: 160 }],
-  "Dopamin":[{label:"1 ampul (200 mg/50 ml → 4000 mcg/ml)",mcgPerMl:4000}],
-  "Dobutamin":[{label:"1 ampul (250 mg/50 ml → 5000 mcg/ml)",mcgPerMl:5000}],
-  "Milrinone":[{label:"20 mg/50 ml → 400 mcg/ml",mcgPerMl:400}],
-  "Herbeser":[{label:"1 ampul (50 mg/50 ml → 1000 mcg/ml)",mcgPerMl:1000}],
+  { label: "1 ampul (4 mg/50 ml)", mcgPerMl: 80 },
+  { label: "2 ampul (8 mg/50 ml)", mcgPerMl: 160 }],
+  "Dopamin":[{label:"1 ampul (200 mg/50 ml)",mcgPerMl:4000}],
+  "Dobutamin":[{label:"1 ampul (250 mg/50 ml)",mcgPerMl:5000}],
+  "Milrinone":[{label:"20 mg/50 ml",mcgPerMl:400}],
+  "Herbeser":[{label:"1 ampul (50 mg/50 ml)",mcgPerMl:1000}],
   "NTG_BB":[
-  { label:"1 ampul (10 mg/50 ml → 200 mcg/ml)", mcgPerMl:200 },
-  { label:"5 ampul (50 mg/50 ml → 1000 mcg/ml)", mcgPerMl:1000 }]
+  { label:"1 ampul (10 mg/50 ml)", mcgPerMl:200 },
+  { label:"5 ampul (50 mg/50 ml)", mcgPerMl:1000 }]
 };
 
 function setDefaultConc(){
@@ -467,10 +497,10 @@ function getActiveConcentration(drug){
 }
 
 function rowHtml(doseText,unit,mlHour){
-  return `<div class='flex justify-between border-b border-dashed text-xs'>
-    <span>${doseText} ${unit}</span>
-    <span class='font-semibold'>${mlHour.toFixed(2)} ml/jam</span>
-  </div>`;
+  return `<tr>
+    <td>${doseText} ${unit}</td>
+    <td>${mlHour.toFixed(2)} ml/jam</td>
+  </tr>`;
 }
 
 function calculate(){
@@ -487,9 +517,23 @@ function calculate(){
   if(!weight||weight<=0)
     return result.innerHTML="<p class='text-red-600'>BB tidak valid.</p>";
 
-  let html=`<h3 class='font-semibold mb-1'>Hasil Perhitungan ${drug}</h3>
-  <p class='text-xs'>BB: <b>${weight} kg</b></p>
-  <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p><hr class='my-2'>`;
+  const concLabel = getConcentrationLabel(drug);
+
+let html=`<h3 class='font-semibold mb-1'>${drug}</h3>
+<p class='text-xs'>BB: <b>${weight} kg</b></p>
+<p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+<p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p>
+<hr class='my-2'>
+
+<table class="result-table">
+  <thead>
+    <tr>
+      <th>Dosis</th>
+      <th>Kecepatan</th>
+    </tr>
+  </thead>
+  <tbody>
+`;
 
   let doses=[];
   if(drug==="NE"){
@@ -514,6 +558,7 @@ function calculate(){
     const mlHour=(d*weight*60)/conc;
     html+=rowHtml(Number(d.toFixed(3)),"mcg/kg/menit",mlHour);
   });
+  html += `</tbody></table>`;
   result.innerHTML=html;
 }
 
@@ -522,11 +567,78 @@ function printResultOnly(){
   if(!hasil)return alert("Belum ada hasil.");
 
   const w=window.open("", "_blank","width=800,height=600");
-  w.document.write(`<!DOCTYPE html><html><head>
-  <meta charset='utf-8'><title>Print</title></head><body>${hasil}</body></html>`);
-  w.print();
+
+  w.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Print</title>
+
+<style>
+@media print {
+
+  body{
+    font-size: 14px;
+    padding: 5px;
+    width: 100mm; /* 🔥 KUNCI: batasi lebar seperti struk */
+  }
+
+  .result-table{
+    width: 100%;
+    table-layout: fixed; /* 🔥 biar gak melebar liar */
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .result-table th,
+  .result-table td{
+    border: 1px solid #000;
+    padding: 2px 4px; /* kecilin */
+    word-wrap: break-word; /* biar gak maksa melebar */
+  }
+
+  .result-table td:first-child{
+    width: 55%;
+  }
+
+  .result-table td:last-child{
+    width: 45%;
+    text-align: right;
+  }
+
+  h3{
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  p{
+    margin: 1px 0;
+  }
+
+  .footer{
+    font-size: 9px;
+    text-align: right;
+  }
 }
 
+</style>
+
+</head>
+<body>
+
+${hasil}
+
+<div class="footer">
+  Generated by ZED Kalkulator
+</div>
+
+</body>
+</html>`);
+
+  w.document.close(); // penting
+  w.print();
+}
+  
 document.addEventListener("DOMContentLoaded",setDefaultConc);
 </script>
 <script>
@@ -551,6 +663,38 @@ document.addEventListener("DOMContentLoaded",setDefaultConc);
 
     deferredPrompt = null;
   });
+
+  function getConcentrationLabel(drug){
+  if(drug==="NE"){
+    if(!document.getElementById("neConc").classList.contains("hidden")){
+      return document.getElementById("neConc").selectedOptions[0].text;
+    } else {
+      return "Custom: " + 
+        document.getElementById("neCustomDose").value + " mg / " +
+        document.getElementById("neCustomVolume").value + " ml";
+    }
+  }
+
+  if(drug==="Nicardipin"){
+    if(!document.getElementById("nicaConc").classList.contains("hidden")){
+      return document.getElementById("nicaConc").selectedOptions[0].text;
+    } else {
+      return "Custom: " + 
+        document.getElementById("nicaCustomDose").value + " mg / " +
+        document.getElementById("nicaCustomVolume").value + " ml";
+    }
+  }
+
+  const presetSel=document.getElementById("otherPresetSelect");
+  if(presetSel && !presetSel.classList.contains("hidden")){
+    return presetSel.selectedOptions[0].text;
+  }
+
+  return "Custom: " + 
+    document.getElementById("otherCustomDose").value + " mg / " +
+    document.getElementById("otherCustomVolume").value + " ml";
+}
+
 </script>
 <script src="Asset/swipe.js" defer></script>
 
