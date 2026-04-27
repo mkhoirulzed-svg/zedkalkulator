@@ -575,47 +575,39 @@ function printResultOnly(){
 <title>Print</title>
 
 <style>
-/* === DEFAULT (layar) === */
-.result-table{
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-  font-size: 12px;
-}
-
-.result-table th,
-.result-table td{
-  border: 1px solid #000;
-  padding: 6px 10px;
-}
-
-/* === KHUSUS PRINT 🔥 === */
 @media print {
+
   body{
-    font-size: 10px; /* lebih kecil */
+    font-size: 10px;
     padding: 5px;
+    width: 80mm; /* 🔥 KUNCI: batasi lebar seperti struk */
   }
 
   .result-table{
+    width: 100%;
+    table-layout: fixed; /* 🔥 biar gak melebar liar */
+    border-collapse: collapse;
     font-size: 10px;
   }
 
   .result-table th,
   .result-table td{
-    padding: 2px 4px; /* 🔥 dipersempit */
+    border: 1px solid #000;
+    padding: 2px 4px; /* kecilin */
+    word-wrap: break-word; /* biar gak maksa melebar */
   }
 
   .result-table td:first-child{
-    width: 60%;
+    width: 55%;
   }
 
   .result-table td:last-child{
-    width: 40%;
+    width: 45%;
     text-align: right;
   }
 
   h3{
-    font-size: 12px;
+    font-size: 11px;
     margin-bottom: 2px;
   }
 
@@ -624,8 +616,8 @@ function printResultOnly(){
   }
 
   .footer{
-    margin-top: 10px;
     font-size: 9px;
+    text-align: right;
   }
 }
 
