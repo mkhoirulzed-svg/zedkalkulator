@@ -277,8 +277,8 @@
           <div class="flex gap-2">
             <select id="neConc"
               class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
-              <option value="80">1 ampul (4 mg/50 ml → 80 mcg/ml)</option>
-              <option value="160">2 ampul (8 mg/50 ml → 160 mcg/ml)</option>
+              <option value="80">1 ampul (4 mg/50 ml)</option>
+              <option value="160">2 ampul (8 mg/50 ml)</option>
             </select>
             <button id="neToggleBtn" type="button" onclick="toggleNEMode()"
               class="border rounded-lg px-3 py-2 text-xs">Custom</button>
@@ -299,8 +299,8 @@
           <div class="flex gap-2">
             <select id="nicaConc"
               class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
-              <option value="200">1 ampul (10 mg/50 ml → 200 mcg/ml)</option>
-              <option value="400">2 ampul (20 mg/50 ml → 400 mcg/ml)</option>
+              <option value="200">1 ampul (10 mg/50 ml)</option>
+              <option value="400">2 ampul (20 mg/50 ml)</option>
             </select>
             <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()"
               class="border rounded-lg px-3 py-2 text-xs">Custom</button>
@@ -390,15 +390,15 @@ function toggleDual(prefix){
 
 const DRUG_PRESETS={
   "Adrenalin":[
-  { label: "1 ampul (4 mg/50 ml → 80 mcg/ml)", mcgPerMl: 80 },
-  { label: "2 ampul (8 mg/50 ml → 160 mcg/ml)", mcgPerMl: 160 }],
-  "Dopamin":[{label:"1 ampul (200 mg/50 ml → 4000 mcg/ml)",mcgPerMl:4000}],
-  "Dobutamin":[{label:"1 ampul (250 mg/50 ml → 5000 mcg/ml)",mcgPerMl:5000}],
-  "Milrinone":[{label:"20 mg/50 ml → 400 mcg/ml",mcgPerMl:400}],
-  "Herbeser":[{label:"1 ampul (50 mg/50 ml → 1000 mcg/ml)",mcgPerMl:1000}],
+  { label: "1 ampul (4 mg/50 ml)", mcgPerMl: 80 },
+  { label: "2 ampul (8 mg/50 ml)", mcgPerMl: 160 }],
+  "Dopamin":[{label:"1 ampul (200 mg/50 ml)",mcgPerMl:4000}],
+  "Dobutamin":[{label:"1 ampul (250 mg/50 ml)",mcgPerMl:5000}],
+  "Milrinone":[{label:"20 mg/50 ml",mcgPerMl:400}],
+  "Herbeser":[{label:"1 ampul (50 mg/50 ml)",mcgPerMl:1000}],
   "NTG_BB":[
-  { label:"1 ampul (10 mg/50 ml → 200 mcg/ml)", mcgPerMl:200 },
-  { label:"5 ampul (50 mg/50 ml → 1000 mcg/ml)", mcgPerMl:1000 }]
+  { label:"1 ampul (10 mg/50 ml)", mcgPerMl:200 },
+  { label:"5 ampul (50 mg/50 ml)", mcgPerMl:1000 }]
 };
 
 function setDefaultConc(){
