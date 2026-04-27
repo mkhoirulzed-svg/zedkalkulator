@@ -87,7 +87,37 @@
       height: 3px;
       background: #2563eb;
       border-radius: 2px;
-    }</style>
+    }
+  
+  .result-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.result-table th,
+.result-table td{
+  border-bottom: 1px dashed #ccc;
+  padding: 6px 10px; /* 🔥 ini bikin gak mepet */
+}
+
+.result-table th{
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.result-table td:first-child{
+  width: 65%;
+}
+
+.result-table td:last-child{
+  width: 35%;
+  text-align: right; /* 🔥 ini penting */
+  font-weight: 600;
+}
+</style>
   
 <!-- iPhone Icon -->
 <link rel="apple-touch-icon" href="192x193.png">
