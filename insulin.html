@@ -209,12 +209,14 @@
     </div>
 
   <!-- TAB -->
-  <div class="flex gap-2 mb-2">
-    <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
-      onclick="showPage('insulinIV', this)">Protap 1</button>
-    <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
-      onclick="showPage('syringePump', this)">Protap 2</button>
-  </div>
+ <div class="flex gap-2 mb-2">
+  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
+    onclick="showPage('insulinIV', this)">Protap 1</button>
+  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
+    onclick="showPage('syringePump', this)">Protap 2</button>
+  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
+    onclick="showPage('RapidActing', this)">Protap 3</button>
+</div>
     <!-- MAIN PANEL -->
     <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
     </main>
@@ -266,6 +268,14 @@ const syringePump = [
   { gds: "251 – 300", rate: "2 Unit" },
   { gds: "301 – 350", rate: "3 Unit" },
   { gds: "> 350", rate: "4 Unit" },
+];
+const RapidActing = [
+  { bg: "<150", sens: 0, normal: 0, resist: 0, hs: "-" },
+  { bg: "150-199", sens: 1, normal: 2, resist: 3, hs: "-" },
+  { bg: "200-249", sens: 2, normal: 4, resist: 6, hs: "-" },
+  { bg: "250-299", sens: 3, normal: 6, resist: 9, hs: "0-2" },
+  { bg: "300-349", sens: 4, normal: 8, resist: 12, hs: "2-4" },
+  { bg: "≥350", sens: 5, normal: 10, resist: 15, hs: "4-6" },
 ];
 
 /* ========== RENDER FUNCTIONS ========== */
@@ -419,6 +429,47 @@ function renderSyringePump() {
   `;
 }
 
+  function renderRapidActing() {
+  if (!konten) return;
+  konten.innerHTML = `
+    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 4</h1>
+    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">
+      Rapid-Acting Insulin (AC & HS)
+    </p>
+
+    <div id="rapidPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
+      <table class="min-w-full text-sm">
+        <thead class="bg-teal-50">
+          <tr>
+            <th class="px-3 py-2">BG</th>
+            <th class="px-3 py-2">Sensitif</th>
+            <th class="px-3 py-2">Normal</th>
+            <th class="px-3 py-2">Resisten</th>
+            <th class="px-3 py-2">HS</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rapidActing.map((r,i)=>`
+            <tr class="${i%2?'bg-slate-50':''}">
+              <td class="px-3 py-2">${r.bg}</td>
+              <td class="px-3 py-2">${r.sens} U</td>
+              <td class="px-3 py-2">${r.normal} U</td>
+              <td class="px-3 py-2">${r.resist} U</td>
+              <td class="px-3 py-2">${r.hs === "-" ? "-" : r.hs + " U"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex gap-2">
+      <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onclick="printElement('rapidPrintArea')">Print Protap 4</button>
+    </div>
+  `;
+}
+
+
 /* ========== PAGE HANDLER ========== */
 function showPage(page, el) {
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
@@ -426,6 +477,7 @@ function showPage(page, el) {
 
   if(page === "insulinIV") renderInsulinIV();
   if(page === "syringePump") renderSyringePump();
+  if(page === "rapidActing") renderRapidActing();
 }
 
 // Default page load
