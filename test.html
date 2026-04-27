@@ -578,16 +578,16 @@ function printResultOnly(){
 @media print {
 
   body{
-    font-size: 10px;
+    font-size: 14px;
     padding: 5px;
-    width: 80mm; /* 🔥 KUNCI: batasi lebar seperti struk */
+    width: 100%; /* 🔥 KUNCI: batasi lebar seperti struk */
   }
 
   .result-table{
     width: 100%;
     table-layout: fixed; /* 🔥 biar gak melebar liar */
     border-collapse: collapse;
-    font-size: 10px;
+    font-size: 14px;
   }
 
   .result-table th,
