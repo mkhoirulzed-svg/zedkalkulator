@@ -432,7 +432,7 @@ function renderSyringePump() {
   function renderRapidActing() {
   if (!konten) return;
   konten.innerHTML = `
-    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 4</h1>
+    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 3</h1>
     <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">
       Rapid-Acting Insulin (AC & HS)
     </p>
@@ -449,7 +449,7 @@ function renderSyringePump() {
           </tr>
         </thead>
         <tbody>
-          ${rapidActing.map((r,i)=>`
+          ${RapidActing.map((r,i)=>`
             <tr class="${i%2?'bg-slate-50':''}">
               <td class="px-3 py-2">${r.bg}</td>
               <td class="px-3 py-2">${r.sens} U</td>
@@ -464,7 +464,7 @@ function renderSyringePump() {
 
     <div class="flex gap-2">
       <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onclick="printElement('rapidPrintArea')">Print Protap 4</button>
+        onclick="printElement('rapidPrintArea')">Print Protap 3</button>
     </div>
   `;
 }
