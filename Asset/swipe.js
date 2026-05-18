@@ -2,7 +2,7 @@
     "index.html",
     "infus.html",
     "insulin.html",
-    "anestesi.html"
+    "kalkulatorpengenceranobat.html"
   ];
 
   const currentPage = location.pathname.split("/").pop();
