@@ -16,6 +16,90 @@ function toggleMenu(){
   else{ m.classList.remove('-translate-x-full'); b.classList.remove('hidden'); }
 }
 
+
+const DRUG_SEARCH_ITEMS = [
+  { value: "NE", label: "Norepinefrin (NE)", aliases: ["ne", "norepinefrin", "norepinephrine", "noradrenalin"] },
+  { value: "Adrenalin", label: "Adrenalin", aliases: ["adrenalin", "epinefrin", "epinephrine"] },
+  { value: "Dopamin", label: "Dopamin", aliases: ["dopamin", "dopamine"] },
+  { value: "Dobutamin", label: "Dobutamin", aliases: ["dobutamin", "dobutamine"] },
+  { value: "Milrinone", label: "Milrinone", aliases: ["milrinone", "milrinon"] },
+  { value: "Nicardipin", label: "Nicardipin", aliases: ["nicardipin", "nicardipine", "cardene"] },
+  { value: "Herbeser", label: "Herbeser", aliases: ["herbeser", "diltiazem"] },
+  { value: "NTG_BB", label: "NTG (dengan BB)", aliases: ["ntg dengan bb", "nitrogliserin bb", "nitroglycerin bb"] },
+  { value: "NTG", label: "NTG (tanpa BB)", aliases: ["ntg tanpa bb", "ntg", "nitrogliserin", "nitroglycerin"] },
+  { value: "PPI", label: "OMZ / Panto", aliases: ["ppi", "omz", "omeprazole", "omeprazol", "panto", "pantoprazole", "pantoprazol"] },
+  { value: "Furosemide", label: "Furosemide", aliases: ["furosemide", "furosemid", "lasix"] },
+  { value: "Lansoprazole", label: "Lansoprazole", aliases: ["lansoprazole", "lansoprazol"] }
+];
+
+function normalizeDrugText(text){
+  return String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function findDrugBySearch(text){
+  const q = normalizeDrugText(text);
+  if(!q) return null;
+
+  let exact = DRUG_SEARCH_ITEMS.find(item =>
+    normalizeDrugText(item.label) === q ||
+    normalizeDrugText(item.value) === q ||
+    item.aliases.some(alias => normalizeDrugText(alias) === q)
+  );
+  if(exact) return exact;
+
+  const matches = DRUG_SEARCH_ITEMS.filter(item => {
+    const haystack = [item.label, item.value, ...item.aliases]
+      .map(normalizeDrugText)
+      .join(" ");
+    return haystack.includes(q);
+  });
+
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function syncSearchFromSelect(){
+  const select = el("drugSelect");
+  const search = el("drugSearch");
+  if(!select || !search) return;
+
+  const item = DRUG_SEARCH_ITEMS.find(d => d.value === select.value);
+  search.value = item ? item.label : "";
+}
+
+function clearDrugSearch(){
+  const search = el("drugSearch");
+  const select = el("drugSelect");
+  if(search) search.value = "";
+  if(select) select.value = "";
+  setDefaultConc();
+}
+
+function initDrugSearch(){
+  const search = el("drugSearch");
+  const select = el("drugSelect");
+  if(!search || !select) return;
+
+  search.addEventListener("input", () => {
+    const item = findDrugBySearch(search.value);
+    if(item){
+      select.value = item.value;
+      setDefaultConc();
+    } else if(!search.value.trim()){
+      select.value = "";
+      setDefaultConc();
+    }
+  });
+
+  search.addEventListener("change", () => {
+    const item = findDrugBySearch(search.value);
+    if(item){
+      select.value = item.value;
+      search.value = item.label;
+      setDefaultConc();
+    }
+  });
+}
+
 function selectedDrug(){ return el("drugSelect").value; }
 function isNoWeightDrug(drug){ return NO_WEIGHT_DRUGS.includes(drug); }
 
@@ -405,6 +489,7 @@ function printResultOnly(){
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initDrugSearch();
   setDefaultConc();
 
   let deferredPrompt;
