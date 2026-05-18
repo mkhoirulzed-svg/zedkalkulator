@@ -1,6 +1,5 @@
  const pages = [
     "index.html",
-    "index_NoBB.html",
     "infus.html",
     "insulin.html",
     "anestesi.html"
