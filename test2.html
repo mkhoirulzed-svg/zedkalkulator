@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>ZED Kalkulator Gabungan</title>
+  <title>ZED Kalkulator</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSGRFKN6V0"></script>
   <script>
@@ -126,7 +126,7 @@
     </div>
 
     <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump Gabungan</a>
+      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump</a>
       <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
       <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
       <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
@@ -159,7 +159,7 @@
       </header>
 
       <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn active"><img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syring Pump</a>
+        <a href="index.html" class="pos-menu-btn active"><img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump</a>
         <a href="infus.html" class="pos-menu-btn"><img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus</a>
         <a href="insulin.html" class="pos-menu-btn"><img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin</a>
         <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn"><img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran</a>
@@ -169,15 +169,49 @@
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <header class="mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1">Gabungan obat dengan BB dan tanpa BB.</p>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat syringe pump.</p>
       </header>
 
       <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
 
-        <div class="space-y-1">
-          <label class="text-sm font-medium text-slate-700">Pilih obat</label>
-          <select id="drugSelect" onchange="setDefaultConc()" class="w-full rounded-lg border px-3 py-2 shadow-sm">
-            <option value="">-- Pilih obat --</option>
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-slate-700">Cari / pilih obat</label>
+
+          <div class="flex gap-2">
+            <input
+              id="drugSearch"
+              type="search"
+              list="drugSearchList"
+              placeholder="Ketik nama obat, contoh: NE, Furosemide, NTG..."
+              class="flex-1 rounded-lg border px-3 py-2 shadow-sm text-sm"
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              onclick="clearDrugSearch()"
+              class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white text-slate-600"
+            >
+              Reset
+            </button>
+          </div>
+
+          <datalist id="drugSearchList">
+            <option value="Norepinefrin (NE)"></option>
+            <option value="Adrenalin"></option>
+            <option value="Dopamin"></option>
+            <option value="Dobutamin"></option>
+            <option value="Milrinone"></option>
+            <option value="Nicardipin"></option>
+            <option value="Herbeser"></option>
+            <option value="NTG (dengan BB)"></option>
+            <option value="NTG (tanpa BB)"></option>
+            <option value="OMZ / Panto"></option>
+            <option value="Furosemide"></option>
+            <option value="Lansoprazole"></option>
+          </datalist>
+
+          <select id="drugSelect" onchange="syncSearchFromSelect(); setDefaultConc();" class="w-full rounded-lg border px-3 py-2 shadow-sm text-sm">
+            <option value="">-- Atau pilih obat dari daftar --</option>
             <optgroup label="Dengan Berat Badan">
               <option value="NE">Norepinefrin (NE)</option>
               <option value="Adrenalin">Adrenalin</option>
@@ -195,6 +229,7 @@
               <option value="Lansoprazole">Lansoprazole</option>
             </optgroup>
           </select>
+          <p class="text-[11px] text-slate-400">Bisa ketik nama obat atau tetap pilih manual dari daftar.</p>
         </div>
 
         <div id="weightWrapper" class="space-y-1">
