@@ -5,38 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>ZED Kalkulator</title>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSGRFKN6V0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSGRFKN6V0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PSGRFKN6V0');
+  </script>
 
-  gtag('config', 'G-PSGRFKN6V0');
-</script>
-  
-  
-  <!-- Tailwind CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="apple-touch-icon" href="192x193.png">
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="Asset/swipe.css">
 
-<link rel="stylesheet" href="Asset/swipe.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#0f766e">
 
-  <style>.hidden { display: none; }
-@font-face {
-  font-family: 'Archicoco';
-  src: url('./Asset/Archicoco.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+  <style>
+    .hidden { display: none; }
 
- @import url('https://fonts.cdnfonts.com/css/poppins');
-    /* ICON MENU IMG */
+    @font-face {
+      font-family: 'Archicoco';
+      src: url('./Asset/Archicoco.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @import url('https://fonts.cdnfonts.com/css/poppins');
+
     .pos-menu-icon {
       width: 30px;
       height: 22px;
@@ -45,11 +45,8 @@
       opacity: .55;
     }
 
-    .pos-menu-btn.active .pos-menu-icon {
-      opacity: 1;
-    }
+    .pos-menu-btn.active .pos-menu-icon { opacity: 1; }
 
-    /* === POS TAB MENU === */
     .pos-menu {
       display: flex;
       justify-content: space-between;
@@ -69,9 +66,7 @@
       transition: color .15s;
     }
 
-    .pos-menu-btn:hover {
-      color: #2563eb;
-    }
+    .pos-menu-btn:hover { color: #2563eb; }
 
     .pos-menu-btn.active {
       color: #2563eb;
@@ -88,62 +83,40 @@
       background: #2563eb;
       border-radius: 2px;
     }
-  
-  .result-table{
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 13px;
-}
 
-.result-table th,
-.result-table td{
-  border-bottom: 0.5px dashed #ccc;
-  padding: 4px 8px; /* 🔥 ini bikin gak mepet */
-}
+    .result-table{
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
 
-.result-table th{
-  text-align: left;
-  font-weight: 600;
-  color: #374151;
-}
+    .result-table th,
+    .result-table td{
+      border-bottom: 0.5px dashed #ccc;
+      padding: 4px 8px;
+    }
 
-.result-table td:first-child{
-  width: 65%;
-}
+    .result-table th{
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+    }
 
-.result-table td:last-child{
-  width: 35%;
-  text-align: right; /* 🔥 ini penting */
-  font-weight: 600;
-}
-</style>
-  
-<!-- iPhone Icon -->
-<link rel="apple-touch-icon" href="192x193.png">
-
-<!-- PWA iOS Compatibility -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<!-- Warna tema (opsional tapi bagus) -->
-<meta name="theme-color" content="#0f766e">
-
+    .result-table td:first-child{ width: 65%; }
+    .result-table td:last-child{
+      width: 35%;
+      text-align: right;
+      font-weight: 600;
+    }
+  </style>
 </head>
+
 <body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
 
-  <!-- BACKDROP -->
-  <div
-    id="backdrop"
-    class="fixed inset-0 bg-black/30 z-30 hidden"
-    onclick="toggleMenu()"
-  ></div>
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
 
-  <!-- SIDE MENU -->
-  <aside
-    id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
-  >
+  <aside id="sideMenu" class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
     <div class="p-4 border-b border-teal-200 flex items-center justify-between">
       <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
       <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
@@ -153,45 +126,22 @@
     </div>
 
     <nav class="p-4 text-sm space-y-1 text-slate-800">
-     <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">
-        Syringe Pump - Dengan BB
-      </a>
-      <a href="index_NoBB.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        Syringe Pump - Tanpa BB
-      </a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        Kalkulator Tetesan Infus
-      </a>
- <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        Kalkulator Insulin
-      </a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        EBV | ABL | MABL
-      </a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        Kalkulator Pengenceran Obat
-      </a>
-        <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        Kalkulator AGD/ABG
-      </a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">
-        ℹ️ Tentang Aplikasi
-      </a>
+      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump</a>
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
+      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">ℹ️ Tentang Aplikasi</a>
     </nav>
   </aside>
 
-  <!-- KONTEN UTAMA -->
   <div class="w-full max-w-2xl flex flex-col gap-4">
 
-    <!-- HEADER + POS MENU -->
     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-
       <header class="flex items-center px-3 py-2">
         <div class="flex items-center gap-3">
-          <button
-            onclick="toggleMenu()"
-            class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500"
-          >
+          <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
             <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
             <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
             <div class="w-5 h-0.5 bg-slate-800"></div>
@@ -199,175 +149,300 @@
 
           <div class="flex items-center gap-2">
             <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
-           <span
-  class="text-xs sm:text-sm text-slate-600 font-medium"
-  style="font-family: 'Poppins', sans-serif;"
->
-  ZED Kalkulator
-</span>
-
-
+            <span class="text-xs sm:text-sm text-slate-600 font-medium" style="font-family: 'Poppins', sans-serif;">ZED Kalkulator</span>
           </div>
-            <button
-    id="installBtn"
-    class="hidden flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium shadow active:scale-95"
-  >
-    Install Aplikasi
-  </button>
+
+          <button id="installBtn" class="hidden flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium shadow active:scale-95">
+            Install Aplikasi
+          </button>
         </div>
-       
       </header>
 
       <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn active">
-          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP BB
-        </a>
-        <a href="index_NoBB.html" class="pos-menu-btn">
-          <img src="Asset/SPnoBB.svg" class="pos-menu-icon" alt="">SP Non BB
-        </a>
-        <a href="infus.html" class="pos-menu-btn">
-          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
-        </a>
-        <a href="insulin.html" class="pos-menu-btn">
-          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
-        </a>
-        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn">
-          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran
-        </a>
+        <a href="index.html" class="pos-menu-btn active"><img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump</a>
+        <a href="infus.html" class="pos-menu-btn"><img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus</a>
+        <a href="insulin.html" class="pos-menu-btn"><img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin</a>
+        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn"><img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran</a>
       </nav>
-
     </div>
 
-    <!-- CARD -->
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <header class="mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat berdasarkan BB.</p>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat syringe pump.</p>
       </header>
 
       <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
 
-        <!-- Drug Select -->
+        <!-- SEARCHABLE DRUG SELECT: 1 KOTAK -->
         <div class="space-y-1">
-          <label class="text-sm font-medium text-slate-700">Pilih obat</label>
-          <select id="drugSelect" onchange="setDefaultConc()"
-            class="w-full rounded-lg border px-3 py-2 shadow-sm">
-            <option value="">-- Pilih obat --</option>
-            <option value="NE">Norepinefrin (NE)</option>
-            <option value="Adrenalin">Adrenalin</option>
-            <option value="Dopamin">Dopamin</option>
-            <option value="Dobutamin">Dobutamin</option>
-            <option value="Milrinone">Milrinone</option>
-            <option value="Nicardipin">Nicardipin</option>
-            <option value="Herbeser">Herbeser</option>
-            <option value="NTG_BB">NTG (dengan BB)</option>
-          </select>
+          <label class="text-sm font-medium text-slate-700">Cari / pilih obat</label>
+
+          <div class="relative">
+            <input
+              id="drugSearch"
+              type="text"
+              placeholder="Ketik nama obat, contoh: NE, Furosemide, NTG..."
+              class="w-full rounded-lg border px-3 py-2 pr-10 shadow-sm text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              autocomplete="off"
+            />
+
+            <button
+              id="clearDrugBtn"
+              type="button"
+              class="absolute right-2 top-1/2 -translate-y-1/2 hidden text-slate-400 hover:text-slate-700 text-lg leading-none px-1"
+              aria-label="Bersihkan pilihan obat"
+            >
+              ×
+            </button>
+
+            <div
+              id="drugDropdown"
+              class="absolute z-50 mt-1 w-full bg-white border rounded-xl shadow-lg max-h-72 overflow-y-auto hidden"
+            >
+              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 sticky top-0">
+                Dengan Berat Badan
+              </div>
+
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NE" data-label="Norepinefrin (NE)">Norepinefrin (NE)</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Adrenalin" data-label="Adrenalin">Adrenalin</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Dopamin" data-label="Dopamin">Dopamin</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Dobutamin" data-label="Dobutamin">Dobutamin</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Milrinone" data-label="Milrinone">Milrinone</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Nicardipin" data-label="Nicardipin">Nicardipin</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
+
+              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t sticky top-0">
+                Tanpa Berat Badan
+              </div>
+
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG" data-label="NTG (tanpa BB)">NTG (tanpa BB)</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="PPI" data-label="OMZ / Panto">OMZ / Panto</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Furosemide" data-label="Furosemide">Furosemide</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Lansoprazole" data-label="Lansoprazole">Lansoprazole</button>
+
+              <div id="drugEmptyState" class="hidden px-3 py-3 text-sm text-slate-500">
+                Obat tidak ditemukan.
+              </div>
+            </div>
+          </div>
+
+          <!-- Value asli tetap pakai id drugSelect agar appgabungan.js tetap jalan -->
+          <input type="hidden" id="drugSelect" value="">
+          <p class="text-[11px] text-slate-400">Klik kotak untuk memilih, atau ketik untuk mencari obat lebih cepat.</p>
         </div>
 
-        <!-- Weight -->
         <div id="weightWrapper" class="space-y-1">
           <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
-          <input id="weightInput" type="number" min="1"
-            class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
+          <input id="weightInput" type="number" min="1" class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
         </div>
 
-        <!-- NE -->
+        <div id="doseWrapperNoBB" class="hidden">
+          <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis (opsional)</label>
+          <div class="mt-1 flex items-center gap-2">
+            <input type="number" id="doseInput" step="0.01" min="0" placeholder="Contoh: 20" class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border" />
+            <span id="doseUnit" class="text-xs text-slate-600 whitespace-nowrap">mg/jam</span>
+          </div>
+          <p class="mt-1 text-[11px] text-slate-400">Kosongkan jika ingin melihat tabel dosis standar.</p>
+        </div>
+
         <div id="concWrapperNE" class="hidden space-y-1">
           <label class="text-sm font-medium text-slate-700">Konsentrasi Norepinefrin</label>
           <div class="flex gap-2">
-            <select id="neConc"
-              class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
+            <select id="neConc" class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
               <option value="80">1 ampul (4 mg/50 ml)</option>
               <option value="160">2 ampul (8 mg/50 ml)</option>
             </select>
-            <button id="neToggleBtn" type="button" onclick="toggleNEMode()"
-              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
+            <button id="neToggleBtn" type="button" onclick="toggleNEMode()" class="border rounded-lg px-3 py-2 text-xs">Custom</button>
           </div>
           <div id="neCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="neCustomDose" type="number" placeholder="mg"
-                class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="neCustomVolume" type="number" placeholder="ml"
-                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="neCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="neCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
         </div>
 
-        <!-- Nicardipine -->
         <div id="concWrapperNica" class="hidden space-y-1">
           <label class="text-sm font-medium text-slate-700">Konsentrasi Nicardipin</label>
           <div class="flex gap-2">
-            <select id="nicaConc"
-              class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
+            <select id="nicaConc" class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
               <option value="200">1 ampul (10 mg/50 ml)</option>
               <option value="400">2 ampul (20 mg/50 ml)</option>
             </select>
-            <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()"
-              class="border rounded-lg px-3 py-2 text-xs">Custom</button>
+            <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()" class="border rounded-lg px-3 py-2 text-xs">Custom</button>
           </div>
           <div id="nicaCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="nicaCustomDose" type="number" placeholder="mg"
-                class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="nicaCustomVolume" type="number" placeholder="ml"
-                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="nicaCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="nicaCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
         </div>
 
-        <!-- Generic Others -->
         <div id="concWrapperOther" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">
-            Konsentrasi <span id="drugNameLabel"></span>
-          </label>
+          <label class="text-sm font-medium text-slate-700">Konsentrasi <span id="drugNameLabel"></span></label>
           <div id="otherPresetArea" class="space-y-2"></div>
           <div id="otherCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="otherCustomDose" type="number" placeholder="mg"
-                class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="otherCustomVolume" type="number" placeholder="ml"
-                class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="otherCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
+              <input id="otherCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
             </div>
           </div>
         </div>
 
-        <!-- Buttons -->
+        <div id="concWrapperPPI" class="hidden space-y-1">
+          <label id="ppiLabel" class="text-sm font-medium text-slate-700">Konsentrasi</label>
+          <div class="flex gap-2">
+            <select id="ppiConc" class="flex-1 px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border"></select>
+            <button type="button" onclick="togglePPICustom()" class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">Custom</button>
+          </div>
+          <div id="ppiCustomWrapper" class="hidden">
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <input type="number" id="ppiCustomDose" placeholder="Dosis (mg)" class="rounded-lg border px-3 py-2 text-sm" />
+              <input type="number" id="ppiCustomVolume" placeholder="Volume (ml)" class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
+
+        <div id="concWrapperFuro" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Furosemide</label>
+          <div class="flex gap-2">
+            <select id="furoConcPreset" class="flex-1 px-3 py-2 rounded-lg border text-sm shadow-sm">
+              <option value="2000">5 ampul (100 mg/50 ml)</option>
+              <option value="5000">5 ampul (100 mg/20 ml)</option>
+              <option value="2400">6 ampul (120 mg/50 ml)</option>
+              <option value="4800">12 ampul (240 mg/50 ml)</option>
+              <option value="10000">10 ampul murni (200 mg/20 ml)</option>
+            </select>
+            <button type="button" onclick="toggleFuroCustom()" class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">Custom</button>
+          </div>
+          <div id="furoCustomWrapper" class="hidden mt-2">
+            <div class="grid grid-cols-2 gap-2">
+              <input type="number" id="furoCustomDose" placeholder="Dosis (mg)" class="rounded-lg border px-3 py-2 text-sm" />
+              <input type="number" id="furoCustomVolume" placeholder="Volume (ml)" class="rounded-lg border px-3 py-2 text-sm" />
+            </div>
+          </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row-reverse gap-2 pt-2">
-          <button type="submit"
-            class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-lg">
-            Hitung
-          </button>
-          <button type="button" onclick="printResultOnly()"
-            class="border bg-white font-medium px-4 py-2.5 rounded-lg text-slate-700">
-            Print hasil
-          </button>
+          <button type="submit" class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-lg">Hitung</button>
+          <button type="button" onclick="printResultOnly()" class="border bg-white font-medium px-4 py-2.5 rounded-lg text-slate-700">Print hasil</button>
         </div>
       </form>
 
-      <section id="result"
-        class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]">
-      </section>
+      <section id="result" class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
     </div>
 
-   <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
-  <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
-  <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
-  <div>
-    Powered by 
-    <a 
-  href="https://www.alkespky.store" 
-  target="_blank" 
-  class="text-blue-500 hover:underline"
-  style="font-family: 'Archicoco', cursive;"
->
-  AlkesPky
-</a>
+    <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
+      <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
+      <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
+      <div>Powered by <a href="https://www.alkespky.store" target="_blank" class="text-blue-500 hover:underline" style="font-family: 'Archicoco', cursive;">AlkesPky</a></div>
+    </footer>
   </div>
-</footer>
 
-  </div>
-<script src="Asset/appindex.js" defer></script>
-<script src="Asset/swipe.js" defer></script>
+  <script src="Asset/appgabungan.js" defer></script>
+  <script src="Asset/swipe.js" defer></script>
+
+  <script>
+    // Searchable dropdown 1 kotak untuk pilihan obat
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("drugSearch");
+      const dropdown = document.getElementById("drugDropdown");
+      const hiddenSelect = document.getElementById("drugSelect");
+      const clearBtn = document.getElementById("clearDrugBtn");
+      const options = Array.from(document.querySelectorAll(".drug-option"));
+      const emptyState = document.getElementById("drugEmptyState");
+
+      if (!searchInput || !dropdown || !hiddenSelect) return;
+
+      function openDropdown() {
+        dropdown.classList.remove("hidden");
+        filterOptions(searchInput.value);
+      }
+
+      function closeDropdown() {
+        dropdown.classList.add("hidden");
+      }
+
+      function filterOptions(keyword) {
+        const q = keyword.trim().toLowerCase();
+        let visibleCount = 0;
+
+        options.forEach(option => {
+          const label = option.dataset.label.toLowerCase();
+          const value = option.dataset.value.toLowerCase();
+          const isMatch = !q || label.includes(q) || value.includes(q);
+
+          option.classList.toggle("hidden", !isMatch);
+          if (isMatch) visibleCount++;
+        });
+
+        if (emptyState) emptyState.classList.toggle("hidden", visibleCount !== 0);
+      }
+
+      function chooseDrug(option) {
+        searchInput.value = option.dataset.label;
+        hiddenSelect.value = option.dataset.value;
+        clearBtn.classList.remove("hidden");
+        closeDropdown();
+
+        if (typeof setDefaultConc === "function") {
+          setDefaultConc();
+        }
+      }
+
+      function clearDrug() {
+        searchInput.value = "";
+        hiddenSelect.value = "";
+        clearBtn.classList.add("hidden");
+        filterOptions("");
+
+        if (typeof setDefaultConc === "function") {
+          setDefaultConc();
+        }
+
+        searchInput.focus();
+        openDropdown();
+      }
+
+      searchInput.addEventListener("focus", openDropdown);
+      searchInput.addEventListener("click", openDropdown);
+
+      searchInput.addEventListener("input", () => {
+        hiddenSelect.value = "";
+        clearBtn.classList.toggle("hidden", searchInput.value.trim() === "");
+        openDropdown();
+      });
+
+      options.forEach(option => {
+        option.addEventListener("click", () => chooseDrug(option));
+      });
+
+      clearBtn.addEventListener("click", clearDrug);
+
+      document.addEventListener("click", (event) => {
+        if (!searchInput.contains(event.target) && !dropdown.contains(event.target) && !clearBtn.contains(event.target)) {
+          closeDropdown();
+        }
+      });
+
+      searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDropdown();
+      });
+    });
+
+    // Kompatibilitas jika masih ada function lama yang dipanggil appgabungan.js
+    function clearDrugSearch() {
+      const btn = document.getElementById("clearDrugBtn");
+      if (btn) btn.click();
+    }
+
+    function syncSearchFromSelect() {
+      // Tidak diperlukan lagi karena select asli sudah diganti hidden input.
+    }
+  </script>
 
 </body>
 </html>
