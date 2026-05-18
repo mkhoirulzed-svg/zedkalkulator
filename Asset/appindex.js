@@ -268,10 +268,8 @@ ${hasil}
   w.document.close(); // penting
   w.print();
 }
-  
+
 document.addEventListener("DOMContentLoaded",setDefaultConc);
-</script>
-<script>
   let deferredPrompt;
   const installBtn = document.getElementById("installBtn");
 
