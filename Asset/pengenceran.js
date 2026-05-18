@@ -29,7 +29,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('dilutionForm');
   const resetBtn = document.getElementById('resetBtn');
   const resultText = document.getElementById('resultText');
-  const drugNameInput = document.getElementById('drugName');
   const doseTotalInput = document.getElementById('doseTotal');
   const volumeTotalInput = document.getElementById('volumeTotal');
   const doseRequestedInput = document.getElementById('doseRequested');
@@ -56,7 +55,6 @@ window.addEventListener('DOMContentLoaded', () => {
       const doseTotal = parseInput(doseTotalInput);
       const volumeTotal = parseInput(volumeTotalInput);
       const doseRequested = parseInput(doseRequestedInput);
-      const drugName = (drugNameInput && drugNameInput.value.trim()) || '';
 
       if (!doseTotal || doseTotal <= 0 || !isFinite(doseTotal)) {
         resultText.innerHTML = '<span class="text-red-600">Isi dosis total dalam vial dengan benar (&gt; 0).</span>';
@@ -71,15 +69,13 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Konsentrasi obat dalam vial (mg/ml atau unit/ml)
+      // Konsentrasi obat dalam vial/ampul (mg/ml atau unit/ml)
       const concentration = doseTotal / volumeTotal; // satuan per ml
       // Volume yang harus diambil
       const volumeNeeded = doseRequested / concentration; // ml
 
-      const drugLabel = drugName ? ' untuk <span class="font-semibold">' + drugName.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span>' : '';
-
       resultText.innerHTML = `
-        <p class="mb-1">Volume yang harus diambil${drugLabel}:<br>
+        <p class="mb-1">Volume yang harus diambil:<br>
           <span class="text-lg font-semibold text-blue-700">${formatNumber(volumeNeeded)} ml</span>
         </p>
         <ul class="mt-2 list-disc list-inside text-xs sm:text-sm text-slate-700 space-y-1">
@@ -97,7 +93,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (resetBtn && resultText) {
     resetBtn.addEventListener('click', () => {
-      if (drugNameInput) drugNameInput.value = '';
       if (doseTotalInput) doseTotalInput.value = '';
       if (volumeTotalInput) volumeTotalInput.value = '';
       if (doseRequestedInput) doseRequestedInput.value = '';
