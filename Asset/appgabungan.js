@@ -511,3 +511,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+// SERVICE WORKER REGISTER
+if ("serviceWorker" in navigator && !window.__zedSwRegistered) {
+
+  window.__zedSwRegistered = true;
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker.register("/sw.js")
+
+      .then((reg) => {
+        console.log("SW registered:", reg.scope);
+      })
+
+      .catch((err) => {
+        console.log("SW failed:", err);
+      });
+
+  });
+
+}
