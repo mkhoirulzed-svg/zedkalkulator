@@ -1,6 +1,6 @@
 {
-  "name": "ZEDose Calc",
-  "short_name": "ZEDose",
+  "name": "ZED Kalkulator",
+  "short_name": "ZED Kalkulator",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
