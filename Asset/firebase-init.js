@@ -13,7 +13,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-alert("Firebase init jalan");
+console.log("Firebase init jalan");
 
 const firebaseConfig = {
   apiKey: "AIzaSyCj_KSdwjSZy3v2D1Wry1VDxBlFTS4d518",
@@ -54,7 +54,7 @@ async function aktifkanNotifikasi() {
       updatedAt: serverTimestamp()
     });
 
-    alert("Token berhasil disimpan ke Firestore");
+    console.log("Token berhasil disimpan ke Firestore");
 
   } catch (error) {
     alert("Gagal: " + error.message);
