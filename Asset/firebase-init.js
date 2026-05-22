@@ -61,7 +61,11 @@ async function aktifkanNotifikasi() {
   }
 }
 
-aktifkanNotifikasi();
+const notifBtn = document.getElementById("notifBtn");
+
+notifBtn?.addEventListener("click", () => {
+  aktifkanNotifikasi();
+});
 
 onMessage(messaging, (payload) => {
   console.log("Notifikasi diterima:", payload);
