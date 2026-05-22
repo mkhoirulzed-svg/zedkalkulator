@@ -29,9 +29,28 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 const db = getFirestore(app);
 
+const notifBtn = document.getElementById("notifBtn");
+
+function updateTombolNotifikasi() {
+  if (!notifBtn) return;
+
+  if (
+    Notification.permission === "granted" ||
+    Notification.permission === "denied"
+  ) {
+    notifBtn.classList.add("hidden");
+  } else {
+    notifBtn.classList.remove("hidden");
+  }
+}
+
+updateTombolNotifikasi();
+
 async function aktifkanNotifikasi() {
   try {
     const permission = await Notification.requestPermission();
+
+    updateTombolNotifikasi();
 
     if (permission !== "granted") {
       alert("Izin notifikasi ditolak");
@@ -55,13 +74,14 @@ async function aktifkanNotifikasi() {
     });
 
     console.log("Token berhasil disimpan ke Firestore");
+    alert("Notifikasi berhasil diaktifkan");
+
+    updateTombolNotifikasi();
 
   } catch (error) {
     alert("Gagal: " + error.message);
   }
 }
-
-const notifBtn = document.getElementById("notifBtn");
 
 notifBtn?.addEventListener("click", () => {
   aktifkanNotifikasi();
