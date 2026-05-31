@@ -397,9 +397,15 @@
       if (!searchInput || !dropdown || !hiddenSelect) return;
 
       function openDropdown() {
-        dropdown.classList.remove("hidden");
-        filterOptions(searchInput.value);
-      }
+  dropdown.classList.remove("hidden");
+
+  // Kalau obat sudah dipilih, tampilkan semua pilihan lagi saat diklik
+  if (hiddenSelect.value) {
+    filterOptions("");
+  } else {
+    filterOptions(searchInput.value);
+  }
+}
 
       function closeDropdown() {
         dropdown.classList.add("hidden");
