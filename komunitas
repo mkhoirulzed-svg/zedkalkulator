@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Komunitas ZED</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#0f766e">
+
+  <style>
+    .hidden { display: none; }
+
+    @font-face {
+      font-family: 'Archicoco';
+      src: url('./Asset/Archicoco.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
+
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
+
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
+
+    .pos-menu-btn:hover {
+      color: #2563eb;
+    }
+
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
+
+    .cat-btn.active {
+      background: #0f766e;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
+
+  <!-- BACKDROP -->
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- SIDE MENU -->
+  <aside
+    id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
+  >
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
+      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
+      <a href="komunitas.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Komunitas ZED</a>
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+    </nav>
+  </aside>
+
+  <!-- KONTEN UTAMA -->
+  <div class="w-full max-w-2xl flex flex-col gap-4">
+
+    <!-- HEADER + POS MENU -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <header class="flex items-center px-3 py-2">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800"></div>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
+            <span class="text-xs sm:text-sm text-slate-600 font-medium">
+              ZED Kalkulator
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="pos-menu">
+        <a href="index.html" class="pos-menu-btn">
+          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
+        </a>
+        <a href="infus.html" class="pos-menu-btn">
+          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+        </a>
+        <a href="insulin.html" class="pos-menu-btn">
+          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+        </a>
+        <a href="komunitas.html" class="pos-menu-btn active">
+          <img src="Asset/komunitas.svg" class="pos-menu-icon" alt="">Komunitas
+        </a>
+      </nav>
+    </div>
+
+    <!-- HERO -->
+    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold text-slate-800">
+        Komunitas ZED
+      </h1>
+      <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+        Ruang diskusi klinis untuk tenaga kesehatan. Bahas kasus, EKG,
+        pengenceran obat, pengalaman IGD, dan cerita jaga.
+      </p>
+
+      <div class="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed">
+        Hindari menulis nama pasien, nomor rekam medis, alamat, atau identitas pribadi pasien.
+      </div>
+    </div>
+
+    <!-- FORM POST -->
+    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <h2 class="text-base font-semibold text-slate-800 mb-3">
+        Buat Diskusi
+      </h2>
+
+      <textarea
+        id="postInput"
+        class="w-full min-h-[95px] border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
+        placeholder="Tulis kasus klinis, pertanyaan, atau cerita jaga..."
+      ></textarea>
+
+      <div class="flex items-center justify-between gap-2 mt-3">
+        <select id="categoryInput" class="border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700">
+          <option>IGD</option>
+          <option>EKG</option>
+          <option>Obat</option>
+          <option>Stroke</option>
+          <option>Cerita Jaga</option>
+        </select>
+
+        <button
+          onclick="addPost()"
+          class="bg-teal-700 hover:bg-teal-800 text-white px-5 py-2 rounded-xl text-sm font-semibold"
+        >
+          Posting
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB KATEGORI -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-2 overflow-x-auto">
+      <div class="flex gap-2 text-xs font-semibold">
+        <button onclick="filterPosts('Semua', this)" class="cat-btn active px-4 py-2 rounded-xl whitespace-nowrap">Semua</button>
+        <button onclick="filterPosts('IGD', this)" class="cat-btn bg-slate-100 px-4 py-2 rounded-xl whitespace-nowrap">IGD</button>
+        <button onclick="filterPosts('EKG', this)" class="cat-btn bg-slate-100 px-4 py-2 rounded-xl whitespace-nowrap">EKG</button>
+        <button onclick="filterPosts('Obat', this)" class="cat-btn bg-slate-100 px-4 py-2 rounded-xl whitespace-nowrap">Obat</button>
+        <button onclick="filterPosts('Cerita Jaga', this)" class="cat-btn bg-slate-100 px-4 py-2 rounded-xl whitespace-nowrap">Cerita Jaga</button>
+      </div>
+    </div>
+
+    <!-- FEED -->
+    <div id="feed" class="flex flex-col gap-4"></div>
+
+    <!-- FOOTER -->
+    <footer class="mt-8 border-t border-slate-200 bg-slate-50">
+      <div class="py-4 px-4 text-center text-[10px] text-slate-500">
+        <div>
+          © 2025–2026 Muhammad Khairul Zed. All Rights Reserved.
+        </div>
+
+        <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
+          <a href="https://www.alkespky.store" target="_blank" class="hover:text-teal-600 hover:underline">
+            Powered by AlkesPKY
+          </a>
+
+          <span class="text-slate-300">•</span>
+
+          <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-500 hover:underline">
+            Contact
+          </a>
+
+          <span class="text-slate-300">•</span>
+
+          <a href="/about.html" class="hover:text-blue-500 hover:underline">
+            Privacy Policy
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('sideMenu').classList.toggle('-translate-x-full');
+      document.getElementById('backdrop').classList.toggle('hidden');
+    }
+
+    let currentFilter = "Semua";
+
+    let posts = [
+      {
+        name: "Admin ZED",
+        role: "Komunitas ZED",
+        category: "IGD",
+        text: "Selamat datang di Komunitas ZED. Silakan berbagi kasus klinis, diskusi EKG, pengenceran obat, atau cerita jaga. Jangan mencantumkan identitas pasien.",
+        likes: 12,
+        comments: 3
+      },
+      {
+        name: "Perawat IGD",
+        role: "Member",
+        category: "EKG",
+        text: "Pasien nyeri dada 3 jam, EKG curiga STEMI inferior. Apakah teman-teman rutin pasang V4R sebelum pemberian nitrat?",
+        likes: 8,
+        comments: 5
+      },
+      {
+        name: "Nakes ZED",
+        role: "Member",
+        category: "Obat",
+        text: "Di tempat teman-teman, norepinefrin lebih sering pakai 4 mg/50 ml atau 8 mg/50 ml untuk syringe pump?",
+        likes: 6,
+        comments: 4
+      }
+    ];
+
+    function renderPosts() {
+      const feed = document.getElementById("feed");
+      feed.innerHTML = "";
+
+      const filteredPosts = currentFilter === "Semua"
+        ? posts
+        : posts.filter(p => p.category === currentFilter);
+
+      if (filteredPosts.length === 0) {
+        feed.innerHTML = `
+          <div class="bg-white border border-slate-200 rounded-2xl p-5 text-center text-sm text-slate-500">
+            Belum ada diskusi pada kategori ini.
+          </div>
+        `;
+        return;
+      }
+
+      filteredPosts.forEach((p, index) => {
+        const realIndex = posts.indexOf(p);
+
+        feed.innerHTML += `
+          <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-5">
+            <div class="flex gap-3">
+              <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700">
+                ${p.name.charAt(0)}
+              </div>
+
+              <div class="flex-1">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-semibold text-sm text-slate-800">${p.name}</div>
+                    <div class="text-[11px] text-slate-500">${p.role} · ${p.category}</div>
+                  </div>
+
+                  <span class="text-[10px] bg-teal-50 text-teal-700 border border-teal-100 px-2 py-1 rounded-full">
+                    ${p.category}
+                  </span>
+                </div>
+
+                <p class="text-sm text-slate-700 mt-3 leading-relaxed">
+                  ${p.text}
+                </p>
+
+                <div class="flex gap-4 mt-4 text-sm text-slate-500">
+                  <button onclick="likePost(${realIndex})" class="hover:text-red-500">❤️ ${p.likes}</button>
+                  <button class="hover:text-blue-500">💬 ${p.comments}</button>
+                  <button class="hover:text-teal-600">↗️ Bagikan</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function addPost() {
+      const input = document.getElementById("postInput");
+      const text = input.value.trim();
+      const category = document.getElementById("categoryInput").value;
+
+      if (!text) {
+        alert("Tulis isi diskusi terlebih dahulu.");
+        return;
+      }
+
+      posts.unshift({
+        name: "Pengguna ZED",
+        role: "Member",
+        category: category,
+        text: text,
+        likes: 0,
+        comments: 0
+      });
+
+      input.value = "";
+      currentFilter = "Semua";
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.classList.remove("active");
+        btn.classList.add("bg-slate-100");
+      });
+      document.querySelector(".cat-btn").classList.add("active");
+      document.querySelector(".cat-btn").classList.remove("bg-slate-100");
+
+      renderPosts();
+    }
+
+    function likePost(index) {
+      posts[index].likes++;
+      renderPosts();
+    }
+
+    function filterPosts(category, btn) {
+      currentFilter = category;
+
+      document.querySelectorAll(".cat-btn").forEach(el => {
+        el.classList.remove("active");
+        el.classList.add("bg-slate-100");
+      });
+
+      btn.classList.add("active");
+      btn.classList.remove("bg-slate-100");
+
+      renderPosts();
+    }
+
+    renderPosts();
+  </script>
+
+</body>
+</html>
