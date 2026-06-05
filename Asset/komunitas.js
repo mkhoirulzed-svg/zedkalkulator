@@ -122,7 +122,6 @@ function listenCategories() {
       "Gagal memuat kategori. Cek Firestore Rules.";
   });
 }
-
 function listenPosts() {
   const q = query(
     collection(db, "komunitas_posts"),
@@ -136,7 +135,14 @@ function listenPosts() {
     }));
 
     document.getElementById("loadingText").classList.add("hidden");
+
     renderPosts();
+
+    // TAMBAHKAN INI
+    posts.forEach(post => {
+      listenLikeCount(post.id);
+    });
+
   }, error => {
     console.error("Error postingan:", error);
     document.getElementById("loadingText").innerText =
@@ -240,9 +246,9 @@ function renderPosts() {
 
            <div class="flex flex-wrap gap-4 mt-4 text-sm text-slate-500">
 
-  <button onclick="likePost('${post.id}')" class="hover:text-red-500">
-    ❤️ ${post.likes || 0}
-  </button>
+ <button onclick="likePost('${post.id}')" class="hover:text-red-500">
+  ❤️ <span id="like-count-${post.id}">0</span>
+</button>
 
   <button onclick="toggleComments('${post.id}')" class="hover:text-blue-500">
     Komentar
@@ -491,6 +497,23 @@ window.loadComments = function(postId){
       `;
     });
   });
+}
+
+function listenLikeCount(postId){
+
+  onSnapshot(
+    collection(db, "komunitas_posts", postId, "likes"),
+    snap => {
+
+      const el =
+        document.getElementById(`like-count-${postId}`);
+
+      if(el){
+        el.textContent = snap.size;
+      }
+    }
+  );
+
 }
 
 window.addComment = async function(postId){
