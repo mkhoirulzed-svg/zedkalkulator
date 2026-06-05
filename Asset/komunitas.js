@@ -84,6 +84,11 @@ let categories = [];
 let posts = [];
 let currentFilter = "Semua";
 
+function isAdmin() {
+  return currentUser &&
+    currentUser.email === "mkhoirulzed@gmail.com";
+}
+
 window.toggleMenu = function () {
   document.getElementById("sideMenu").classList.toggle("-translate-x-full");
   document.getElementById("backdrop").classList.toggle("hidden");
@@ -242,8 +247,14 @@ function renderPosts() {
             <div class="flex items-start justify-between gap-2">
               <div>
                 <div class="font-semibold text-sm text-slate-800">
-                  ${escapeHtml(post.name || "Pengguna ZED")}
-                </div>
+  ${escapeHtml(post.name || "Pengguna")}
+
+  ${
+    post.email === "mkhoirulzed@gmail.com"
+      ? `<span class="ml-1 text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full">ADMIN</span>`
+      : ""
+  }
+</div>
                 <div class="text-[11px] text-slate-500">
                   ${escapeHtml(post.role || "Member")} · ${formatDate(post.createdAt)}
                 </div>
@@ -254,9 +265,41 @@ function renderPosts() {
               </span>
             </div>
 
-            <p class="text-sm text-slate-700 mt-3 leading-relaxed whitespace-pre-line">
-              ${escapeHtml(post.text || "")}
-            </p>
+           ${(() => {
+  const fullText = escapeHtml(post.text || "");
+  const shortText =
+    fullText.length > 250
+      ? fullText.substring(0, 250) + "..."
+      : fullText;
+
+  return `
+    <p
+      id="post-text-${post.id}"
+      class="text-sm text-slate-700 mt-3 leading-relaxed whitespace-pre-line"
+    >
+      ${shortText}
+    </p>
+
+    ${
+      fullText.length > 250
+        ? `
+          <button
+            onclick="togglePostText('${post.id}')"
+            class="text-xs text-teal-600 mt-2"
+          >
+            Lihat selengkapnya
+          </button>
+        `
+        : ""
+    }
+
+    <input
+      type="hidden"
+      id="full-post-${post.id}"
+      value="${escapeHtml(post.text || "")}"
+    >
+  `;
+})()}
 
            <div class="flex flex-wrap gap-4 mt-4 text-sm text-slate-500">
 
@@ -273,7 +316,11 @@ function renderPosts() {
   </button>
 
   ${
-    currentUser && currentUser.uid === post.uid
+   currentUser &&
+(
+  currentUser.uid === post.uid ||
+  currentUser.email === "mkhoirulzed@gmail.com"
+)
     ? `
       <button onclick="editPost('${post.id}')" class="hover:text-amber-600">
         Edit
@@ -441,6 +488,34 @@ window.sharePost = async function (text) {
   }
 };
 
+window.togglePostText = function(postId){
+
+  const textEl =
+    document.getElementById(`post-text-${postId}`);
+
+  const btn =
+    event.target;
+
+  const full =
+    document.getElementById(`full-post-${postId}`).value;
+
+  if(btn.dataset.open === "1"){
+
+    textEl.innerHTML =
+      escapeHtml(full.substring(0,250)) + "...";
+
+    btn.innerText = "Lihat selengkapnya";
+    btn.dataset.open = "0";
+
+  }else{
+
+    textEl.innerHTML =
+      escapeHtml(full);
+
+    btn.innerText = "Sembunyikan";
+    btn.dataset.open = "1";
+  }
+}
 window.editPost = async function(postId){
 
   const post = posts.find(p => p.id === postId);
@@ -461,6 +536,19 @@ window.editPost = async function(postId){
 }
 
 window.deletePostConfirm = async function(postId){
+
+  const post = posts.find(p => p.id === postId);
+
+  if(!post) return;
+
+  const allowed =
+    currentUser.uid === post.uid ||
+    currentUser.email === "mkhoirulzed@gmail.com";
+
+  if(!allowed){
+    alert("Tidak memiliki izin");
+    return;
+  }
 
   if(!confirm("Hapus postingan ini?")) return;
 
