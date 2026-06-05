@@ -14,20 +14,23 @@ import {
   increment
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+//firestore
+
 const firebaseConfig = {
-  apiKey: "ISI_API_KEY_KAMU",
-  authDomain: "ISI_PROJECT.firebaseapp.com",
-  projectId: "ISI_PROJECT_ID",
-  storageBucket: "ISI_PROJECT.appspot.com",
-  messagingSenderId: "ISI_SENDER_ID",
-  appId: "ISI_APP_ID"
+  apiKey: "AIzaSyDzL1TQvSe622JvmJzbjx0JqlPlhIetHUU",
+  authDomain: "zedkomunitas.firebaseapp.com",
+  projectId: "zedkomunitas",
+  storageBucket: "zedkomunitas.firebasestorage.app",
+  messagingSenderId: "571357898541",
+  appId: "1:571357898541:web:63ec4b51c1ce3c452655a4",
+  measurementId: "G-BLWCMQ6TYN"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const defaultCategories = [
-  "IGD",
+  "Bebas",
   "EKG",
   "Obat",
   "Stroke",
@@ -330,14 +333,3 @@ await seedDefaultCategories();
 listenCategories();
 listenPosts();
 
-//firestore
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDzL1TQvSe622JvmJzbjx0JqlPlhIetHUU",
-  authDomain: "zedkomunitas.firebaseapp.com",
-  projectId: "zedkomunitas",
-  storageBucket: "zedkomunitas.firebasestorage.app",
-  messagingSenderId: "571357898541",
-  appId: "1:571357898541:web:63ec4b51c1ce3c452655a4",
-  measurementId: "G-BLWCMQ6TYN"
-};
