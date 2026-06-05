@@ -13,6 +13,9 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
+  deleteDoc,
+  setDoc,
   onSnapshot,
   query,
   orderBy,
@@ -235,19 +238,58 @@ function renderPosts() {
               ${escapeHtml(post.text || "")}
             </p>
 
-            <div class="flex gap-4 mt-4 text-sm text-slate-500">
-              <button onclick="likePost('${post.id}')" class="hover:text-red-500">
-                ❤️ ${post.likes || 0}
-              </button>
+           <div class="flex flex-wrap gap-4 mt-4 text-sm text-slate-500">
 
-              <button class="hover:text-blue-500">
-                💬 ${post.comments || 0}
-              </button>
+  <button onclick="likePost('${post.id}')" class="hover:text-red-500">
+    ❤️ ${post.likes || 0}
+  </button>
 
-              <button onclick="sharePost('${escapeJs(post.text || "")}')" class="hover:text-teal-600">
-                ↗️ Bagikan
-              </button>
-            </div>
+  <button onclick="toggleComments('${post.id}')" class="hover:text-blue-500">
+    Komentar
+  </button>
+
+  <button onclick="sharePost('${escapeJs(post.text || "")}')" class="hover:text-teal-600">
+    Bagikan
+  </button>
+
+  ${
+    currentUser && currentUser.uid === post.uid
+    ? `
+      <button onclick="editPost('${post.id}')" class="hover:text-amber-600">
+        Edit
+      </button>
+
+      <button onclick="deletePostConfirm('${post.id}')" class="hover:text-red-600">
+        Hapus
+      </button>
+    `
+    : ""
+  }
+</div>
+
+<div id="comments-${post.id}" class="hidden mt-3">
+  <div id="commentList-${post.id}" class="space-y-2 mb-2"></div>
+
+  ${
+    currentUser
+    ? `
+      <div class="flex gap-2">
+        <input
+          id="commentInput-${post.id}"
+          class="flex-1 border rounded-xl px-3 py-2 text-sm"
+          placeholder="Tulis komentar..."
+        >
+        <button
+          onclick="addComment('${post.id}')"
+          class="bg-blue-600 text-white px-3 rounded-xl"
+        >
+          Kirim
+        </button>
+      </div>
+    `
+    : ""
+  }
+</div>
           </div>
         </div>
       </div>
@@ -315,17 +357,40 @@ window.addPost = async function () {
   renderCategoryTabs();
 };
 
-window.likePost = async function (postId) {
- if (!currentUser) {
-  alert("Silakan login Google dulu untuk like.");
-  return;
-}
-  const postRef = doc(db, "komunitas_posts", postId);
+window.likePost = async function(postId){
 
-  await updateDoc(postRef, {
-    likes: increment(1)
+  if(!currentUser){
+    alert("Login dulu");
+    return;
+  }
+
+  const likeRef = doc(
+    db,
+    "komunitas_posts",
+    postId,
+    "likes",
+    currentUser.uid
+  );
+
+  const snap = await getDoc(likeRef);
+
+  if(snap.exists()){
+    alert("Kamu sudah like postingan ini");
+    return;
+  }
+
+  await setDoc(likeRef,{
+    uid:currentUser.uid,
+    createdAt:serverTimestamp()
   });
-};
+
+  await updateDoc(
+    doc(db,"komunitas_posts",postId),
+    {
+      likes:increment(1)
+    }
+  );
+}
 
 window.filterPosts = function (category, btn) {
   currentFilter = category;
@@ -355,6 +420,108 @@ window.sharePost = async function (text) {
     alert("Teks diskusi disalin.");
   }
 };
+
+window.editPost = async function(postId){
+
+  const post = posts.find(p => p.id === postId);
+
+  if(!post) return;
+
+  const text = prompt("Edit postingan", post.text);
+
+  if(text === null) return;
+
+  await updateDoc(
+    doc(db,"komunitas_posts",postId),
+    {
+      text:text.trim()
+    }
+  );
+}
+
+window.deletePostConfirm = async function(postId){
+
+  if(!confirm("Hapus postingan ini?")) return;
+
+  await deleteDoc(
+    doc(db,"komunitas_posts",postId)
+  );
+}
+
+window.toggleComments = function(postId){
+
+  const el = document.getElementById(`comments-${postId}`);
+
+  el.classList.toggle("hidden");
+
+  loadComments(postId);
+}
+
+window.loadComments = function(postId){
+
+  const q = query(
+    collection(db,"komunitas_posts",postId,"comments"),
+    orderBy("createdAt","asc")
+  );
+
+  onSnapshot(q,snapshot=>{
+
+    const target =
+      document.getElementById(`commentList-${postId}`);
+
+    if(!target) return;
+
+    target.innerHTML = "";
+
+    snapshot.forEach(docSnap=>{
+
+      const c = docSnap.data();
+
+      target.innerHTML += `
+        <div class="bg-slate-50 rounded-xl p-2 text-sm">
+          <div class="font-semibold">
+            ${escapeHtml(c.name || "Member")}
+          </div>
+
+          <div>
+            ${escapeHtml(c.text)}
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+
+window.addComment = async function(postId){
+
+  if(!currentUser) return;
+
+  const input =
+    document.getElementById(`commentInput-${postId}`);
+
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  await addDoc(
+    collection(db,"komunitas_posts",postId,"comments"),
+    {
+      uid:currentUser.uid,
+      name:currentUser.displayName,
+      text:text,
+      createdAt:serverTimestamp()
+    }
+  );
+
+  input.value = "";
+
+  await updateDoc(
+    doc(db,"komunitas_posts",postId),
+    {
+      comments:increment(1)
+    }
+  );
+}
 
 function formatDate(timestamp) {
   if (!timestamp || !timestamp.toDate) return "Baru saja";
