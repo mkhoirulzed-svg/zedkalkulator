@@ -257,12 +257,12 @@ function renderPosts() {
 
 window.addPost = async function () {
   if (!currentUser) {
-  alert("Silakan login Google dulu untuk membuat postingan.");
-  return;
-}
+    alert("Silakan login Google dulu untuk membuat postingan.");
+    return;
+  }
+
   const textInput = document.getElementById("postInput");
   const customInput = document.getElementById("customCategoryInput");
-
   const text = textInput.value.trim();
 
   if (!text) {
@@ -287,23 +287,18 @@ window.addPost = async function () {
     );
 
     if (!exists) {
-  await addDoc(collection(db, "komunitas_posts"), {
-  uid: currentUser.uid,
-  name: currentUser.displayName || "Pengguna ZED",
-  email: currentUser.email || "",
-  photoURL: currentUser.photoURL || "",
-  role: "Member",
-  category: category,
-  text: text,
-  likes: 0,
-  comments: 0,
-  createdAt: serverTimestamp()
-});
+      await addDoc(collection(db, "komunitas_categories"), {
+        name: category,
+        createdAt: serverTimestamp()
+      });
     }
   }
 
   await addDoc(collection(db, "komunitas_posts"), {
-    name: "Pengguna ZED",
+    uid: currentUser.uid,
+    name: currentUser.displayName || "Pengguna ZED",
+    email: currentUser.email || "",
+    photoURL: currentUser.photoURL || "",
     role: "Member",
     category: category,
     text: text,
@@ -315,8 +310,6 @@ window.addPost = async function () {
   textInput.value = "";
   customInput.value = "";
   customInput.classList.add("hidden");
-
-  document.getElementById("categoryInput").value = categories[0]?.name || "Bebas";
 
   currentFilter = "Semua";
   renderCategoryTabs();
