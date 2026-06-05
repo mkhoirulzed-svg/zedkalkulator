@@ -221,9 +221,22 @@ function renderPosts() {
     feed.innerHTML += `
       <div class="post-card bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-5">
         <div class="flex gap-3">
-          <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700">
-            ${escapeHtml((post.name || "P").charAt(0))}
-          </div>
+          ${
+  post.photoURL
+  ? `
+    <img
+      src="${escapeHtml(post.photoURL)}"
+      class="w-10 h-10 rounded-full object-cover border border-slate-200"
+      referrerpolicy="no-referrer"
+      alt="Foto profil"
+    >
+  `
+  : `
+    <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700">
+      ${escapeHtml((post.name || "P").charAt(0))}
+    </div>
+  `
+}
 
           <div class="flex-1">
             <div class="flex items-start justify-between gap-2">
