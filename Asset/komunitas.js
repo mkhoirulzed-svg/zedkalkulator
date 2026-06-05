@@ -141,6 +141,7 @@ function listenPosts() {
     // TAMBAHKAN INI
     posts.forEach(post => {
       listenLikeCount(post.id);
+      listenCommentCount(post.id);
     });
 
   }, error => {
@@ -251,8 +252,8 @@ function renderPosts() {
 </button>
 
   <button onclick="toggleComments('${post.id}')" class="hover:text-blue-500">
-    Komentar
-  </button>
+  💬 <span id="comment-count-${post.id}">0</span>
+</button>
 
   <button onclick="sharePost('${escapeJs(post.text || "")}')" class="hover:text-teal-600">
     Bagikan
@@ -516,6 +517,23 @@ function listenLikeCount(postId){
 
 }
 
+function listenCommentCount(postId){
+
+  onSnapshot(
+    collection(db, "komunitas_posts", postId, "comments"),
+    snap => {
+
+      const el =
+        document.getElementById(`comment-count-${postId}`);
+
+      if(el){
+        el.textContent = snap.size;
+      }
+    }
+  );
+
+}
+
 window.addComment = async function(postId){
 
   if(!currentUser) return;
@@ -538,13 +556,6 @@ window.addComment = async function(postId){
   );
 
   input.value = "";
-
-  await updateDoc(
-    doc(db,"komunitas_posts",postId),
-    {
-      comments:increment(1)
-    }
-  );
 }
 
 function formatDate(timestamp) {
