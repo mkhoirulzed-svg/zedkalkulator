@@ -329,3 +329,15 @@ function escapeJs(text) {
 await seedDefaultCategories();
 listenCategories();
 listenPosts();
+
+//firestore
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDzL1TQvSe622JvmJzbjx0JqlPlhIetHUU",
+  authDomain: "zedkomunitas.firebaseapp.com",
+  projectId: "zedkomunitas",
+  storageBucket: "zedkomunitas.firebasestorage.app",
+  messagingSenderId: "571357898541",
+  appId: "1:571357898541:web:63ec4b51c1ce3c452655a4",
+  measurementId: "G-BLWCMQ6TYN"
+};
