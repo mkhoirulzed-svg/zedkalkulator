@@ -73,6 +73,10 @@ function listenCategories() {
 
     renderCategoryOptions();
     renderCategoryTabs();
+  }, error => {
+    console.error("Error kategori:", error);
+    document.getElementById("loadingText").innerText =
+      "Gagal memuat kategori. Cek Firestore Rules.";
   });
 }
 
@@ -90,6 +94,10 @@ function listenPosts() {
 
     document.getElementById("loadingText").classList.add("hidden");
     renderPosts();
+  }, error => {
+    console.error("Error postingan:", error);
+    document.getElementById("loadingText").innerText =
+      "Gagal memuat postingan. Cek Firestore Rules.";
   });
 }
 
@@ -256,7 +264,7 @@ window.addPost = async function () {
   customInput.value = "";
   customInput.classList.add("hidden");
 
-  document.getElementById("categoryInput").value = categories[0]?.name || "IGD";
+  document.getElementById("categoryInput").value = categories[0]?.name || "Bebas";
 
   currentFilter = "Semua";
   renderCategoryTabs();
@@ -329,7 +337,16 @@ function escapeJs(text) {
     .replaceAll("\r", "");
 }
 
-await seedDefaultCategories();
-listenCategories();
-listenPosts();
+async function initKomunitas() {
+  try {
+    await seedDefaultCategories();
+    listenCategories();
+    listenPosts();
+  } catch (error) {
+    console.error("Gagal memuat Komunitas ZED:", error);
+    document.getElementById("loadingText").innerText =
+      "Gagal memuat komunitas. Cek koneksi Firebase atau Firestore Rules.";
+  }
+}
 
+initKomunitas();
