@@ -1,0 +1,75 @@
+.hidden {
+  display: none;
+}
+
+@font-face {
+  font-family: 'Archicoco';
+  src: url('./Archicoco.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.pos-menu-icon {
+  width: 30px;
+  height: 22px;
+  margin: 0 auto 2px;
+  display: block;
+  opacity: .55;
+}
+
+.pos-menu-btn.active .pos-menu-icon {
+  opacity: 1;
+}
+
+.pos-menu {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pos-menu-btn {
+  flex: 1;
+  padding: 0.6rem 0.2rem 0.5rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.7rem;
+  font-weight: 500;
+  position: relative;
+  transition: color .15s;
+}
+
+.pos-menu-btn:hover {
+  color: #2563eb;
+}
+
+.pos-menu-btn.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.pos-menu-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -1px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 2px;
+}
+
+.cat-btn.active {
+  background: #0f766e;
+  color: white;
+}
+
+.post-card {
+  transition: .2s;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
