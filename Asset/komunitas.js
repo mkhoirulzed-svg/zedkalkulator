@@ -431,12 +431,13 @@ window.editPost = async function(postId){
 
   if(text === null) return;
 
-  await updateDoc(
-    doc(db,"komunitas_posts",postId),
-    {
-      text:text.trim()
-    }
-  );
+ await updateDoc(
+  doc(db,"komunitas_posts",postId),
+  {
+    text:text.trim(),
+    updatedAt:serverTimestamp()
+  }
+);
 }
 
 window.deletePostConfirm = async function(postId){
