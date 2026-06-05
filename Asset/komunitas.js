@@ -1,6 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
 import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
   getFirestore,
   collection,
   addDoc,
@@ -28,6 +36,38 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+let currentUser = null;
+
+window.loginGoogle = async function () {
+  await signInWithPopup(auth, provider);
+};
+
+window.logoutGoogle = async function () {
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+
+  const loginBtn = document.getElementById("loginBtn");
+  const userInfo = document.getElementById("userInfo");
+
+  if (user) {
+    loginBtn.classList.add("hidden");
+    userInfo.classList.remove("hidden");
+    userInfo.classList.add("flex");
+
+    document.getElementById("userName").innerText = user.displayName || "Pengguna ZED";
+    document.getElementById("userEmail").innerText = user.email || "";
+  } else {
+    loginBtn.classList.remove("hidden");
+    userInfo.classList.add("hidden");
+    userInfo.classList.remove("flex");
+  }
+});
 
 const defaultCategories = [
   "Bebas",
@@ -216,6 +256,10 @@ function renderPosts() {
 }
 
 window.addPost = async function () {
+  if (!currentUser) {
+  alert("Silakan login Google dulu untuk membuat postingan.");
+  return;
+}
   const textInput = document.getElementById("postInput");
   const customInput = document.getElementById("customCategoryInput");
 
@@ -243,10 +287,18 @@ window.addPost = async function () {
     );
 
     if (!exists) {
-      await addDoc(collection(db, "komunitas_categories"), {
-        name: category,
-        createdAt: serverTimestamp()
-      });
+  await addDoc(collection(db, "komunitas_posts"), {
+  uid: currentUser.uid,
+  name: currentUser.displayName || "Pengguna ZED",
+  email: currentUser.email || "",
+  photoURL: currentUser.photoURL || "",
+  role: "Member",
+  category: category,
+  text: text,
+  likes: 0,
+  comments: 0,
+  createdAt: serverTimestamp()
+});
     }
   }
 
@@ -271,6 +323,10 @@ window.addPost = async function () {
 };
 
 window.likePost = async function (postId) {
+ if (!currentUser) {
+  alert("Silakan login Google dulu untuk like.");
+  return;
+}
   const postRef = doc(db, "komunitas_posts", postId);
 
   await updateDoc(postRef, {
