@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kalkulator Manual</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#0f766e">
+
+  <link rel="stylesheet" href="Asset/swipe.css">
+
+  <style>
+    .hidden { display: none; }
+
+    @font-face {
+      font-family: 'Archicoco';
+      src: url('./Asset/Archicoco.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
+
+    .pos-menu-btn.active .pos-menu-icon {
+      opacity: 1;
+    }
+
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pos-menu-btn {
+      flex: 1;
+      padding: 0.6rem 0.2rem 0.5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
+
+    .pos-menu-btn:hover {
+      color: #2563eb;
+    }
+
+    .pos-menu-btn.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .pos-menu-btn.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: -1px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+    }
+
+    .calc-btn {
+      height: 64px;
+      border-radius: 1rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      box-shadow: 0 1px 2px rgba(15,23,42,.06);
+      transition: .12s;
+    }
+
+    .calc-btn:active {
+      transform: scale(.96);
+      background: #e2e8f0;
+    }
+
+    .calc-op {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .calc-equal {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .calc-clear {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fecaca;
+    }
+
+    .calc-display {
+      min-height: 96px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
+
+  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <aside id="sideMenu"
+    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+
+    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+      </button>
+    </div>
+
+    <nav class="p-4 text-sm space-y-1 text-slate-800">
+      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
+      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
+      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
+      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
+      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
+      <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Kalkulator Manual</a>
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+    </nav>
+  </aside>
+
+  <div class="w-full max-w-2xl flex flex-col gap-4">
+
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <header class="flex items-center px-3 py-2">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+            <div class="w-5 h-0.5 bg-slate-800"></div>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
+            <span class="text-xs sm:text-sm text-slate-600 font-medium">ZED Kalkulator</span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="pos-menu">
+        <a href="index.html" class="pos-menu-btn">
+          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
+        </a>
+        <a href="infus.html" class="pos-menu-btn">
+          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+        </a>
+        <a href="insulin.html" class="pos-menu-btn">
+          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+        </a>
+        <a href="kalkulatormanual.html" class="pos-menu-btn active">
+          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Manual
+        </a>
+      </nav>
+    </div>
+
+    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+      <header class="mb-4">
+        <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
+          Kalkulator Manual
+        </h1>
+        <p class="mt-1 text-xs sm:text-sm text-slate-500">
+          Kalkulator sederhana seperti kalkulator di handphone.
+        </p>
+      </header>
+
+      <div class="rounded-2xl bg-slate-900 p-4 mb-4 calc-display flex flex-col justify-end text-right">
+        <div id="history" class="text-xs text-slate-400 min-h-5"></div>
+        <div id="display" class="text-4xl font-bold text-white">0</div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 sm:gap-3">
+        <button class="calc-btn calc-clear" onclick="clearCalc()">C</button>
+        <button class="calc-btn calc-op" onclick="deleteLast()">⌫</button>
+        <button class="calc-btn calc-op" onclick="appendOperator('%')">%</button>
+        <button class="calc-btn calc-op" onclick="appendOperator('/')">÷</button>
+
+        <button class="calc-btn" onclick="appendNumber('7')">7</button>
+        <button class="calc-btn" onclick="appendNumber('8')">8</button>
+        <button class="calc-btn" onclick="appendNumber('9')">9</button>
+        <button class="calc-btn calc-op" onclick="appendOperator('*')">×</button>
+
+        <button class="calc-btn" onclick="appendNumber('4')">4</button>
+        <button class="calc-btn" onclick="appendNumber('5')">5</button>
+        <button class="calc-btn" onclick="appendNumber('6')">6</button>
+        <button class="calc-btn calc-op" onclick="appendOperator('-')">−</button>
+
+        <button class="calc-btn" onclick="appendNumber('1')">1</button>
+        <button class="calc-btn" onclick="appendNumber('2')">2</button>
+        <button class="calc-btn" onclick="appendNumber('3')">3</button>
+        <button class="calc-btn calc-op" onclick="appendOperator('+')">+</button>
+
+        <button class="calc-btn" onclick="toggleMinus()">±</button>
+        <button class="calc-btn" onclick="appendNumber('0')">0</button>
+        <button class="calc-btn" onclick="appendDot()">.</button>
+        <button class="calc-btn calc-equal" onclick="calculateResult()">=</button>
+      </div>
+    </div>
+
+    <footer class="mt-8 border-t border-slate-200 bg-slate-50">
+      <div class="py-4 px-4 text-center text-[10px] text-slate-500">
+        <div>© 2025–2026 Muhammad Khairul Zed. All Rights Reserved.</div>
+
+        <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
+          <a href="https://www.alkespky.store" target="_blank" class="hover:text-teal-600 hover:underline">
+            Powered by AlkesPKY
+          </a>
+          <span class="text-slate-300">•</span>
+          <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-500 hover:underline">
+            Contact
+          </a>
+          <span class="text-slate-300">•</span>
+          <a href="/about.html" class="hover:text-blue-500 hover:underline">
+            Privacy Policy
+          </a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      const backdrop = document.getElementById('backdrop');
+      const isOpen = !menu.classList.contains('-translate-x-full');
+
+      if (isOpen) {
+        menu.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      } else {
+        menu.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      }
+    }
+
+    let currentInput = "0";
+    let historyInput = "";
+    let justCalculated = false;
+
+    const display = document.getElementById("display");
+    const history = document.getElementById("history");
+
+    function updateDisplay() {
+      display.textContent = formatDisplay(currentInput);
+      history.textContent = historyInput.replaceAll("*", "×").replaceAll("/", "÷");
+    }
+
+    function formatDisplay(value) {
+      return value.toString();
+    }
+
+    function appendNumber(num) {
+      if (justCalculated) {
+        currentInput = num;
+        historyInput = "";
+        justCalculated = false;
+      } else if (currentInput === "0") {
+        currentInput = num;
+      } else {
+        currentInput += num;
+      }
+      updateDisplay();
+    }
+
+    function appendDot() {
+      const parts = currentInput.split(/[\+\-\*\/%]/);
+      const lastPart = parts[parts.length - 1];
+
+      if (!lastPart.includes(".")) {
+        currentInput += ".";
+      }
+
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      justCalculated = false;
+
+      if (/[+\-*/%]$/.test(currentInput)) {
+        currentInput = currentInput.slice(0, -1) + op;
+      } else {
+        currentInput += op;
+      }
+
+      updateDisplay();
+    }
+
+    function clearCalc() {
+      currentInput = "0";
+      historyInput = "";
+      justCalculated = false;
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      if (justCalculated) {
+        clearCalc();
+        return;
+      }
+
+      currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : "0";
+      updateDisplay();
+    }
+
+    function toggleMinus() {
+      if (currentInput === "0") return;
+
+      if (currentInput.startsWith("-")) {
+        currentInput = currentInput.slice(1);
+      } else {
+        currentInput = "-" + currentInput;
+      }
+
+      updateDisplay();
+    }
+
+    function calculateResult() {
+      try {
+        if (/[+\-*/%]$/.test(currentInput)) {
+          currentInput = currentInput.slice(0, -1);
+        }
+
+        historyInput = currentInput + " =";
+
+        const result = Function('"use strict"; return (' + currentInput + ')')();
+
+        if (!isFinite(result)) {
+          currentInput = "Error";
+        } else {
+          currentInput = Number.isInteger(result)
+            ? result.toString()
+            : parseFloat(result.toFixed(10)).toString();
+        }
+
+        justCalculated = true;
+        updateDisplay();
+
+      } catch (e) {
+        currentInput = "Error";
+        justCalculated = true;
+        updateDisplay();
+      }
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (!isNaN(e.key)) appendNumber(e.key);
+      if (e.key === ".") appendDot();
+      if (["+", "-", "*", "/", "%"].includes(e.key)) appendOperator(e.key);
+      if (e.key === "Enter") calculateResult();
+      if (e.key === "Backspace") deleteLast();
+      if (e.key === "Escape") clearCalc();
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      });
+    }
+  </script>
+
+  <script src="Asset/swipe.js" defer></script>
+
+</body>
+</html>
