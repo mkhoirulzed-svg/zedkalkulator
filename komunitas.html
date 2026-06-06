@@ -86,72 +86,38 @@
       </div>
     </div>
 <div id="loginBox" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-  <div id="userInfo" class="hidden items-center justify-between gap-3">
-    <div>
-      <div class="text-sm font-semibold text-slate-800" id="userName"></div>
-      <div class="text-xs text-slate-500" id="userEmail"></div>
-    </div>
-    <button onclick="logoutGoogle()" class="text-xs px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">
-      Logout
-    </button>
+    
+<div id="userInfo" class="hidden items-center justify-between gap-3">
+
+  <div>
+    <div class="text-sm font-semibold text-slate-800" id="userName"></div>
+    <div class="text-xs text-slate-500" id="userEmail"></div>
   </div>
 
+  <div class="flex gap-2">
+
+    <a
+      href="profil.html"
+      class="text-xs px-3 py-2 rounded-xl bg-teal-600 text-white hover:bg-teal-700"
+    >
+      Profil
+    </a>
+
+    <button
+      onclick="logoutGoogle()"
+      class="text-xs px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200"
+    >
+      Logout
+    </button>
+
+  </div>
+
+</div>
+  
   <button id="loginBtn" onclick="loginGoogle()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-sm font-semibold">
     Login dengan Google
   </button>
 </div>
-
-<div id="profileBox" class="hidden bg-white border border-slate-200 rounded-2xl p-4 mt-4">
-  <div class="font-bold text-slate-800 mb-3">
-    Profil User
-  </div>
-
-  <div class="space-y-3">
-    <input
-      id="profileName"
-      class="w-full border rounded-xl px-3 py-2 text-sm"
-      placeholder="Nama tampilan"
-    >
-
-    <input
-      id="profileCity"
-      class="w-full border rounded-xl px-3 py-2 text-sm"
-      placeholder="Asal kota"
-    >
-
-    <select
-      id="profileProfession"
-      class="w-full border rounded-xl px-3 py-2 text-sm"
-    >
-      <option value="">Pilih profesi</option>
-      <option value="Dokter">Dokter</option>
-      <option value="Perawat">Perawat</option>
-      <option value="Bidan">Bidan</option>
-      <option value="Apoteker">Apoteker</option>
-      <option value="Analis Laboratorium">Analis Laboratorium</option>
-      <option value="Radiografer">Radiografer</option>
-      <option value="Fisioterapis">Fisioterapis</option>
-      <option value="Mahasiswa Kesehatan">Mahasiswa Kesehatan</option>
-      <option value="Tenaga Kesehatan Lainnya">Tenaga Kesehatan Lainnya</option>
-      <option value="Umum">Umum</option>
-    </select>
-
-    <textarea
-      id="profileBio"
-      class="w-full border rounded-xl px-3 py-2 text-sm"
-      rows="3"
-      placeholder="Bio singkat"
-    ></textarea>
-
-    <button
-      onclick="saveProfile()"
-      class="w-full bg-teal-600 text-white rounded-xl py-2 text-sm font-semibold"
-    >
-      Simpan Profil
-    </button>
-  </div>
-</div>
-
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <h2 class="text-base font-semibold text-slate-800 mb-3">Buat Diskusi</h2>
 
