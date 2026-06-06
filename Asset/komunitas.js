@@ -43,6 +43,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 let currentUser = null;
+let currentProfile = null;
 
 window.loginGoogle = async function () {
   await signInWithPopup(auth, provider);
@@ -52,23 +53,40 @@ window.logoutGoogle = async function () {
   await signOut(auth);
 };
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   currentUser = user;
 
   const loginBtn = document.getElementById("loginBtn");
   const userInfo = document.getElementById("userInfo");
+  const profileBox = document.getElementById("profileBox");
 
   if (user) {
     loginBtn.classList.add("hidden");
     userInfo.classList.remove("hidden");
     userInfo.classList.add("flex");
 
-    document.getElementById("userName").innerText = user.displayName || "Pengguna ZED";
-    document.getElementById("userEmail").innerText = user.email || "";
+    document.getElementById("userName").innerText =
+      user.displayName || "Pengguna";
+
+    document.getElementById("userEmail").innerText =
+      user.email || "";
+
+    if (profileBox) {
+      profileBox.classList.remove("hidden");
+    }
+
+    await loadProfile();
+
   } else {
     loginBtn.classList.remove("hidden");
     userInfo.classList.add("hidden");
     userInfo.classList.remove("flex");
+
+    if (profileBox) {
+      profileBox.classList.add("hidden");
+    }
+
+    currentProfile = null;
   }
 });
 
@@ -255,9 +273,11 @@ function renderPosts() {
       : ""
   }
 </div>
-                <div class="text-[11px] text-slate-500">
-                  ${escapeHtml(post.role || "Member")} · ${formatDate(post.createdAt)}
-                </div>
+               <div class="text-[11px] text-slate-500">
+  ${escapeHtml(post.profession || post.role || "Member")}
+  ${post.city ? " · " + escapeHtml(post.city) : ""}
+  · ${formatDate(post.createdAt)}
+</div>
               </div>
 
               <span class="text-[10px] bg-teal-50 text-teal-700 border border-teal-100 px-2 py-1 rounded-full">
@@ -405,10 +425,13 @@ window.addPost = async function () {
 
   await addDoc(collection(db, "komunitas_posts"), {
     uid: currentUser.uid,
-    name: currentUser.displayName || "Pengguna ZED",
-    email: currentUser.email || "",
-    photoURL: currentUser.photoURL || "",
-    role: "Member",
+    name: currentProfile?.name || currentUser.displayName || "Pengguna ZED",
+email: currentUser.email || "",
+photoURL: currentProfile?.photoURL || currentUser.photoURL || "",
+city: currentProfile?.city || "",
+bio: currentProfile?.bio || "",
+profession: currentProfile?.profession || "",
+role: currentProfile?.profession || "Member",
     category: category,
     text: text,
     likes: 0,
@@ -702,3 +725,84 @@ async function initKomunitas() {
 }
 
 initKomunitas();
+
+
+async function loadProfile(){
+
+  if(!currentUser) return;
+
+  const ref = doc(db, "komunitas_users", currentUser.uid);
+  const snap = await getDoc(ref);
+
+  if(snap.exists()){
+    currentProfile = snap.data();
+  }else{
+    currentProfile = {
+      uid: currentUser.uid,
+      name: currentUser.displayName || "Pengguna ZED",
+      city: "",
+      bio: "",
+      profession: "",
+      email: currentUser.email || "",
+      photoURL: currentUser.photoURL || ""
+    };
+  }
+
+  document.getElementById("profileName").value =
+    currentProfile.name || "";
+
+  document.getElementById("profileCity").value =
+    currentProfile.city || "";
+
+  document.getElementById("profileProfession").value =
+    currentProfile.profession || "";
+
+  document.getElementById("profileBio").value =
+    currentProfile.bio || "";
+}
+
+window.saveProfile = async function(){
+
+  if(!currentUser){
+    alert("Login dulu");
+    return;
+  }
+
+  const name =
+    document.getElementById("profileName").value.trim();
+
+  const city =
+    document.getElementById("profileCity").value.trim();
+
+  const profession =
+    document.getElementById("profileProfession").value;
+
+  const bio =
+    document.getElementById("profileBio").value.trim();
+
+  if(!name){
+    alert("Nama tidak boleh kosong");
+    return;
+  }
+
+  const data = {
+    uid: currentUser.uid,
+    name,
+    city,
+    profession,
+    bio,
+    email: currentUser.email || "",
+    photoURL: currentUser.photoURL || "",
+    updatedAt: serverTimestamp()
+  };
+
+  await setDoc(
+    doc(db, "komunitas_users", currentUser.uid),
+    data
+  );
+
+  currentProfile = data;
+
+  alert("Profil berhasil disimpan");
+}
+
