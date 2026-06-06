@@ -110,7 +110,18 @@ export async function loadProfile() {
       photoURL: currentUser.photoURL || ""
     };
   }
+  
+const avatar =
+  document.getElementById("profileAvatar");
 
+if (avatar) {
+
+  avatar.src =
+    currentProfile.photoURL ||
+    currentUser.photoURL ||
+    "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(currentProfile.name || "Z");
+}
   const profileName = document.getElementById("profileName");
   const profileCity = document.getElementById("profileCity");
   const profileProfession = document.getElementById("profileProfession");
