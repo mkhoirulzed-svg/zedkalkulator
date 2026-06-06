@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Syringe Pump Manual</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="stylesheet" href="Asset/swipe.css">
+
+  <style>
+    .hidden { display:none; }
+
+    @font-face {
+      font-family: 'Archicoco';
+      src: url('./Asset/Archicoco.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    .pos-menu-icon {
+      width: 30px;
+      height: 22px;
+      margin: 0 auto 2px;
+      display: block;
+      opacity: .55;
+    }
+
+    .pos-menu-btn.active .pos-menu-icon { opacity: 1; }
+
+    .pos-menu {
+      display: flex;
+      justify-content: space-between;
+      gap: .25rem;
+      margin: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pos-menu-btn {
+      flex: 1;
+      padding: .6rem .2rem .5rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: .7rem;
+      font-weight: 500;
+      position: relative;
+      transition: color .15s;
+    }
+
+    .pos-menu-btn:hover { color:#2563eb; }
+
+    .pos-menu-btn.active {
+      color:#2563eb;
+      font-weight:600;
+    }
+
+    .pos-menu-btn.active::after {
+      content:"";
+      position:absolute;
+      left:20%;
+      right:20%;
+      bottom:-1px;
+      height:3px;
+      background:#2563eb;
+      border-radius:2px;
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
+
+<div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
+
+<aside id="sideMenu" class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
+  <div class="p-4 border-b border-teal-200 flex items-center justify-between">
+    <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
+    <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
+      <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
+      <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
+    </button>
+  </div>
+
+  <nav class="p-4 text-sm space-y-1 text-slate-800">
+    <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
+    <a href="syringepumpmanual.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump Manual</a>
+    <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
+    <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
+    <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
+    <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
+    <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
+    <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+  </nav>
+</aside>
+
+<div class="w-full max-w-2xl flex flex-col gap-4">
+
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+    <header class="flex items-center px-3 py-2">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
+          <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+          <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+          <div class="w-5 h-0.5 bg-slate-800"></div>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
+          <span class="text-xs sm:text-sm text-slate-600 font-medium">ZED Kalkulator</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="pos-menu">
+      <a href="index.html" class="pos-menu-btn">
+        <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP Preset
+      </a>
+      <a href="syringepumpmanual.html" class="pos-menu-btn active">
+        <img src="Asset/SP.svg" class="pos-menu-icon" alt="">SP Manual
+      </a>
+      <a href="infus.html" class="pos-menu-btn">
+        <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
+      </a>
+      <a href="insulin.html" class="pos-menu-btn">
+        <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
+      </a>
+    </nav>
+  </div>
+
+  <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
+    <header class="mb-4 sm:mb-6">
+      <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
+        Syringe Pump Manual
+      </h1>
+      <p class="mt-1 text-xs sm:text-sm text-slate-500">
+        Hitung laju syringe pump berdasarkan dosis permintaan dan pengenceran manual.
+      </p>
+    </header>
+
+    <form id="spManualForm" onsubmit="event.preventDefault(); hitungSPManual();" class="space-y-4 sm:space-y-5">
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700">Jenis permintaan dosis</label>
+        <select id="jenisDosis" onchange="updateJenisDosis()" class="mt-1 block w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          <option value="mg_jam">mg/jam</option>
+          <option value="mcg_kg_menit">mcg/kgBB/menit</option>
+          <option value="mcg_kg_jam">mcg/kgBB/jam</option>
+          <option value="iu_kg_jam">IU/kgBB/jam</option>
+          <option value="iu_jam">IU/jam</option>
+        </select>
+      </div>
+
+      <div>
+        <label id="labelDosis" class="block text-sm font-medium text-slate-700">Dosis permintaan</label>
+        <input id="dosisInput" type="number" step="any" min="0" placeholder="contoh: 5" class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+      </div>
+
+      <div id="bbWrapper">
+        <label class="block text-sm font-medium text-slate-700">Berat badan / BB (kg)</label>
+        <input id="bbInput" type="number" step="any" min="0" placeholder="contoh: 60" class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+      </div>
+
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4 space-y-3">
+        <div>
+          <h2 class="text-sm sm:text-base font-semibold text-slate-800">Pengenceran</h2>
+          <p class="text-[11px] sm:text-xs text-slate-500">
+            Isi jumlah obat dan total volume setelah diencerkan.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Jumlah obat</label>
+          <input id="jumlahObatInput" type="number" step="any" min="0" placeholder="contoh: 50" class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Satuan obat</label>
+          <select id="satuanObat" class="mt-1 block w-full rounded-lg border-slate-300 bg-white px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <option value="mg">mg</option>
+            <option value="mcg">mcg</option>
+            <option value="iu">IU</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Total volume pengenceran (ml)</label>
+          <input id="volumeInput" type="number" step="any" min="0" placeholder="contoh: 50" class="mt-1 block w-full rounded-lg border-slate-300 px-3 py-2 text-sm sm:text-base shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row-reverse sm:justify-end gap-2 pt-2">
+        <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700">
+          Hitung
+        </button>
+
+        <button type="button" onclick="resetSPManual()" class="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm sm:text-base font-medium text-slate-700 shadow-sm hover:bg-slate-50">
+          Reset
+        </button>
+      </div>
+    </form>
+
+    <section id="result" class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
+  </div>
+
+  <footer class="mt-8 border-t border-slate-200 bg-slate-50">
+    <div class="py-4 px-4 text-center text-[10px] text-slate-500">
+      <div>© 2025–2026 Muhammad Khairul Zed. All Rights Reserved.</div>
+
+      <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
+        <a href="https://www.alkespky.store" target="_blank" class="hover:text-teal-600 hover:underline">
+          Powered by AlkesPKY
+        </a>
+
+        <span class="text-slate-300">•</span>
+
+        <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-500 hover:underline">
+          Contact
+        </a>
+
+        <span class="text-slate-300">•</span>
+
+        <a href="/about.html" class="hover:text-blue-500 hover:underline">
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('sideMenu');
+    const backdrop = document.getElementById('backdrop');
+    const isOpen = !menu.classList.contains('-translate-x-full');
+
+    if (isOpen) {
+      menu.classList.add('-translate-x-full');
+      backdrop.classList.add('hidden');
+    } else {
+      menu.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+    }
+  }
+
+  function updateJenisDosis() {
+    const jenis = document.getElementById("jenisDosis").value;
+    const bbWrapper = document.getElementById("bbWrapper");
+    const labelDosis = document.getElementById("labelDosis");
+
+    if (jenis === "mg_jam") {
+      bbWrapper.classList.add("hidden");
+      labelDosis.textContent = "Dosis permintaan (mg/jam)";
+    }
+
+    if (jenis === "mcg_kg_menit") {
+      bbWrapper.classList.remove("hidden");
+      labelDosis.textContent = "Dosis permintaan (mcg/kgBB/menit)";
+    }
+
+    if (jenis === "mcg_kg_jam") {
+      bbWrapper.classList.remove("hidden");
+      labelDosis.textContent = "Dosis permintaan (mcg/kgBB/jam)";
+    }
+
+    if (jenis === "iu_kg_jam") {
+      bbWrapper.classList.remove("hidden");
+      labelDosis.textContent = "Dosis permintaan (IU/kgBB/jam)";
+    }
+
+    if (jenis === "iu_jam") {
+      bbWrapper.classList.add("hidden");
+      labelDosis.textContent = "Dosis permintaan (IU/jam)";
+    }
+  }
+
+  function hitungSPManual() {
+    const jenis = document.getElementById("jenisDosis").value;
+    const dosis = parseFloat(document.getElementById("dosisInput").value);
+    const bb = parseFloat(document.getElementById("bbInput").value);
+    const jumlahObat = parseFloat(document.getElementById("jumlahObatInput").value);
+    const satuanObat = document.getElementById("satuanObat").value;
+    const volume = parseFloat(document.getElementById("volumeInput").value);
+    const resultDiv = document.getElementById("result");
+
+    if (!dosis || dosis <= 0) {
+      resultDiv.innerHTML = "<p class='text-red-600'>Dosis permintaan tidak valid.</p>";
+      return;
+    }
+
+    if (!jumlahObat || jumlahObat <= 0) {
+      resultDiv.innerHTML = "<p class='text-red-600'>Jumlah obat tidak valid.</p>";
+      return;
+    }
+
+    if (!volume || volume <= 0) {
+      resultDiv.innerHTML = "<p class='text-red-600'>Volume pengenceran tidak valid.</p>";
+      return;
+    }
+
+    const butuhBB = ["mcg_kg_menit", "mcg_kg_jam", "iu_kg_jam"].includes(jenis);
+
+    if (butuhBB && (!bb || bb <= 0)) {
+      resultDiv.innerHTML = "<p class='text-red-600'>Berat badan tidak valid.</p>";
+      return;
+    }
+
+    let konsentrasi = 0;
+    let kebutuhanPerJam = 0;
+    let satuanKonsentrasi = "";
+    let satuanKebutuhan = "";
+
+    if (jenis === "mg_jam") {
+      if (satuanObat === "iu") {
+        resultDiv.innerHTML = "<p class='text-red-600'>Satuan IU tidak bisa dikonversi ke mg. Gunakan satuan obat mg atau mcg.</p>";
+        return;
+      }
+
+      const jumlahMg = satuanObat === "mcg" ? jumlahObat / 1000 : jumlahObat;
+      konsentrasi = jumlahMg / volume;
+      kebutuhanPerJam = dosis;
+      satuanKonsentrasi = "mg/ml";
+      satuanKebutuhan = "mg/jam";
+    }
+
+    if (jenis === "mcg_kg_menit") {
+      if (satuanObat === "iu") {
+        resultDiv.innerHTML = "<p class='text-red-600'>Satuan IU tidak bisa dikonversi ke mcg. Gunakan satuan obat mg atau mcg.</p>";
+        return;
+      }
+
+      const jumlahMcg = satuanObat === "mg" ? jumlahObat * 1000 : jumlahObat;
+      konsentrasi = jumlahMcg / volume;
+      kebutuhanPerJam = dosis * bb * 60;
+      satuanKonsentrasi = "mcg/ml";
+      satuanKebutuhan = "mcg/jam";
+    }
+
+    if (jenis === "mcg_kg_jam") {
+      if (satuanObat === "iu") {
+        resultDiv.innerHTML = "<p class='text-red-600'>Satuan IU tidak bisa dikonversi ke mcg. Gunakan satuan obat mg atau mcg.</p>";
+        return;
+      }
+
+      const jumlahMcg = satuanObat === "mg" ? jumlahObat * 1000 : jumlahObat;
+      konsentrasi = jumlahMcg / volume;
+      kebutuhanPerJam = dosis * bb;
+      satuanKonsentrasi = "mcg/ml";
+      satuanKebutuhan = "mcg/jam";
+    }
+
+    if (jenis === "iu_kg_jam") {
+      if (satuanObat !== "iu") {
+        resultDiv.innerHTML = "<p class='text-red-600'>Untuk dosis IU, satuan obat harus IU.</p>";
+        return;
+      }
+
+      konsentrasi = jumlahObat / volume;
+      kebutuhanPerJam = dosis * bb;
+      satuanKonsentrasi = "IU/ml";
+      satuanKebutuhan = "IU/jam";
+    }
+
+    if (jenis === "iu_jam") {
+      if (satuanObat !== "iu") {
+        resultDiv.innerHTML = "<p class='text-red-600'>Untuk dosis IU, satuan obat harus IU.</p>";
+        return;
+      }
+
+      konsentrasi = jumlahObat / volume;
+      kebutuhanPerJam = dosis;
+      satuanKonsentrasi = "IU/ml";
+      satuanKebutuhan = "IU/jam";
+    }
+
+    const mlPerJam = kebutuhanPerJam / konsentrasi;
+
+    resultDiv.innerHTML = `
+      <div class="space-y-2">
+        <p class="font-semibold text-slate-900">
+          Hasil syringe pump:
+          <span class="text-blue-700">${mlPerJam.toFixed(2)} ml/jam</span>
+        </p>
+
+        <div class="text-xs sm:text-sm text-slate-600 space-y-1">
+          <p>Konsentrasi: <b>${konsentrasi.toFixed(2)} ${satuanKonsentrasi}</b></p>
+          <p>Kebutuhan obat: <b>${kebutuhanPerJam.toFixed(2)} ${satuanKebutuhan}</b></p>
+        </div>
+      </div>
+    `;
+  }
+
+  function resetSPManual() {
+    document.getElementById("spManualForm").reset();
+    document.getElementById("result").innerHTML = "";
+    updateJenisDosis();
+  }
+
+  updateJenisDosis();
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
+
+<script src="Asset/swipe.js" defer></script>
+
+</body>
+</html>
