@@ -100,6 +100,58 @@
     Login dengan Google
   </button>
 </div>
+
+<div id="profileBox" class="hidden bg-white border border-slate-200 rounded-2xl p-4 mt-4">
+  <div class="font-bold text-slate-800 mb-3">
+    Profil User
+  </div>
+
+  <div class="space-y-3">
+    <input
+      id="profileName"
+      class="w-full border rounded-xl px-3 py-2 text-sm"
+      placeholder="Nama tampilan"
+    >
+
+    <input
+      id="profileCity"
+      class="w-full border rounded-xl px-3 py-2 text-sm"
+      placeholder="Asal kota"
+    >
+
+    <select
+      id="profileProfession"
+      class="w-full border rounded-xl px-3 py-2 text-sm"
+    >
+      <option value="">Pilih profesi</option>
+      <option value="Dokter">Dokter</option>
+      <option value="Perawat">Perawat</option>
+      <option value="Bidan">Bidan</option>
+      <option value="Apoteker">Apoteker</option>
+      <option value="Analis Laboratorium">Analis Laboratorium</option>
+      <option value="Radiografer">Radiografer</option>
+      <option value="Fisioterapis">Fisioterapis</option>
+      <option value="Mahasiswa Kesehatan">Mahasiswa Kesehatan</option>
+      <option value="Tenaga Kesehatan Lainnya">Tenaga Kesehatan Lainnya</option>
+      <option value="Umum">Umum</option>
+    </select>
+
+    <textarea
+      id="profileBio"
+      class="w-full border rounded-xl px-3 py-2 text-sm"
+      rows="3"
+      placeholder="Bio singkat"
+    ></textarea>
+
+    <button
+      onclick="saveProfile()"
+      class="w-full bg-teal-600 text-white rounded-xl py-2 text-sm font-semibold"
+    >
+      Simpan Profil
+    </button>
+  </div>
+</div>
+
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <h2 class="text-base font-semibold text-slate-800 mb-3">Buat Diskusi</h2>
 
