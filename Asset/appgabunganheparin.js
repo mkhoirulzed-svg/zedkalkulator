@@ -179,6 +179,10 @@ const DRUG_PRESETS = {
 function setDefaultConcBB(){
   hideAllConcWrappers();
   const drug = selectedDrug();
+  const heparinDose = el("doseWrapperHeparin");
+if(heparinDose){
+  heparinDose.classList.toggle("hidden", drug !== "Heparin");
+}
   const presetArea = el("otherPresetArea");
   presetArea.innerHTML = "";
   if(!drug) return;
@@ -251,6 +255,9 @@ function hideAllConcWrappers(){
     if(c) c.classList.add("hidden");
     if(s) s.classList.remove("hidden");
   });
+
+  const heparinDose = el("doseWrapperHeparin");
+  if(heparinDose) heparinDose.classList.add("hidden");
 }
 
 function calculateConcentration(amount, ml, drug){
@@ -326,23 +333,51 @@ function calculateBB(){
   let doses = [];
   if(drug === "Heparin"){
 
+  const customDose = parseFloat(el("doseInputHeparin")?.value);
+
+  if(!isNaN(customDose) && customDose > 0){
+
+    const iuHour = customDose * weight;
+    const mlHour = iuHour / conc;
+
+    result.innerHTML = `
+      <h3 class='font-semibold mb-1'>Heparin</h3>
+
+      <p class='text-xs'>BB: <b>${weight} kg</b></p>
+      <p class='text-xs'>Dosis: <b>${customDose} IU/kgBB/jam</b></p>
+      <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+      <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} IU/ml</b></p>
+
+      <hr class='my-2'>
+
+      <div class='text-lg font-bold text-blue-600'>
+        ${mlHour.toFixed(2)} ml/jam
+      </div>
+    `;
+
+    return;
+  }
+
   html = `
   <h3 class='font-semibold mb-1'>Heparin</h3>
   <p class='text-xs'>BB: <b>${weight} kg</b></p>
   <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
   <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} IU/ml</b></p>
+
   <hr class='my-2'>
+
   <table class="result-table">
-  <thead>
-  <tr>
-    <th>Dosis</th>
-    <th>Kecepatan</th>
-  </tr>
-  </thead>
-  <tbody>
+    <thead>
+      <tr>
+        <th>Dosis</th>
+        <th>Kecepatan</th>
+      </tr>
+    </thead>
+    <tbody>
   `;
 
-  for(let d=5; d<=30; d+=1){
+  for(let d=5; d<=30; d++){
+
     const iuHour = d * weight;
     const mlHour = iuHour / conc;
 
