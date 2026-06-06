@@ -242,7 +242,28 @@
           <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
           <input id="weightInput" type="number" min="1" class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
         </div>
+<div id="doseWrapperHeparin" class="hidden space-y-1">
+  <label class="text-sm font-medium text-slate-700">Dosis Heparin custom</label>
 
+  <div class="flex items-center gap-2">
+    <input
+      id="doseInputHeparin"
+      type="number"
+      step="0.01"
+      min="0"
+      placeholder="Contoh: 18"
+      class="w-full rounded-lg border px-3 py-2 shadow-sm"
+    />
+
+    <span class="text-xs text-slate-600 whitespace-nowrap">
+      IU/kgBB/jam
+    </span>
+  </div>
+
+  <p class="text-[11px] text-slate-400">
+    Opsional. Kosongkan jika ingin melihat tabel standar.
+  </p>
+</div>
         <div id="doseWrapperNoBB" class="hidden">
           <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis (opsional)</label>
           <div class="mt-1 flex items-center gap-2">
