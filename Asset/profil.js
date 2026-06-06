@@ -169,3 +169,8 @@ window.saveProfile = async function () {
 
   alert("Profil berhasil disimpan");
 };
+
+window.toggleMenu = function () {
+  document.getElementById("sideMenu")?.classList.toggle("-translate-x-full");
+  document.getElementById("backdrop")?.classList.toggle("hidden");
+};
