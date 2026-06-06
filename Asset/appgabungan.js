@@ -4,7 +4,7 @@
 // ===============================
 
 const NO_WEIGHT_DRUGS = ["NTG", "PPI", "Furosemide", "Lansoprazole"];
-const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB"];
+const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB", "Heparin"];
 
 function el(id){ return document.getElementById(id); }
 
@@ -26,6 +26,7 @@ const DRUG_SEARCH_ITEMS = [
   { value: "Nicardipin", label: "Nicardipin", aliases: ["nicardipin", "nicardipine", "cardene"] },
   { value: "Herbeser", label: "Herbeser", aliases: ["herbeser", "diltiazem"] },
   { value: "NTG_BB", label: "NTG (dengan BB)", aliases: ["ntg dengan bb", "nitrogliserin bb", "nitroglycerin bb"] },
+  {value: "Heparin",label: "Heparin",aliases: ["heparin"]},
   { value: "NTG", label: "NTG (tanpa BB)", aliases: ["ntg tanpa bb", "ntg", "nitrogliserin", "nitroglycerin"] },
   { value: "PPI", label: "OMZ / Panto", aliases: ["ppi", "omz", "omeprazole", "omeprazol", "panto", "pantoprazole", "pantoprazol"] },
   { value: "Furosemide", label: "Furosemide", aliases: ["furosemide", "furosemid", "lasix"] },
@@ -168,12 +169,20 @@ const DRUG_PRESETS = {
   "NTG_BB": [
     { label: "1 ampul (10 mg/50 ml)", mcgPerMl: 200 },
     { label: "5 ampul (50 mg/50 ml)", mcgPerMl: 1000 }
-  ]
+  ],
+  "Heparin": [
+  { label: "25.000 IU/50 ml", mcgPerMl: 500 },
+  { label: "50.000 IU/50 ml", mcgPerMl: 1000 }
+]
 };
 
 function setDefaultConcBB(){
   hideAllConcWrappers();
   const drug = selectedDrug();
+  const heparinDose = el("doseWrapperHeparin");
+if(heparinDose){
+  heparinDose.classList.toggle("hidden", drug !== "Heparin");
+}
   const presetArea = el("otherPresetArea");
   presetArea.innerHTML = "";
   if(!drug) return;
@@ -190,6 +199,13 @@ function setDefaultConcBB(){
 
   el("concWrapperOther").classList.remove("hidden");
   el("drugNameLabel").textContent = drug;
+  if(drug === "Heparin"){
+  el("otherCustomDose").placeholder = "IU";
+  el("otherCustomVolume").placeholder = "ml";
+}else{
+  el("otherCustomDose").placeholder = "mg";
+  el("otherCustomVolume").placeholder = "ml";
+}
 
   if(DRUG_PRESETS[drug]){
     const presets = DRUG_PRESETS[drug];
@@ -239,23 +255,39 @@ function hideAllConcWrappers(){
     if(c) c.classList.add("hidden");
     if(s) s.classList.remove("hidden");
   });
+
+  const heparinDose = el("doseWrapperHeparin");
+  if(heparinDose) heparinDose.classList.add("hidden");
 }
 
-function calculateConcentration(mg, ml){
-  if(!mg || !ml || ml <= 0) return null;
-  return (mg * 1000) / ml;
+function calculateConcentration(amount, ml, drug){
+  if(!amount || !ml || ml <= 0) return null;
+
+  if(drug === "Heparin"){
+    return amount / ml; // IU/ml
+  }
+
+  return (amount * 1000) / ml; // mcg/ml
 }
 
 function getActiveConcentrationBB(drug){
   if(drug === "NE"){
     const custom = !el("neCustomWrapper").classList.contains("hidden");
-    if(custom) return calculateConcentration(parseFloat(el("neCustomDose").value), parseFloat(el("neCustomVolume").value));
+    if(custom) return calculateConcentration(
+  parseFloat(el("neCustomDose").value),
+  parseFloat(el("neCustomVolume").value),
+  drug
+);
     return parseFloat(el("neConc").value);
   }
 
   if(drug === "Nicardipin"){
     const custom = !el("nicaCustomWrapper").classList.contains("hidden");
-    if(custom) return calculateConcentration(parseFloat(el("nicaCustomDose").value), parseFloat(el("nicaCustomVolume").value));
+    if(custom) return calculateConcentration(
+  parseFloat(el("nicaCustomDose").value),
+  parseFloat(el("nicaCustomVolume").value),
+  drug
+);
     return parseFloat(el("nicaConc").value);
   }
 
@@ -263,7 +295,11 @@ function getActiveConcentrationBB(drug){
   if(presetSel && !presetSel.classList.contains("hidden")) return parseFloat(presetSel.value);
 
   if(!el("otherCustomWrapper").classList.contains("hidden")){
-    return calculateConcentration(parseFloat(el("otherCustomDose").value), parseFloat(el("otherCustomVolume").value));
+    return calculateConcentration(
+  parseFloat(el("otherCustomDose").value),
+  parseFloat(el("otherCustomVolume").value),
+  drug
+);
   }
 
   return null;
@@ -295,6 +331,69 @@ function calculateBB(){
 <thead><tr><th>Dosis</th><th>Kecepatan</th></tr></thead><tbody>`;
 
   let doses = [];
+  if(drug === "Heparin"){
+
+  const customDose = parseFloat(el("doseInputHeparin")?.value);
+
+  if(!isNaN(customDose) && customDose > 0){
+
+    const iuHour = customDose * weight;
+    const mlHour = iuHour / conc;
+
+    result.innerHTML = `
+      <h3 class='font-semibold mb-1'>Heparin</h3>
+
+      <p class='text-xs'>BB: <b>${weight} kg</b></p>
+      <p class='text-xs'>Dosis: <b>${customDose} IU/kgBB/jam</b></p>
+      <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+      <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} IU/ml</b></p>
+
+      <hr class='my-2'>
+
+      <div class='text-lg font-bold text-blue-600'>
+        ${mlHour.toFixed(2)} ml/jam
+      </div>
+    `;
+
+    return;
+  }
+
+  html = `
+  <h3 class='font-semibold mb-1'>Heparin</h3>
+  <p class='text-xs'>BB: <b>${weight} kg</b></p>
+  <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+  <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} IU/ml</b></p>
+
+  <hr class='my-2'>
+
+  <table class="result-table">
+    <thead>
+      <tr>
+        <th>Dosis</th>
+        <th>Kecepatan</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  for(let d=5; d<=30; d++){
+
+    const iuHour = d * weight;
+    const mlHour = iuHour / conc;
+
+    html += `
+      <tr>
+        <td>${d} IU/kgBB/jam</td>
+        <td>${mlHour.toFixed(2)} ml/jam</td>
+      </tr>
+    `;
+  }
+
+  html += "</tbody></table>";
+
+  result.innerHTML = html;
+  return;
+}
   if(drug === "NE"){
     for(let d = 0.01; d <= 0.1; d += 0.01) doses.push(d);
     for(let d = 0.2; d <= 2.000001; d += 0.1) doses.push(d);
