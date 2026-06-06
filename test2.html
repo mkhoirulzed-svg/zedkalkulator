@@ -16,7 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="192x193.png">
+  <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="Asset/swipe.css">
 
@@ -132,7 +132,7 @@
       <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
       <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">ℹ️ Tentang Aplikasi</a>
+      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
     </nav>
   </aside>
 
@@ -148,13 +148,18 @@
           </button>
 
           <div class="flex items-center gap-2">
-            <img src="192x193.png" class="h-7 w-7 rounded-md" alt="Logo">
+            <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
             <span class="text-xs sm:text-sm text-slate-600 font-medium" style="font-family: 'Poppins', sans-serif;">ZED Kalkulator</span>
           </div>
 
           <button id="installBtn" class="hidden flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium shadow active:scale-95">
             Install Aplikasi
-          </button>
+          </button> <button
+  id="notifBtn"
+  class="hidden flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-medium shadow active:scale-95"
+>
+  Aktifkan Notifikasi
+</button>
         </div>
       </header>
 
@@ -212,7 +217,7 @@
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Nicardipin" data-label="Nicardipin">Nicardipin</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
-
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
               <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t sticky top-0">
                 Tanpa Berat Badan
               </div>
@@ -230,7 +235,7 @@
 
           <!-- Value asli tetap pakai id drugSelect agar appgabungan.js tetap jalan -->
           <input type="hidden" id="drugSelect" value="">
-          <p class="text-[11px] text-slate-400">Klik kotak untuk memilih, atau ketik untuk mencari obat lebih cepat.</p>
+          <p class="text-[11px] text-slate-400">Klik kotak untuk memilih, atau ketik untuk mencari obat lebih cepat. klik [x] jika ingin menghapus atau mengganti obat.</p>
         </div>
 
         <div id="weightWrapper" class="space-y-1">
@@ -335,13 +340,47 @@
       <section id="result" class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
     </div>
 
-    <footer class="text-[10px] text-center text-slate-500 space-y-0.5">
-      <div>Created by Muhammad Khairul Zed, S.Kep., Ners</div>
-      <div>RSUD dr Doris Sylvanus Kalimantan Tengah</div>
-      <div>Powered by <a href="https://www.alkespky.store" target="_blank" class="text-blue-500 hover:underline" style="font-family: 'Archicoco', cursive;">AlkesPky</a></div>
-    </footer>
-  </div>
+<footer class="mt-8 border-t border-slate-200 bg-slate-50">
+  <div class="py-4 px-4 text-center text-[10px] text-slate-500">
 
+    <div>
+      © 2025–2026 Muhammad Khairul Zed. All Rights Reserved.
+    </div>
+
+    <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
+
+      <a
+        href="https://www.alkespky.store"
+        target="_blank"
+        class="hover:text-teal-600 hover:underline"
+      >
+        Powered by AlkesPKY
+      </a>
+
+      <span class="text-slate-300">•</span>
+
+      <a
+        href="mailto:mkhoirulzed@gmail.com"
+        class="hover:text-blue-500 hover:underline"
+      >
+        Contact
+      </a>
+
+      <span class="text-slate-300">•</span>
+
+      <a
+        href="/about.html"
+        class="hover:text-blue-500 hover:underline"
+      >
+        Privacy Policy
+      </a>
+
+    </div>
+
+  </div>
+</footer>
+  </div>
+<script type="module" src="Asset/firebase-init.js"></script>
   <script src="Asset/appgabungan.js" defer></script>
   <script src="Asset/swipe.js" defer></script>
 
@@ -358,9 +397,15 @@
       if (!searchInput || !dropdown || !hiddenSelect) return;
 
       function openDropdown() {
-        dropdown.classList.remove("hidden");
-        filterOptions(searchInput.value);
-      }
+  dropdown.classList.remove("hidden");
+
+  // Kalau obat sudah dipilih, tampilkan semua pilihan lagi saat diklik
+  if (hiddenSelect.value) {
+    filterOptions("");
+  } else {
+    filterOptions(searchInput.value);
+  }
+}
 
       function closeDropdown() {
         dropdown.classList.add("hidden");
