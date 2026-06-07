@@ -92,8 +92,6 @@ function listenPosts() {
   );
 
   onSnapshot(q, snapshot => {
-    console.log("User notif:", currentUser.uid);
-    console.log("Jumlah notif:", snapshot.size);
     posts = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
