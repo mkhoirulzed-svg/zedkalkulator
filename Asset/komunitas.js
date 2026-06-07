@@ -45,11 +45,15 @@ window.toggleMenu = function () {
   document.getElementById("backdrop").classList.toggle("hidden");
 };
 
-window.toggleNotifications = function () {
+window.toggleNotifications = async function () {
   const panel = document.getElementById("notifPanel");
   if (!panel) return;
 
   panel.classList.toggle("hidden");
+
+  if (!panel.classList.contains("hidden")) {
+    await markNotificationsAsRead();
+  }
 };
 
 async function seedDefaultCategories() {
@@ -891,6 +895,26 @@ function listenNotifications() {
     }
    }, error => {
     console.error("ERROR NOTIF:", error.code, error.message);
+  });
+}
+
+async function markNotificationsAsRead() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+
+  const q = query(
+    collection(db, "komunitas_notifications"),
+    where("toUid", "==", currentUser.uid),
+    where("read", "==", false)
+  );
+
+  const snap = await getDocs(q);
+
+  snap.forEach(async (docSnap) => {
+    await updateDoc(
+      doc(db, "komunitas_notifications", docSnap.id),
+      { read: true }
+    );
   });
 }
 
