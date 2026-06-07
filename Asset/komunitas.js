@@ -889,6 +889,8 @@ function listenNotifications() {
     } else {
       badge.classList.add("hidden");
     }
+   }, error => {
+    console.error("ERROR NOTIF:", error.code, error.message);
   });
 }
 
