@@ -44,6 +44,13 @@ window.toggleMenu = function () {
   document.getElementById("backdrop").classList.toggle("hidden");
 };
 
+window.toggleNotifications = function () {
+  const panel = document.getElementById("notifPanel");
+  if (!panel) return;
+
+  panel.classList.toggle("hidden");
+};
+
 async function seedDefaultCategories() {
   const snap = await getDocs(collection(db, "komunitas_categories"));
 
