@@ -88,8 +88,9 @@ function listenCategories() {
 
 function listenPosts() {
   const q = query(
-    collection(db, "komunitas_posts")
-  );
+  collection(db, "komunitas_posts"),
+  orderBy("createdAt", "desc")
+);
 
   onSnapshot(q, snapshot => {
     posts = snapshot.docs.map(doc => ({
