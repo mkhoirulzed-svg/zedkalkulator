@@ -577,6 +577,7 @@ function listenCommentCount(postId) {
 
 window.addComment = async function (postId) {
   const currentUser = getCurrentUser();
+  const currentProfile = getCurrentProfile();
 
   if (!currentUser) return;
 
@@ -589,7 +590,10 @@ window.addComment = async function (postId) {
     collection(db, "komunitas_posts", postId, "comments"),
     {
       uid: currentUser.uid,
-      name: currentUser.displayName,
+      name: currentProfile?.name || currentUser.displayName || "Member",
+      photoURL: currentProfile?.photoURL || currentUser.photoURL || "",
+      profession: currentProfile?.profession || "Member",
+      city: currentProfile?.city || "",
       text: text,
       createdAt: serverTimestamp()
     }
@@ -597,7 +601,6 @@ window.addComment = async function (postId) {
 
   input.value = "";
 };
-
 function formatDate(timestamp) {
   if (!timestamp || !timestamp.toDate) return "Baru saja";
 
