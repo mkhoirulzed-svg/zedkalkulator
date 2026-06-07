@@ -200,20 +200,7 @@ function renderPosts() {
                 <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-700">
                   ${escapeHtml((post.name || "P").charAt(0))}
                 </div>
-              `
-          if (filteredPosts.length > visiblePosts) {
-  feed.innerHTML += `
-    <div class="text-center mt-4">
-      <button
-        onclick="loadMorePosts()"
-        class="px-4 py-2 bg-teal-600 text-white rounded-xl text-sm font-medium"
-      >
-        Muat Lagi
-      </button>
-    </div>
-  `;
-}
-          
+              `          
           }
 
           <div class="flex-1">
@@ -303,6 +290,19 @@ function renderPosts() {
       </div>
     `;
   });
+
+  if (filteredPosts.length > visiblePosts) {
+  feed.innerHTML += `
+    <div class="text-center mt-4">
+      <button
+        onclick="loadMorePosts()"
+        class="px-4 py-2 bg-teal-600 text-white rounded-xl text-sm font-medium"
+      >
+        Muat Lagi
+      </button>
+    </div>
+  `;
+}
 }
 
 function renderPostText(post) {
