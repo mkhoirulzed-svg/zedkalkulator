@@ -197,6 +197,7 @@ currentProfile = data;
 await updateUserCommentsProfile(data);
 
 alert("Profil berhasil disimpan");
+}
 
 window.toggleMenu = function () {
   document.getElementById("sideMenu")?.classList.toggle("-translate-x-full");
