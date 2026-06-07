@@ -407,6 +407,28 @@ window.addPost = async function () {
   renderCategoryTabs();
 };
 
+async function createNotification({ toUid, type, postId, text }) {
+  const currentUser = getCurrentUser();
+  const currentProfile = getCurrentProfile();
+
+  if (!currentUser) return;
+  if (!toUid) return;
+
+  // Jangan kirim notifikasi ke diri sendiri
+  if (toUid === currentUser.uid) return;
+
+  await addDoc(collection(db, "komunitas_notifications"), {
+    toUid,
+    fromUid: currentUser.uid,
+    fromName: currentProfile?.name || currentUser.displayName || "Member",
+    type,
+    postId,
+    text,
+    read: false,
+    createdAt: serverTimestamp()
+  });
+}
+
 window.likePost = async function (postId) {
   const currentUser = getCurrentUser();
 
@@ -441,7 +463,16 @@ window.likePost = async function (postId) {
       likes: increment(1)
     }
   );
-};
+  const post = posts.find(p => p.id === postId);
+
+await createNotification({
+  toUid: post?.uid,
+  type: "like",
+  postId,
+  text: "menyukai postingan Anda"
+});
+
+
 
 window.filterPosts = function (category, btn) {
   visiblePosts = 10;
@@ -750,7 +781,14 @@ window.addComment = async function (postId) {
       createdAt: serverTimestamp()
     }
   );
+const post = posts.find(p => p.id === postId);
 
+await createNotification({
+  toUid: post?.uid,
+  type: "comment",
+  postId,
+  text: "mengomentari postingan Anda"
+});
   input.value = "";
 };
 function formatDate(timestamp) {
