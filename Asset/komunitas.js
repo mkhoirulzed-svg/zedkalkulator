@@ -897,9 +897,14 @@ async function initKomunitas() {
     listenCategories();
     listenPosts();
 
-    setTimeout(() => {
-      listenNotifications();
-    }, 1500);
+    const notifTimer = setInterval(() => {
+      const currentUser = getCurrentUser();
+
+      if (currentUser) {
+        listenNotifications();
+        clearInterval(notifTimer);
+      }
+    }, 500);
 
   } catch (error) {
     console.error("Gagal memuat Komunitas ZED:", error);
