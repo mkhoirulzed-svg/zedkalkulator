@@ -88,11 +88,12 @@ function listenCategories() {
 
 function listenPosts() {
   const q = query(
-    collection(db, "komunitas_posts"),
-    orderBy("createdAt", "desc")
+    collection(db, "komunitas_posts")
   );
 
   onSnapshot(q, snapshot => {
+    console.log("User notif:", currentUser.uid);
+    console.log("Jumlah notif:", snapshot.size);
     posts = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
