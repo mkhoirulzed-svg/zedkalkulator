@@ -470,7 +470,7 @@ await createNotification({
   type: "like",
   postId,
   text: "menyukai postingan Anda"
-});
+});};
 
 
 
