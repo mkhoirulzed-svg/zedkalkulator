@@ -32,6 +32,8 @@ let categories = [];
 let posts = [];
 let currentFilter = "Semua";
 
+let visiblePosts = 10;
+
 function isAdmin() {
   const currentUser = getCurrentUser();
   return currentUser && currentUser.email === "mkhoirulzed@gmail.com";
@@ -168,6 +170,9 @@ function renderPosts() {
     ? posts
     : posts.filter(post => post.category === currentFilter);
 
+  const visibleFilteredPosts =
+  filteredPosts.slice(0, visiblePosts);
+
   if (filteredPosts.length === 0) {
     feed.innerHTML = `
       <div class="bg-white border border-slate-200 rounded-2xl p-5 text-center text-sm text-slate-500">
@@ -177,7 +182,7 @@ function renderPosts() {
     return;
   }
 
-  filteredPosts.forEach(post => {
+  visibleFilteredPosts.forEach(post => {
     feed.innerHTML += `
       <div class="post-card bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-5">
         <div class="flex gap-3">
@@ -196,6 +201,19 @@ function renderPosts() {
                   ${escapeHtml((post.name || "P").charAt(0))}
                 </div>
               `
+          if (filteredPosts.length > visiblePosts) {
+  feed.innerHTML += `
+    <div class="text-center mt-4">
+      <button
+        onclick="loadMorePosts()"
+        class="px-4 py-2 bg-teal-600 text-white rounded-xl text-sm font-medium"
+      >
+        Muat Lagi
+      </button>
+    </div>
+  `;
+}
+          
           }
 
           <div class="flex-1">
@@ -426,6 +444,7 @@ window.likePost = async function (postId) {
 };
 
 window.filterPosts = function (category, btn) {
+  visiblePosts = 10;
   currentFilter = category;
 
   document.querySelectorAll(".cat-btn").forEach(el => {
@@ -436,6 +455,11 @@ window.filterPosts = function (category, btn) {
   btn.classList.add("active");
   btn.classList.remove("bg-slate-100");
 
+  renderPosts();
+};
+
+window.loadMorePosts = function () {
+  visiblePosts += 10;
   renderPosts();
 };
 
