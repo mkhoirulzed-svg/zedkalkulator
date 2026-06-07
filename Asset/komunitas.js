@@ -11,7 +11,8 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
-  increment
+  increment,
+  where
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 import {
@@ -826,6 +827,67 @@ function escapeJs(text) {
     .replaceAll('"', '\\"')
     .replaceAll("\n", "\\n")
     .replaceAll("\r", "");
+}
+
+function listenNotifications() {
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) return;
+
+  const q = query(
+    collection(db, "komunitas_notifications"),
+    where("toUid", "==", currentUser.uid),
+    orderBy("createdAt", "desc")
+  );
+
+  onSnapshot(q, snapshot => {
+    const badge = document.getElementById("notifBadge");
+    const list = document.getElementById("notifList");
+
+    if (!badge || !list) return;
+
+    let unreadCount = 0;
+    let html = "";
+
+    if (snapshot.empty) {
+      list.innerHTML = `
+        <div class="p-4 text-slate-500 text-center">
+          Belum ada notifikasi
+        </div>
+      `;
+
+      badge.classList.add("hidden");
+      return;
+    }
+
+    snapshot.forEach(docSnap => {
+      const n = docSnap.data();
+
+      if (n.read === false) unreadCount++;
+
+      html += `
+        <div class="px-4 py-3 border-b border-slate-100 ${n.read === false ? "bg-teal-50" : "bg-white"}">
+          <div class="text-sm text-slate-700">
+            <span class="font-semibold">${escapeHtml(n.fromName || "Member")}</span>
+            ${escapeHtml(n.text || "")}
+          </div>
+
+          <div class="text-[11px] text-slate-400 mt-1">
+            ${formatDate(n.createdAt)}
+          </div>
+        </div>
+      `;
+    });
+
+    list.innerHTML = html;
+
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount > 9 ? "9+" : unreadCount;
+      badge.classList.remove("hidden");
+    } else {
+      badge.classList.add("hidden");
+    }
+  });
 }
 
 async function initKomunitas() {
