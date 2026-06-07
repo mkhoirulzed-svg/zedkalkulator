@@ -842,10 +842,12 @@ function listenNotifications() {
   );
 
   onSnapshot(q, snapshot => {
-    const badge = document.getElementById("notifBadge");
-    const list = document.getElementById("notifList");
 
-    if (!badge || !list) return;
+  console.log("UID Login:", currentUser.uid);
+  console.log("Jumlah Notifikasi:", snapshot.size);
+
+  const badge = document.getElementById("notifBadge");
+  const list = document.getElementById("notifList");
 
     let unreadCount = 0;
     let html = "";
@@ -896,6 +898,11 @@ async function initKomunitas() {
     await seedDefaultCategories();
     listenCategories();
     listenPosts();
+
+    setTimeout(() => {
+      listenNotifications();
+    }, 1500);
+
   } catch (error) {
     console.error("Gagal memuat Komunitas ZED:", error);
 
