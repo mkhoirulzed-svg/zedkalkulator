@@ -519,6 +519,8 @@ window.toggleComments = function (postId) {
 };
 
 window.loadComments = function (postId) {
+  const currentUser = getCurrentUser();
+
   const q = query(
     collection(db, "komunitas_posts", postId, "comments"),
     orderBy("createdAt", "asc")
@@ -534,13 +536,60 @@ window.loadComments = function (postId) {
     snapshot.forEach(docSnap => {
       const c = docSnap.data();
 
+      const canEdit =
+        currentUser &&
+        currentUser.uid === c.uid;
+
+      const canDelete =
+        currentUser &&
+        (
+          currentUser.uid === c.uid ||
+          currentUser.email === "mkhoirulzed@gmail.com"
+        );
+
       target.innerHTML += `
         <div class="bg-slate-50 rounded-xl p-2 text-sm">
-          <div class="font-semibold">
-            ${escapeHtml(c.name || "Member")}
+          <div class="flex items-start justify-between gap-2">
+            <div class="font-semibold">
+              ${escapeHtml(c.name || "Member")}
+            </div>
+
+            ${
+              canEdit || canDelete
+                ? `
+                  <div class="flex gap-2 text-[11px]">
+                    ${
+                      canEdit
+                        ? `
+                          <button
+                            onclick="editComment('${postId}', '${docSnap.id}')"
+                            class="text-amber-600 hover:underline"
+                          >
+                            Edit
+                          </button>
+                        `
+                        : ""
+                    }
+
+                    ${
+                      canDelete
+                        ? `
+                          <button
+                            onclick="deleteComment('${postId}', '${docSnap.id}')"
+                            class="text-red-600 hover:underline"
+                          >
+                            Hapus
+                          </button>
+                        `
+                        : ""
+                    }
+                  </div>
+                `
+                : ""
+            }
           </div>
 
-          <div>
+          <div class="mt-1 whitespace-pre-line">
             ${escapeHtml(c.text)}
           </div>
         </div>
@@ -548,6 +597,85 @@ window.loadComments = function (postId) {
     });
   });
 };
+
+window.editComment = async function (postId, commentId) {
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) {
+    alert("Login dulu");
+    return;
+  }
+
+  const ref = doc(
+    db,
+    "komunitas_posts",
+    postId,
+    "comments",
+    commentId
+  );
+
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return;
+
+  const comment = snap.data();
+
+  if (comment.uid !== currentUser.uid) {
+    alert("Kamu hanya bisa edit komentar sendiri");
+    return;
+  }
+
+  const newText = prompt("Edit komentar", comment.text || "");
+
+  if (newText === null) return;
+
+  if (!newText.trim()) {
+    alert("Komentar tidak boleh kosong");
+    return;
+  }
+
+  await updateDoc(ref, {
+    text: newText.trim(),
+    updatedAt: serverTimestamp()
+  });
+};
+
+window.deleteComment = async function (postId, commentId) {
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) {
+    alert("Login dulu");
+    return;
+  }
+
+  const ref = doc(
+    db,
+    "komunitas_posts",
+    postId,
+    "comments",
+    commentId
+  );
+
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return;
+
+  const comment = snap.data();
+
+  const allowed =
+    comment.uid === currentUser.uid ||
+    currentUser.email === "mkhoirulzed@gmail.com";
+
+  if (!allowed) {
+    alert("Tidak memiliki izin");
+    return;
+  }
+
+  if (!confirm("Hapus komentar ini?")) return;
+
+  await deleteDoc(ref);
+};
+
 
 function listenLikeCount(postId) {
   onSnapshot(
