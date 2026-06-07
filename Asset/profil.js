@@ -14,7 +14,10 @@ import {
   doc,
   getDoc,
   setDoc,
-  serverTimestamp
+  serverTimestamp,
+  collectionGroup,
+  getDocs,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -133,6 +136,30 @@ if (avatar) {
   if (profileBio) profileBio.value = currentProfile.bio || "";
 }
 
+async function updateUserCommentsProfile(data) {
+  const snap = await getDocs(collectionGroup(db, "comments"));
+
+  const tasks = [];
+
+  snap.forEach(docSnap => {
+    const comment = docSnap.data();
+
+    if (comment.uid === currentUser.uid) {
+      tasks.push(
+        updateDoc(docSnap.ref, {
+          name: data.name,
+          profession: data.profession || "",
+          city: data.city || "",
+          photoURL: data.photoURL || "",
+          updatedProfileAt: serverTimestamp()
+        })
+      );
+    }
+  });
+
+  await Promise.all(tasks);
+}
+
 window.saveProfile = async function () {
   if (!currentUser) {
     alert("Login dulu");
@@ -160,15 +187,16 @@ window.saveProfile = async function () {
     updatedAt: serverTimestamp()
   };
 
-  await setDoc(
-    doc(db, "komunitas_users", currentUser.uid),
-    data
-  );
+ await setDoc(
+  doc(db, "komunitas_users", currentUser.uid),
+  data
+);
 
-  currentProfile = data;
+currentProfile = data;
 
-  alert("Profil berhasil disimpan");
-};
+await updateUserCommentsProfile(data);
+
+alert("Profil berhasil disimpan");
 
 window.toggleMenu = function () {
   document.getElementById("sideMenu")?.classList.toggle("-translate-x-full");
