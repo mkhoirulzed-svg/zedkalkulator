@@ -557,16 +557,16 @@ window.loadComments = function (postId) {
             ${
               canEdit || canDelete
                 ? `
-                  <div class="flex gap-2 text-[11px]">
+                 <div class="flex gap-2 shrink-0">
                     ${
                       canEdit
                         ? `
                           <button
-                            onclick="editComment('${postId}', '${docSnap.id}')"
-                            class="text-amber-600 hover:underline"
-                          >
-                            Edit
-                          </button>
+  onclick="editComment('${postId}', '${docSnap.id}')"
+  class="px-2 py-1 rounded-lg bg-amber-100 text-amber-700 text-[11px] font-semibold"
+>
+  Edit
+</button>
                         `
                         : ""
                     }
@@ -575,11 +575,11 @@ window.loadComments = function (postId) {
                       canDelete
                         ? `
                           <button
-                            onclick="deleteComment('${postId}', '${docSnap.id}')"
-                            class="text-red-600 hover:underline"
-                          >
-                            Hapus
-                          </button>
+  onclick="deleteComment('${postId}', '${docSnap.id}')"
+  class="px-2 py-1 rounded-lg bg-red-100 text-red-700 text-[11px] font-semibold"
+>
+  Hapus
+</button>
                         `
                         : ""
                     }
