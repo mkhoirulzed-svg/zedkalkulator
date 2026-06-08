@@ -81,6 +81,42 @@
       background: #2563eb;
       border-radius: 2px;
     }
+   .footer-menu {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .footer-menu a {
+      flex: 1;
+      text-align: center;
+      padding: 0.65rem 0.2rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #6b7280;
+      position: relative;
+    }
+
+    .footer-menu a:hover {
+      color: #2563eb;
+    }
+
+    .footer-menu a.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .footer-menu a.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      top: 0;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 0 0 2px 2px;
+    }
   </style>
 </head>
 
@@ -293,7 +329,12 @@
         class="mt-6 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"
       ></section>
     </div>
-
+ <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
+      <nav class="footer-menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
+      </nav>
+    </div>
     <!-- FOOTER -->
 <footer class="mt-8 border-t border-slate-200 bg-slate-50">
   <div class="py-4 px-4 text-center text-[10px] text-slate-500">
