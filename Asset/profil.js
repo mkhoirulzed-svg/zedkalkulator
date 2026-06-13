@@ -203,3 +203,19 @@ window.toggleMenu = function () {
   document.getElementById("sideMenu")?.classList.toggle("-translate-x-full");
   document.getElementById("backdrop")?.classList.toggle("hidden");
 };
+
+
+//offline blocker
+
+function checkOffline() {
+  const banner = document.getElementById('offline-banner');
+  if (!navigator.onLine) {
+    banner.style.display = 'block';
+  }
+}
+
+window.addEventListener('load', checkOffline);
+window.addEventListener('offline', checkOffline);
+window.addEventListener('online', () => {
+  document.getElementById('offline-banner').style.display = 'none';
+});
