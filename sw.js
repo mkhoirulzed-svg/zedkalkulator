@@ -1,4 +1,4 @@
-const CACHE_NAME = "zedkalkulator-v2";
+const CACHE_NAME = "zedkalkulator-v3";
 
 const FILES_TO_CACHE = [
   "/",
@@ -16,8 +16,6 @@ const FILES_TO_CACHE = [
   "/manifest.json",
   "/192x192.png",
   "/512x512.png",
-
-  // Asset folder
   "/Asset/Archicoco.otf",
   "/Asset/Perdarahan.svg",
   "/Asset/SP.svg",
@@ -55,23 +53,24 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Stale While Revalidate
 self.addEventListener("fetch", (event) => {
-  // Skip Firebase requests - butuh internet
-  if (event.request.url.includes("firebase") || 
+  if (event.request.url.includes("firebase") ||
       event.request.url.includes("firestore") ||
       event.request.url.includes("googleapis")) {
     return;
   }
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
-        return response;
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((cached) => {
+        const fetchPromise = fetch(event.request).then((response) => {
+          if (response.ok) cache.put(event.request, response.clone());
+          return response;
+        }).catch(() => null);
+
+        return cached || fetchPromise;
       });
-    }).catch(() => caches.match("/index.html"))
+    })
   );
 });
