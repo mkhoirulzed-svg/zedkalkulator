@@ -27,6 +27,14 @@
     .tab-btn.active{background-color:#2563eb;color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(37,99,235,.25);position:relative}
     .tab-btn.active::after{content:"";position:absolute;left:20%;right:20%;bottom:-4px;height:3px;background-color:#2563eb;border-radius:2px}
     .tab-btn:not(.active):hover{background-color:#e5e7eb}
+    #tabContainer{
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+#tabContainer::-webkit-scrollbar{
+  display:none;
+}
 
     .pos-menu-icon{width:30px;height:22px;margin:0 auto 2px;display:block;opacity:.55}
     .pos-menu-btn.active .pos-menu-icon{opacity:1}
@@ -125,9 +133,6 @@
     <section class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Table Protap Syringe Pump</h1>
       <p class="text-xs sm:text-sm mb-4 text-slate-500">Tabel cepat dosis dan kecepatan syringe pump. Data wajib disesuaikan dengan protap RS.</p>
-
-      <label class="text-sm font-semibold text-slate-700">Pilih Obat</label>
-      <select id="drugSelect" class="mt-2 w-full border border-slate-300 rounded-xl px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></select>
     </section>
 
     <div id="tabContainer" class="flex gap-2 overflow-x-auto pb-1"></div>
@@ -196,23 +201,22 @@ const drugs = [
   }
 ];
 
-const drugSelect = document.getElementById('drugSelect');
 const tabContainer = document.getElementById('tabContainer');
 const konten = document.getElementById('konten');
 
 drugs.forEach((d,i)=>{
-  const opt = document.createElement('option');
-  opt.value = i;
-  opt.textContent = d.name;
-  drugSelect.appendChild(opt);
 
   const btn = document.createElement('button');
   btn.className = 'tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm';
   btn.textContent = d.name;
-  btn.onclick = () => { drugSelect.value = i; render(i); };
+
+  btn.onclick = () => {
+    render(i);
+  };
+
   tabContainer.appendChild(btn);
 });
-
+  
 drugSelect.addEventListener('change', () => render(Number(drugSelect.value)));
 
 function fmt(n){
