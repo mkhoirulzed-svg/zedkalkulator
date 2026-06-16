@@ -57,6 +57,17 @@
       .print-area,.print-area *{visibility:visible}
       .print-area{position:absolute;left:0;top:0;width:100%}
     }
+    .variant-btn{
+  transition:all .15s ease;
+}
+
+.variant-btn.active{
+  background:#2563eb;
+  color:white;
+  border-color:#2563eb;
+  font-weight:600;
+  box-shadow:0 4px 10px rgba(37,99,235,.25);
+}
   </style>
 </head>
 
@@ -292,12 +303,12 @@ ${d.variants ? `
 
   <div class="flex gap-2 flex-wrap">
     ${d.variants.map((v,i)=>`
-      <button
-        class="variant-btn px-3 py-2 rounded-lg border bg-slate-100 text-sm"
-        onclick="changeVariant(${index},${i})">
-        ${v.label}
-      </button>
-    `).join("")}
+  <button
+    class="variant-btn px-3 py-2 rounded-lg border text-sm ${i === variantIndex ? 'active' : 'bg-slate-100'}"
+    onclick="changeVariant(${index},${i})">
+    ${v.label}
+  </button>
+`).join("")}
   </div>
 </div>
 ` : ""}
