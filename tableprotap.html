@@ -26,14 +26,6 @@
     .tab-btn.active{background-color:#2563eb;color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(37,99,235,.25);position:relative}
     .tab-btn.active::after{content:"";position:absolute;left:20%;right:20%;bottom:-4px;height:3px;background-color:#2563eb;border-radius:2px}
     .tab-btn:not(.active):hover{background-color:#e5e7eb}
-    #tabContainer{
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-
-#tabContainer::-webkit-scrollbar{
-  display:none;
-}
 
     .pos-menu-icon{width:30px;height:22px;margin:0 auto 2px;display:block;opacity:.55}
     .pos-menu-btn.active .pos-menu-icon{opacity:1}
@@ -57,6 +49,8 @@
     .protap-table thead th:first-child{background:#ccfbf1;z-index:2}
     .highlight{background:#bef264!important}
     .note-card{background:#f0fdfa;border:1px solid #99f6e4;border-radius:14px;padding:10px}
+    #tabContainer{overflow-x:auto;scrollbar-width:none}
+    #tabContainer::-webkit-scrollbar{display:none}
 
     @media print{
       body *{visibility:hidden}
@@ -175,6 +169,18 @@ const drugs = [
     weights: [40,45,50,55,60,65,70,75,80]
   },
   {
+    name: "Dobutamin",
+    amp: "1 amp = 250 mg",
+    dilution: "250 mg / 50 cc = 5 mg/cc",
+    concentrationText: "1 cc = 5.000 mcg",
+    concentration: 5000,
+    doseRange: "1 s/d 20 mcg/kgBB/menit",
+    unit: "mcg/kgBB/menit",
+    formula: "Kecepatan SP = Dosis × BB × 60 / Pengenceran",
+    doses: Array.from({length:20}, (_,i)=>i+1),
+    weights: [40,45,50,55,60,65,70,75,80]
+  },
+  {
     name: "Norepinephrine",
     amp: "Contoh: 4 mg dalam 50 cc",
     dilution: "4 mg / 50 cc = 0,08 mg/cc",
@@ -197,6 +203,18 @@ const drugs = [
     formula: "Kecepatan SP = Dosis × BB × 60 / Pengenceran",
     doses: [0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],
     weights: [40,45,50,55,60,65,70,75,80]
+  },
+  {
+    name: "Herbeser",
+    amp: "1 amp = 50 mg",
+    dilution: "50 mg / 50 cc = 1 mg/cc",
+    concentrationText: "1 cc = 1.000 mcg",
+    concentration: 1000,
+    doseRange: "0,5 s/d 10 mcg/kgBB/menit",
+    unit: "mcg/kgBB/menit",
+    formula: "Kecepatan SP = Dosis × BB × 60 / Pengenceran",
+    doses: [0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10],
+    weights: [40,45,50,55,60,65,70,75,80]
   }
 ];
 
@@ -204,19 +222,14 @@ const tabContainer = document.getElementById('tabContainer');
 const konten = document.getElementById('konten');
 
 drugs.forEach((d,i)=>{
-
   const btn = document.createElement('button');
   btn.className = 'tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm';
   btn.textContent = d.name;
-
-  btn.onclick = () => {
-    render(i);
-  };
-
+  btn.onclick = () => render(i);
   tabContainer.appendChild(btn);
 });
-  
-drugSelect.addEventListener('change', () => render(Number(drugSelect.value)));
+
+render(0);
 
 function fmt(n){
   return Number(n.toFixed(2)).toString();
@@ -283,7 +296,6 @@ function printElement(elementId){
   window.print();
 }
 
-window.addEventListener('DOMContentLoaded',()=>render(0));
 </script>
 </body>
 </html>
