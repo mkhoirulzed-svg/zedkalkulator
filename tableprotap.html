@@ -192,17 +192,34 @@ const drugs = [
     weights: [40,45,50,55,60,65,70,75,80]
   },
   {
-    name: "Norepinephrine",
-    amp: "Contoh: 4 mg dalam 50 cc",
-    dilution: "4 mg / 50 cc = 0,08 mg/cc",
-    concentrationText: "1 cc = 80 mcg",
-    concentration: 80,
-    doseRange: "0,01 s/d 1 mcg/kgBB/menit",
-    unit: "mcg/kgBB/menit",
-    formula: "Kecepatan SP = Dosis × BB × 60 / Pengenceran",
-    doses: [0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1],
-    weights: [40,45,50,55,60,65,70,75,80]
-  },
+  name: "Norepinephrine",
+  variants: [
+    {
+      label: "4 mg / 50 ml",
+      amp: "4 mg dalam 50 cc",
+      dilution: "4 mg / 50 cc = 0,08 mg/cc",
+      concentrationText: "1 cc = 80 mcg",
+      concentration: 80
+    },
+    {
+      label: "8 mg / 50 ml",
+      amp: "8 mg dalam 50 cc",
+      dilution: "8 mg / 50 cc = 0,16 mg/cc",
+      concentrationText: "1 cc = 160 mcg",
+      concentration: 160
+    }
+  ],
+  doseRange: "0,01 s/d 1 mcg/kgBB/menit",
+  unit: "mcg/kgBB/menit",
+  formula: "Kecepatan SP = Dosis × BB × 60 / Pengenceran",
+  doses: [
+    0.01,0.02,0.03,0.04,0.05,
+    0.06,0.07,0.08,0.09,0.1,
+    0.15,0.2,0.3,0.4,0.5,
+    0.6,0.7,0.8,0.9,1
+  ],
+  weights: [40,45,50,55,60,65,70,75,80]
+},
   {
     name: "Adrenalin",
     variants: [
