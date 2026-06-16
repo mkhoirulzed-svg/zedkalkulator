@@ -95,6 +95,19 @@
   font-weight:600;
   box-shadow:0 4px 10px rgba(37,99,235,.25);
 }
+    .print-only{
+  display:none;
+}
+
+@media print{
+  .print-only{
+    display:block!important;
+  }
+
+  .screen-only{
+    display:none!important;
+  }
+}
   </style>
 </head>
 
@@ -424,30 +437,36 @@ ${d.variants ? `
   </div>
 </div>
 ` : ""}
+<div class="grid sm:grid-cols-2 gap-2 mb-4 text-sm">
+  <div class="note-card"><b>${variant.amp}</b></div>
+  <div class="note-card"><b>Pengenceran:</b> ${variant.dilution}</div>
+  <div class="note-card"><b>Dosis:</b> ${d.doseRange}</div>
+  <div class="note-card"><b>Output:</b> cc/jam</div>
+</div>
     <div id="printArea" class="print-area overflow-auto border rounded-lg mb-3 bg-white p-3">
 
-  <div class="grid sm:grid-cols-2 gap-2 mb-4 text-sm">
+  <div class="print-only grid sm:grid-cols-2 gap-2 mb-4 text-sm">
     <div class="note-card">
       <b>Obat:</b> ${d.name}
     </div>
 
-    <div class="note-card">
+    <div class="print-only note-card">
       <b>${variant.amp}</b>
     </div>
 
-    <div class="note-card">
+    <div class="print-only note-card">
       <b>Pengenceran:</b> ${variant.dilution}
     </div>
 
-    <div class="note-card">
+    <div class="print-only note-card">
       <b>Konsentrasi:</b> ${variant.concentrationText}
     </div>
 
-    <div class="note-card">
+    <div class="print-only note-card">
       <b>Dosis:</b> ${d.doseRange}
     </div>
 
-    <div class="note-card">
+    <div class="print-only note-card">
       <b>Output:</b> cc/jam
     </div>
   </div>
