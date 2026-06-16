@@ -53,12 +53,39 @@
     #tabContainer::-webkit-scrollbar{display:none}
 
     @media print{
-      body *{visibility:hidden}
-      .print-area,.print-area *{visibility:visible}
-      .print-area{position:absolute;left:0;top:0;width:100%}
-    }
-    .variant-btn{
-  transition:all .15s ease;
+  body *{
+    visibility:hidden;
+  }
+
+  .print-area,
+  .print-area *{
+    visibility:visible;
+  }
+
+  .print-area{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    padding:12px;
+  }
+
+  .protap-table th,
+  .protap-table td{
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .highlight{
+    background:#bef264!important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-info{
+    display:block!important;
+    margin-bottom:12px;
+  }
 }
 
 .variant-btn.active{
@@ -404,7 +431,20 @@ ${d.variants ? `
       <div class="note-card"><b>Output:</b> cc/jam</div>
     </div>
 
-    <div id="printArea" class="print-area overflow-auto border rounded-lg mb-3 bg-white">
+   <div id="printArea" class="print-area overflow-auto border rounded-lg mb-3 bg-white p-3">
+
+  <div class="print-info mb-3 text-sm">
+    <h3 class="text-lg font-bold text-slate-800">
+      Tabel Syringe Pump ${d.name}
+    </h3>
+    <div><b>Pengenceran:</b> ${variant.label || variant.dilution}</div>
+    <div><b>Konsentrasi:</b> ${variant.concentrationText}</div>
+    <div><b>Dosis:</b> ${d.doseRange}</div>
+    <div><b>Rumus:</b> ${d.formula}</div>
+  </div>
+
+  <table class="protap-table">
+  
       <table class="protap-table">
         <thead>
           <tr>
