@@ -1,4 +1,4 @@
-const CACHE_NAME = "zedkalkulator-v3";
+const CACHE_NAME = "zedkalkulator-v4";
 
 const FILES_TO_CACHE = [
   "/",
@@ -25,7 +25,6 @@ const FILES_TO_CACHE = [
   "/Asset/appindex.js",
   "/Asset/appindexnobb.js",
   "/Asset/calendar.svg",
-  "/Asset/firebase-init.js",
   "/Asset/infus.svg",
   "/Asset/insulin.svg",
   "/Asset/komunitas.css",
@@ -36,28 +35,16 @@ const FILES_TO_CACHE = [
   "/Asset/swipe.js",
 ];
 
-self.addEventListener("install", (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
-  );
-});
-
-// Stale While Revalidate
 self.addEventListener("fetch", (event) => {
-  if (event.request.url.includes("firebase") ||
-      event.request.url.includes("firestore") ||
-      event.request.url.includes("googleapis")) {
+  const url = event.request.url;
+
+  if (
+    url.includes("firebase") ||
+    url.includes("firestore") ||
+    url.includes("googleapis") ||
+    url.includes("/Asset/firebase-init.js") ||
+    url.includes("/firebase-messaging-sw.js")
+  ) {
     return;
   }
 
