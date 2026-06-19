@@ -38,28 +38,20 @@ let messaging = null;
 function updateTombolNotifikasi() {
   if (!notifBtn) return;
 
-  if (!("Notification" in window)) {
+  const fcmEnabled =
+    localStorage.getItem("fcm_enabled") === "true";
+
+  if (fcmEnabled) {
     notifBtn.classList.add("hidden");
     return;
   }
 
   if (Notification.permission === "denied") {
-    notifBtn.classList.remove("hidden");
-    notifBtn.disabled = true;
-    notifBtn.textContent = "Notifikasi Diblokir";
-    return;
-  }
-
-  if (Notification.permission === "granted") {
-    notifBtn.classList.remove("hidden");
-    notifBtn.disabled = false;
-    notifBtn.textContent = "Perbarui Token Notifikasi";
+    notifBtn.classList.add("hidden");
     return;
   }
 
   notifBtn.classList.remove("hidden");
-  notifBtn.disabled = false;
-  notifBtn.textContent = "Aktifkan Notifikasi";
 }
 
 async function aktifkanNotifikasi() {
@@ -121,14 +113,18 @@ async function aktifkanNotifikasi() {
     console.log("FCM Token:", token);
 
     await setDoc(doc(db, "fcmTokens", token), {
-      token: token,
-      userAgent: navigator.userAgent,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    }, { merge: true });
+  token,
+  userAgent: navigator.userAgent,
+  createdAt: serverTimestamp(),
+  updatedAt: serverTimestamp()
+}, { merge: true });
 
-    alert("Notifikasi berhasil diaktifkan.");
+localStorage.setItem("fcm_enabled", "true");
 
+notifBtn.classList.add("hidden");
+
+alert("Notifikasi berhasil diaktifkan");
+    
   } catch (error) {
     console.error("Gagal aktifkan notifikasi:", error);
     alert("Gagal: " + error.message);
