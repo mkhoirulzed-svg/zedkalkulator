@@ -7,24 +7,16 @@ firebase.initializeApp({
   projectId: "zedkalkulator",
   storageBucket: "zedkalkulator.firebasestorage.app",
   messagingSenderId: "224764172",
-  appId: "1:224764172:web:559f67b313bd782dba2929"
+  appId: "1:224764172:web:559f67b313bd782dba2929",
+  measurementId: "G-WEY9ZV12D1"
 });
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  console.log("FCM background:", payload);
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
 
-  const title = payload.notification?.title || payload.data?.title || "ZED Kalkulator";
-
-  const options = {
-    body: payload.notification?.body || payload.data?.body || "Ada update terbaru.",
-    icon: "https://zedkalkulator.site/192x192.png",
-    badge: "https://zedkalkulator.site/192x192.png",
-    data: {
-      url: payload.data?.url || "https://zedkalkulator.site"
-    }
-  };
-
-  return self.registration.showNotification(title, options);
+  event.waitUntil(
+    clients.openWindow("https://zedkalkulator.site")
+  );
 });
