@@ -28,3 +28,5 @@ messaging.onBackgroundMessage((payload) => {
 
   return self.registration.showNotification(title, options);
 });
+  return self.registration.showNotification(title, options);
+});
