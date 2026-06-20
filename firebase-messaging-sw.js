@@ -16,11 +16,21 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log("Background message diterima:", payload);
 
-  const title = payload.notification?.title || "ZED Kalkulator";
+  const title =
+    payload.notification?.title ||
+    payload.data?.title ||
+    "ZED Kalkulator";
+
   const options = {
-    body: payload.notification?.body || "Ada notifikasi baru.",
+    body:
+      payload.notification?.body ||
+      payload.data?.body ||
+      "Ada notifikasi baru.",
     icon: "/192x192.png",
-    badge: "/192x192.png"
+    badge: "/192x192.png",
+    data: {
+      url: payload.data?.url || "https://zedkalkulator.site"
+    }
   };
 
   self.registration.showNotification(title, options);
@@ -30,6 +40,6 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   event.waitUntil(
-    clients.openWindow("https://zedkalkulator.site")
+    clients.openWindow(event.notification.data?.url || "https://zedkalkulator.site")
   );
 });
