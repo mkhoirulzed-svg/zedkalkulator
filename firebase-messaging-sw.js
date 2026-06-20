@@ -12,3 +12,16 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+  console.log("Background message diterima:", payload);
+
+  const title = payload.notification?.title || "ZED Kalkulator";
+  const options = {
+    body: payload.notification?.body || "Ada notifikasi baru.",
+    icon: "/192x192.png",
+    badge: "/192x192.png"
+  };
+
+  self.registration.showNotification(title, options);
+});
