@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "site.zedkalkulator.twa",
-        "sha256_cert_fingerprints": ["6E:8A:2D:C7:05:C4:44:D6:47:17:0C:90:E9:B7:0C:D4:36:20:74:4D:70:C6:94:F2:D8:38:88:25:A7:70:F9:CF"]
+        "sha256_cert_fingerprints": ["16:7D:EB:1F:86:A6:B7:57:C5:41:96:A3:97:DB:57:B9:05:FA:E6:D2:9C:CC:F3:27:6D:19:57:4F:89:1E:1B:9C"]
       }
     }]
