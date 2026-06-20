@@ -109,6 +109,42 @@
       text-align: right;
       font-weight: 600;
     }
+    .footer-menu {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .footer-menu a {
+      flex: 1;
+      text-align: center;
+      padding: 0.65rem 0.2rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #6b7280;
+      position: relative;
+    }
+
+    .footer-menu a:hover {
+      color: #2563eb;
+    }
+
+    .footer-menu a.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .footer-menu a.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      top: 0;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 0 0 2px 2px;
+    }
   </style>
 </head>
 
@@ -125,13 +161,18 @@
       </button>
     </div>
 
-    <nav class="p-4 text-sm space-y-1 text-slate-800">
+       <nav class="p-4 text-sm space-y-1 text-slate-800">
       <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump</a>
+       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
+         <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
       <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
       <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">EBV | ABL | MABL</a>
+      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
       <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
       <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
+       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator</a>
+      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
+      <a href="profil.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Profil</a>
       <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
     </nav>
   </aside>
@@ -139,20 +180,50 @@
   <div class="w-full max-w-2xl flex flex-col gap-4">
 
     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center px-3 py-2">
-        <div class="flex items-center gap-3">
-          <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100 focus:ring-2 focus:ring-blue-500">
-            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-            <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-            <div class="w-5 h-0.5 bg-slate-800"></div>
-          </button>
+      <header class="flex items-center justify-between px-3 py-2">
 
-          <div class="flex items-center gap-2">
-            <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-            <span class="text-xs sm:text-sm text-slate-600 font-medium" style="font-family: 'Poppins', sans-serif;">ZED Kalkulator</span>
-          </div>
+  <div class="flex items-center gap-3">
 
-         
+    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
+      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
+      <div class="w-5 h-0.5 bg-slate-800"></div>
+    </button>
+
+    <div class="flex items-center gap-2">
+      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
+      <span class="text-xs sm:text-sm text-slate-600 font-medium">
+        ZED Kalkulator
+      </span>
+    </div>
+
+  </div>
+
+<div class="relative flex items-center gap-2">
+
+  <a
+    href="kalkulatormanual.html"
+    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
+    aria-label="Kalkulator Manual"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="w-4 h-4"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke="currentColor">
+      <path stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+    </svg>
+  </a>
+
+  <a
+    href="komunitas.html"
+    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
+  >
+    Diskusi
+  </a>
         </div>
       </header>
 
@@ -163,6 +234,7 @@
         <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn"><img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran</a>
       </nav>
     </div>
+
 <div class="flex gap-2">
 
   <button id="installBtn"
@@ -176,10 +248,21 @@
   </button>
 
 </div>
+
     <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
       <header class="mb-4 sm:mb-6">
         <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
-        <p class="text-xs sm:text-sm text-slate-500 mt-1">Hitung kecepatan obat syringe pump.</p>
+      <div class="flex bg-slate-100 rounded-xl p-1 mt-4 text-sm font-semibold">
+  <a href="index.html"  class="flex-1 text-center px-3 py-2 rounded-lg bg-blue-600 text-white shadow">
+    Kalkulator
+  </a>
+  <a href="tableprotap.html" class="flex-1 text-center px-3 py-2 rounded-lg text-slate-600 hover:bg-white">
+    Table
+  </a>
+         <a href="spmanual.html" class="flex-1 text-center px-3 py-2 rounded-lg text-slate-600 hover:bg-white">
+    Manual
+  </a>
+</div>
       </header>
 
       <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
@@ -189,18 +272,20 @@
           <label class="text-sm font-medium text-slate-700">Cari / pilih obat</label>
 
           <div class="relative">
-            <input
-              id="drugSearch"
-              type="text"
-              placeholder="Ketik nama obat, contoh: NE, Furosemide, NTG..."
-              class="w-full rounded-lg border px-3 py-2 pr-10 shadow-sm text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              autocomplete="off"
-            />
+            
+            <!-- Elemen Visual Palsu (Select Button) -->
+            <div id="drugDisplayBtn" class="w-full rounded-lg border px-3 py-2 pr-10 shadow-sm text-sm cursor-pointer flex justify-between items-center bg-white focus:ring-2 focus:ring-blue-500">
+              <span id="drugDisplayText" class="text-slate-400 truncate">Pilih obat di sini...</span>
+              <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+
+            <!-- Input Asli Disembunyikan Total (type hidden) -->
+            <input type="hidden" id="drugSearch" value="" />
 
             <button
               id="clearDrugBtn"
               type="button"
-              class="absolute right-2 top-1/2 -translate-y-1/2 hidden text-slate-400 hover:text-slate-700 text-lg leading-none px-1"
+              class="absolute right-2 top-1/2 -translate-y-1/2 hidden text-slate-400 hover:text-slate-700 text-lg leading-none px-1 z-20"
               aria-label="Bersihkan pilihan obat"
             >
               ×
@@ -210,7 +295,17 @@
               id="drugDropdown"
               class="absolute z-50 mt-1 w-full bg-white border rounded-xl shadow-lg max-h-72 overflow-y-auto hidden"
             >
-              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 sticky top-0">
+              <!-- Input Pencarian Internal Di Dalam Dropdown -->
+              <div class="sticky top-0 z-20 bg-white p-2 border-b border-slate-100">
+                <input 
+                  id="innerSearchBox" 
+                  type="text" 
+                  placeholder="Ketik untuk mencari obat..." 
+                  class="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+                />
+              </div>
+
+              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 sticky top-[45px] border-b border-slate-100">
                 Dengan Berat Badan
               </div>
 
@@ -223,7 +318,8 @@
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
-              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t sticky top-0">
+              
+              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t border-b border-slate-100 sticky top-[45px]">
                 Tanpa Berat Badan
               </div>
 
@@ -238,9 +334,8 @@
             </div>
           </div>
 
-          <!-- Value asli tetap pakai id drugSelect agar appgabungan.js tetap jalan -->
           <input type="hidden" id="drugSelect" value="">
-          <p class="text-[11px] text-slate-400">Klik kotak untuk memilih, atau ketik untuk mencari obat lebih cepat. klik [x] jika ingin menghapus atau mengganti obat.</p>
+          <p class="text-[11px] text-slate-400">Klik kotak untuk melihat daftar. Gunakan pencarian di dalamnya jika ingin memfilter obat. Klik [x] jika ingin menghapus atau mengganti obat.</p>
         </div>
 
         <div id="weightWrapper" class="space-y-1">
@@ -365,7 +460,12 @@
 
       <section id="result" class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
     </div>
-
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
+      <nav class="footer-menu">
+        <a href="index.html" class="active">Home</a>
+        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
+      </nav>
+    </div>
 <footer class="mt-8 border-t border-slate-200 bg-slate-50">
   <div class="py-4 px-4 text-center text-[10px] text-slate-500">
 
@@ -404,6 +504,7 @@
     </div>
 
   </div>
+
 </footer>
   </div>
 <script type="module" src="Asset/firebase-init.js"></script>
@@ -411,7 +512,7 @@
   <script src="Asset/swipe.js" defer></script>
 
   <script>
-    // Searchable dropdown 1 kotak untuk pilihan obat
+    // Logika Dropdown Inti
     document.addEventListener("DOMContentLoaded", function () {
       const searchInput = document.getElementById("drugSearch");
       const dropdown = document.getElementById("drugDropdown");
@@ -423,15 +524,9 @@
       if (!searchInput || !dropdown || !hiddenSelect) return;
 
       function openDropdown() {
-  dropdown.classList.remove("hidden");
-
-  // Kalau obat sudah dipilih, tampilkan semua pilihan lagi saat diklik
-  if (hiddenSelect.value) {
-    filterOptions("");
-  } else {
-    filterOptions(searchInput.value);
-  }
-}
+        dropdown.classList.remove("hidden");
+        filterOptions("");
+      }
 
       function closeDropdown() {
         dropdown.classList.add("hidden");
@@ -473,35 +568,31 @@
         if (typeof setDefaultConc === "function") {
           setDefaultConc();
         }
-
-        searchInput.focus();
-        openDropdown();
       }
 
-      searchInput.addEventListener("focus", openDropdown);
-      searchInput.addEventListener("click", openDropdown);
-
-      searchInput.addEventListener("input", () => {
-        hiddenSelect.value = "";
-        clearBtn.classList.toggle("hidden", searchInput.value.trim() === "");
-        openDropdown();
-      });
-
+      // Event listener untuk opsi obat
       options.forEach(option => {
         option.addEventListener("click", () => chooseDrug(option));
       });
 
       clearBtn.addEventListener("click", clearDrug);
 
+      // Menutup dropdown jika klik di luar area
       document.addEventListener("click", (event) => {
-        if (!searchInput.contains(event.target) && !dropdown.contains(event.target) && !clearBtn.contains(event.target)) {
+        const displayBtn = document.getElementById("drugDisplayBtn");
+        const isClickInsideDropdown = dropdown.contains(event.target);
+        const isClickDisplayBtn = displayBtn ? displayBtn.contains(event.target) : false;
+        const isClickClearBtn = clearBtn.contains(event.target);
+
+        if (!isClickInsideDropdown && !isClickDisplayBtn && !isClickClearBtn) {
           closeDropdown();
         }
       });
 
-      searchInput.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeDropdown();
-      });
+      // Expose fungsi ke window agar bisa dipanggil oleh script bridge tanpa trigger focus
+      window._openDrugDropdown = openDropdown;
+      window._closeDrugDropdown = closeDropdown;
+      window._filterDrugOptions = filterOptions;
     });
 
     // Kompatibilitas jika masih ada function lama yang dipanggil appgabungan.js
@@ -513,6 +604,58 @@
     function syncSearchFromSelect() {
       // Tidak diperlukan lagi karena select asli sudah diganti hidden input.
     }
+  </script>
+
+  <!-- Script Bridge untuk UI Baru (Menggantikan fungsi pencarian lama) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const realInput = document.getElementById("drugSearch");
+      const displayBtn = document.getElementById("drugDisplayBtn");
+      const displayText = document.getElementById("drugDisplayText");
+      const innerSearch = document.getElementById("innerSearchBox");
+      const hiddenSelect = document.getElementById("drugSelect");
+      const clearBtn = document.getElementById("clearDrugBtn");
+      
+      if (!realInput || !displayBtn || !displayText || !innerSearch) return;
+
+      // Override setter value pada input asli untuk menyinkronkan teks tampilan
+      const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+      if (originalDescriptor) {
+        Object.defineProperty(realInput, 'value', {
+          set: function(val) {
+            originalDescriptor.set.call(this, val);
+            if (val.trim() === "") {
+              displayText.textContent = "Pilih obat di sini...";
+              displayText.className = "text-slate-400 truncate";
+              innerSearch.value = ""; 
+            } else {
+              displayText.textContent = val;
+              displayText.className = "text-slate-800 truncate font-medium";
+            }
+          },
+          get: function() {
+            return originalDescriptor.get.call(this);
+          },
+          configurable: true
+        });
+      }
+
+      // Klik pada elemen visual palsu -> langsung buka dropdown (100% tanpa keyboard)
+      displayBtn.addEventListener("click", function(e) {
+        e.stopPropagation(); 
+        if (window._openDrugDropdown) window._openDrugDropdown();
+      });
+
+      // Ketika user mengetik di input pencarian dalam dropdown
+      innerSearch.addEventListener("input", function() {
+        // Hubungkan ke fungsi filter lama
+        if (window._filterDrugOptions) window._filterDrugOptions(innerSearch.value);
+        
+        // Sesuaikan state hidden select dan tombol clear saat sedang mengetik
+        if (hiddenSelect) hiddenSelect.value = "";
+        if (clearBtn) clearBtn.classList.add("hidden");
+      });
+    });
   </script>
 
 </body>
