@@ -7,38 +7,30 @@ firebase.initializeApp({
   projectId: "zedkalkulator",
   storageBucket: "zedkalkulator.firebasestorage.app",
   messagingSenderId: "224764172",
-  appId: "1:224764172:web:559f67b313bd782dba2929",
-  measurementId: "G-WEY9ZV12D1"
+  appId: "1:224764172:web:559f67b313bd782dba2929"
 });
 
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("Background message diterima:", payload);
+  console.log("FCM background:", payload);
 
-  const title =
-    payload.notification?.title ||
-    payload.data?.title ||
-    "ZED Kalkulator";
+  const title = payload.notification?.title || payload.data?.title || "ZED Kalkulator";
 
   const options = {
-    body:
-      payload.notification?.body ||
-      payload.data?.body ||
-      "Ada notifikasi baru.",
-    icon: "/192x192.png",
-    badge: "/192x192.png",
+    body: payload.notification?.body || payload.data?.body || "Ada update terbaru.",
+    icon: "https://zedkalkulator.site/192x192.png",
+    badge: "https://zedkalkulator.site/192x192.png",
     data: {
       url: payload.data?.url || "https://zedkalkulator.site"
     }
   };
 
-  self.registration.showNotification(title, options);
+  return self.registration.showNotification(title, options);
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-
   event.waitUntil(
     clients.openWindow(event.notification.data?.url || "https://zedkalkulator.site")
   );
