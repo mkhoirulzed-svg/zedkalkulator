@@ -1,8 +1,13 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "site.zedkalkulator.twa",
-        "sha256_cert_fingerprints": ["1A:71:CC:DE:7F:1C:1B:D5:2D:81:DF:0E:75:74:CF:F6:5A:CA:3F:70:E6:A1:9C:D1:F3:CB:AE:A7:29:0C:8C:BB"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "site.zedkalkulator.twa",
+      "sha256_cert_fingerprints": [
+        "1A:71:CC:DE:7F:1C:1B:D5:2D:81:DF:0E:75:74:CF:F6:5A:CA:3F:70:E6:A1:9C:D1:F3:CB:AE:A7:29:0C:8C:BB",
+        "16:7D:EB:1F:86:A6:B7:57:C5:41:96:A3:97:DB:57:B9:05:FA:E6:D2:9C:CC:F3:27:6D:19:57:4F:89:1E:1B:9C"
+      ]
+    }
+  }
+]
