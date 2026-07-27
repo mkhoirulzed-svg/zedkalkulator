@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>ZED Kalkulator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Kalkulator obat syringe pump untuk membantu perhitungan laju infus obat.">
+  <meta name="theme-color" content="#0f766e">
+  <title>ZED Kalkulator - Syringe Pump</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSGRFKN6V0"></script>
   <script>
@@ -14,649 +16,208 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
   <link rel="icon" type="image/png" href="512x512.png">
   <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="Asset/swipe.css">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#0f766e">
-
   <style>
-    .hidden { display: none; }
-
-    @font-face {
-      font-family: 'Archicoco';
-      src: url('./Asset/Archicoco.otf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
+    .hidden{display:none!important}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,a,input,select{touch-action:manipulation}
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
+      outline:3px solid rgba(37,99,235,.25);outline-offset:2px
     }
-
-    @import url('https://fonts.cdnfonts.com/css/poppins');
-
-    .pos-menu-icon {
-      width: 30px;
-      height: 22px;
-      margin: 0 auto 2px;
-      display: block;
-      opacity: .55;
+    .app-shell{width:min(100%,1180px);margin-inline:auto}
+    .top-card,.content-card,.info-card{background:#fff;border:1px solid #e2e8f0;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+    .side-panel{transition:transform .22s ease}
+    .side-link{display:flex;align-items:center;min-height:44px;padding:.65rem .75rem;border-radius:.75rem;color:#334155}
+    .side-link:hover{background:#ccfbf1;color:#0f766e}
+    .side-link.active{background:#99f6e4;color:#115e59;font-weight:700}
+    .quick-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #e2e8f0}
+    .quick-nav a{min-width:0;padding:.7rem .35rem;text-align:center;color:#64748b;font-size:.72rem;font-weight:600}
+    .quick-nav a:hover{background:#f8fafc;color:#2563eb}
+    .quick-nav a.active{color:#2563eb;background:#eff6ff}
+    .quick-nav img{width:30px;height:24px;margin:0 auto .2rem;opacity:.7}
+    .quick-nav a.active img{opacity:1}
+    .field{width:100%;min-height:44px;border:1px solid #cbd5e1;border-radius:.75rem;background:#fff;padding:.65rem .8rem;color:#0f172a}
+    .field:hover{border-color:#94a3b8}
+    .field:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);outline:none}
+    .result-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+    .result-table th,.result-table td{border-bottom:1px dashed #cbd5e1;padding:7px 8px}
+    .result-table th{text-align:left;font-weight:700;color:#334155}
+    .result-table td:first-child{width:65%}.result-table td:last-child{width:35%;text-align:right;font-weight:700}
+    .footer-menu{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #e2e8f0}
+    .footer-menu a{text-align:center;padding:.8rem .35rem;font-size:.75rem;font-weight:600;color:#64748b}
+    .footer-menu a.active{color:#2563eb;background:#eff6ff}
+    .desktop-aside{display:none}
+    @media(min-width:900px){
+      body{padding:28px}
+      .desktop-grid{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;align-items:start}
+      .desktop-aside{display:block;position:sticky;top:28px}
+      .mobile-menu-button{display:none}
+      .main-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);gap:22px;align-items:start}
+      .result-column{position:sticky;top:28px}
+      .mobile-footer-nav{display:none}
     }
-
-    .pos-menu-btn.active .pos-menu-icon { opacity: 1; }
-
-    .pos-menu {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.25rem;
-      margin: 0;
-      border-top: 1px solid #e5e7eb;
+    @media(max-width:899px){
+      body{padding:12px}
+      .app-shell{max-width:720px}
     }
-
-    .pos-menu-btn {
-      flex: 1;
-      padding: 0.6rem 0.2rem 0.5rem;
-      text-align: center;
-      color: #6b7280;
-      font-size: 0.7rem;
-      font-weight: 500;
-      position: relative;
-      transition: color .15s;
+    @media(max-width:560px){
+      body{padding:0;background:#f8fafc}
+      .top-card,.content-card,.info-card{border-left:0;border-right:0;border-radius:0;box-shadow:none}
+      .top-card{border-top:0}
+      .content-card{padding:16px!important}
+      .header-action-label{display:none}
+      .quick-nav a{font-size:.65rem;padding-inline:.15rem}
+      .quick-nav img{width:27px;height:22px}
+      .two-inputs{grid-template-columns:1fr!important}
+      .action-row{display:grid!important;grid-template-columns:1fr 1fr}
+      .action-row button{width:100%}
     }
-
-    .pos-menu-btn:hover { color: #2563eb; }
-
-    .pos-menu-btn.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .pos-menu-btn.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      bottom: -1px;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 2px;
-    }
-
-    .result-table{
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    .result-table th,
-    .result-table td{
-      border-bottom: 0.5px dashed #ccc;
-      padding: 4px 8px;
-    }
-
-    .result-table th{
-      text-align: left;
-      font-weight: 600;
-      color: #374151;
-    }
-
-    .result-table td:first-child{ width: 65%; }
-    .result-table td:last-child{
-      width: 35%;
-      text-align: right;
-      font-weight: 600;
-    }
-    .footer-menu {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    .footer-menu a {
-      flex: 1;
-      text-align: center;
-      padding: 0.65rem 0.2rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #6b7280;
-      position: relative;
-    }
-
-    .footer-menu a:hover {
-      color: #2563eb;
-    }
-
-    .footer-menu a.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .footer-menu a.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      top: 0;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 0 0 2px 2px;
+    @media print{
+      body{background:#fff;padding:0}.no-print,.top-card,.desktop-aside,.info-card,footer{display:none!important}
+      .desktop-grid,.main-grid{display:block}.content-card{border:0;box-shadow:none;padding:0!important}.result-column{position:static}
     }
   </style>
 </head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+  <div id="backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/45" onclick="toggleMenu()"></div>
 
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
-
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
-
-  <aside id="sideMenu" class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
-        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
-      </button>
+  <aside id="sideMenu" class="side-panel fixed inset-y-0 left-0 z-50 w-[min(86vw,310px)] -translate-x-full overflow-y-auto bg-white shadow-2xl">
+    <div class="sticky top-0 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
+      <div><p class="text-xs font-semibold uppercase tracking-wider text-teal-700">ZED Kalkulator</p><p class="font-bold text-slate-800">Menu Kalkulator</p></div>
+      <button type="button" onclick="toggleMenu()" class="grid h-10 w-10 place-items-center rounded-xl hover:bg-slate-100" aria-label="Tutup menu">✕</button>
     </div>
-
-       <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Syringe Pump</a>
-       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
-         <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
-      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator</a>
-      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
-      <a href="profil.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Profil</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+    <nav class="space-y-1 p-3 text-sm">
+      <a href="index.html" class="side-link active">Syringe Pump</a>
+      <a href="spmanual.html" class="side-link">Syringe Pump Manual</a>
+      <a href="tableprotap.html" class="side-link">Tabel Protap</a>
+      <a href="infus.html" class="side-link">Kalkulator Tetesan Infus</a>
+      <a href="insulin.html" class="side-link">Kalkulator Insulin</a>
+      <a href="anestesi.html" class="side-link">Estimasi Kehilangan Darah</a>
+      <a href="kalkulatorpengenceranobat.html" class="side-link">Kalkulator Pengenceran Obat</a>
+      <a href="asidosis.html" class="side-link">Kalkulator AGD/ABG</a>
+      <a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a>
+      <a href="komunitas.html" class="side-link">Diskusi</a>
+      <a href="profil.html" class="side-link">Profil</a>
+      <a href="about.html" class="side-link">Privacy Policy & Disclaimer</a>
     </nav>
   </aside>
 
-  <div class="w-full max-w-2xl flex flex-col gap-4">
-
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center justify-between px-3 py-2">
-
-  <div class="flex items-center gap-3">
-
-    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800"></div>
-    </button>
-
-    <div class="flex items-center gap-2">
-      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-      <span class="text-xs sm:text-sm text-slate-600 font-medium">
-        ZED Kalkulator
-      </span>
-    </div>
-
-  </div>
-
-<div class="relative flex items-center gap-2">
-
-  <a
-    href="kalkulatormanual.html"
-    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
-    aria-label="Kalkulator Manual"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-4 h-4"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
-      <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  </a>
-
-  <a
-    href="komunitas.html"
-    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
-  >
-    Diskusi
-  </a>
+  <main class="app-shell">
+    <div class="desktop-grid">
+      <aside class="desktop-aside top-card overflow-hidden rounded-2xl">
+        <div class="border-b border-slate-200 p-4">
+          <div class="flex items-center gap-3"><img src="192x192.png" class="h-11 w-11 rounded-xl" alt="Logo ZED Kalkulator"><div><p class="text-xs font-semibold uppercase tracking-wider text-teal-700">Clinical tools</p><h2 class="font-bold">ZED Kalkulator</h2></div></div>
         </div>
-      </header>
+        <nav class="space-y-1 p-3 text-sm">
+          <a href="index.html" class="side-link active">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Tetesan Infus</a><a href="insulin.html" class="side-link">Insulin</a><a href="anestesi.html" class="side-link">Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Pengenceran Obat</a><a href="asidosis.html" class="side-link">AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a>
+        </nav>
+      </aside>
 
-      <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn active"><img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump</a>
-        <a href="infus.html" class="pos-menu-btn"><img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus</a>
-        <a href="insulin.html" class="pos-menu-btn"><img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin</a>
-        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn"><img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran</a>
-      </nav>
-    </div>
-
-<div class="flex gap-2">
-
-  <button id="installBtn"
-    class="hidden flex-1 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium">
-    Install Aplikasi
-  </button>
-
-  <button id="notifBtn"
-    class="hidden flex-1 py-2 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium">
-    Aktifkan Notifikasi
-  </button>
-
-</div>
-
-    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <header class="mb-4 sm:mb-6">
-        <h1 class="text-xl sm:text-3xl font-bold text-slate-800">Kalkulator Obat Syringe Pump</h1>
-      <div class="flex bg-slate-100 rounded-xl p-1 mt-4 text-sm font-semibold">
-  <a href="index.html"  class="flex-1 text-center px-3 py-2 rounded-lg bg-blue-600 text-white shadow">
-    Kalkulator
-  </a>
-  <a href="tableprotap.html" class="flex-1 text-center px-3 py-2 rounded-lg text-slate-600 hover:bg-white">
-    Table
-  </a>
-         <a href="spmanual.html" class="flex-1 text-center px-3 py-2 rounded-lg text-slate-600 hover:bg-white">
-    Manual
-  </a>
-</div>
-      </header>
-
-      <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-4">
-
-        <!-- SEARCHABLE DRUG SELECT: 1 KOTAK -->
-        <div class="space-y-1">
-          <label class="text-sm font-medium text-slate-700">Cari / pilih obat</label>
-
-          <div class="relative">
-            
-            <!-- Elemen Visual Palsu (Select Button) -->
-            <div id="drugDisplayBtn" class="w-full rounded-lg border px-3 py-2 pr-10 shadow-sm text-sm cursor-pointer flex justify-between items-center bg-white focus:ring-2 focus:ring-blue-500">
-              <span id="drugDisplayText" class="text-slate-400 truncate">Pilih obat di sini...</span>
-              <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+      <div class="min-w-0 space-y-4">
+        <section class="top-card overflow-hidden rounded-2xl">
+          <header class="flex min-h-16 items-center justify-between gap-3 px-3 py-2 sm:px-5">
+            <div class="flex min-w-0 items-center gap-3">
+              <button type="button" onclick="toggleMenu()" class="mobile-menu-button grid h-11 w-11 shrink-0 place-items-center rounded-xl hover:bg-slate-100" aria-label="Buka menu"><span class="text-2xl">☰</span></button>
+              <div class="flex min-w-0 items-center gap-2"><img src="192x192.png" class="h-9 w-9 shrink-0 rounded-lg" alt="Logo"><div class="min-w-0"><p class="truncate text-sm font-bold text-slate-800">ZED Kalkulator</p><p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p></div></div>
             </div>
+            <div class="flex shrink-0 gap-2"><a href="kalkulatormanual.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700"><span class="header-action-label">Kalkulator </span>Manual</a><a href="komunitas.html" class="rounded-full border border-teal-200 bg-teal-50 px-3 py-2 text-xs font-bold text-teal-700">Diskusi</a></div>
+          </header>
+          <nav class="quick-nav no-print">
+            <a href="index.html" class="active"><img src="Asset/SP.svg" alt="">Syringe Pump</a><a href="infus.html"><img src="Asset/infus.svg" alt="">Infus</a><a href="insulin.html"><img src="Asset/insulin.svg" alt="">Insulin</a><a href="kalkulatorpengenceranobat.html"><img src="Asset/Perdarahan.svg" alt="">Pengenceran</a>
+          </nav>
+        </section>
 
-            <!-- Input Asli Disembunyikan Total (type hidden) -->
-            <input type="hidden" id="drugSearch" value="" />
+        <div class="flex gap-2 no-print"><button id="installBtn" class="hidden flex-1 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-700">Install Aplikasi</button><button id="notifBtn" class="hidden flex-1 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 text-sm font-semibold text-blue-700">Aktifkan Notifikasi</button></div>
 
-            <button
-              id="clearDrugBtn"
-              type="button"
-              class="absolute right-2 top-1/2 -translate-y-1/2 hidden text-slate-400 hover:text-slate-700 text-lg leading-none px-1 z-20"
-              aria-label="Bersihkan pilihan obat"
-            >
-              ×
-            </button>
+        <div class="main-grid">
+          <section class="content-card rounded-2xl p-5 sm:p-7">
+            <header class="mb-6">
+              <p class="mb-1 text-xs font-bold uppercase tracking-widest text-blue-600">Syringe pump</p>
+              <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Kalkulator Obat</h1>
+              <p class="mt-2 text-sm leading-6 text-slate-500">Pilih obat, masukkan data pasien dan konsentrasi, lalu hitung laju syringe pump.</p>
+              <div class="mt-5 grid grid-cols-3 rounded-xl bg-slate-100 p-1 text-sm font-bold"><a href="index.html" class="rounded-lg bg-blue-600 px-2 py-2.5 text-center text-white shadow-sm">Kalkulator</a><a href="tableprotap.html" class="rounded-lg px-2 py-2.5 text-center text-slate-600 hover:bg-white">Tabel</a><a href="spmanual.html" class="rounded-lg px-2 py-2.5 text-center text-slate-600 hover:bg-white">Manual</a></div>
+            </header>
 
-            <div
-              id="drugDropdown"
-              class="absolute z-50 mt-1 w-full bg-white border rounded-xl shadow-lg max-h-72 overflow-y-auto hidden"
-            >
-              <!-- Input Pencarian Internal Di Dalam Dropdown -->
-              <div class="sticky top-0 z-20 bg-white p-2 border-b border-slate-100">
-                <input 
-                  id="innerSearchBox" 
-                  type="text" 
-                  placeholder="Ketik untuk mencari obat..." 
-                  class="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-                />
+            <form id="mainForm" onsubmit="event.preventDefault(); calculate();" class="space-y-5">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-slate-700">Cari atau pilih obat</label>
+                <div class="relative">
+                  <button id="drugDisplayBtn" type="button" class="field flex items-center justify-between gap-2 pr-12 text-left"><span id="drugDisplayText" class="truncate text-slate-400">Pilih obat di sini...</span><span class="text-slate-400">⌄</span></button>
+                  <input type="hidden" id="drugSearch" value=""><input type="hidden" id="drugSelect" value="">
+                  <button id="clearDrugBtn" type="button" class="absolute right-9 top-1/2 hidden -translate-y-1/2 rounded-lg px-2 py-1 text-xl text-slate-400 hover:text-slate-700" aria-label="Bersihkan pilihan obat">×</button>
+                  <div id="drugDropdown" class="absolute z-30 mt-2 hidden max-h-80 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl">
+                    <div class="sticky top-0 z-10 border-b border-slate-100 bg-white p-2"><input id="innerSearchBox" type="search" placeholder="Ketik nama obat..." class="field text-sm"></div>
+                    <div class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">Dengan berat badan</div>
+                    <button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="NE" data-label="Norepinefrin (NE)">Norepinefrin (NE)</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Adrenalin" data-label="Adrenalin">Adrenalin</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Dopamin" data-label="Dopamin">Dopamin</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Dobutamin" data-label="Dobutamin">Dobutamin</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Milrinone" data-label="Milrinone">Milrinone</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Nicardipin" data-label="Nicardipin">Nicardipin</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
+                    <div class="border-y border-slate-100 px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">Tanpa berat badan</div>
+                    <button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="NTG" data-label="NTG (tanpa BB)">NTG (tanpa BB)</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="PPI" data-label="OMZ / Panto">OMZ / Panto</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Furosemide" data-label="Furosemide">Furosemide</button><button type="button" class="drug-option w-full px-3 py-2.5 text-left text-sm hover:bg-blue-50" data-value="Lansoprazole" data-label="Lansoprazole">Lansoprazole</button>
+                    <div id="drugEmptyState" class="hidden px-3 py-4 text-sm text-slate-500">Obat tidak ditemukan.</div>
+                  </div>
+                </div>
+                <p class="text-xs leading-5 text-slate-400">Gunakan kotak pencarian untuk menyaring daftar obat.</p>
               </div>
 
-              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 sticky top-[45px] border-b border-slate-100">
-                Dengan Berat Badan
-              </div>
+              <div id="weightWrapper" class="space-y-2"><label class="text-sm font-bold text-slate-700">Berat badan (kg)</label><input id="weightInput" type="number" min="1" class="field" placeholder="Contoh: 60"></div>
+              <div id="doseWrapperHeparin" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Dosis Heparin custom</label><div class="flex items-center gap-2"><input id="doseInputHeparin" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 18"><span class="whitespace-nowrap text-xs text-slate-600">IU/kgBB/jam</span></div><p class="text-xs text-slate-400">Opsional. Kosongkan untuk tabel standar.</p></div>
+              <div id="doseWrapperNoBB" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Dosis (opsional)</label><div class="flex items-center gap-2"><input id="doseInput" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 20"><span id="doseUnit" class="whitespace-nowrap text-xs text-slate-600">mg/jam</span></div></div>
 
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NE" data-label="Norepinefrin (NE)">Norepinefrin (NE)</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Adrenalin" data-label="Adrenalin">Adrenalin</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Dopamin" data-label="Dopamin">Dopamin</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Dobutamin" data-label="Dobutamin">Dobutamin</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Milrinone" data-label="Milrinone">Milrinone</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Nicardipin" data-label="Nicardipin">Nicardipin</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
-              
-              <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t border-b border-slate-100 sticky top-[45px]">
-                Tanpa Berat Badan
-              </div>
+              <div id="concWrapperNE" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Konsentrasi Norepinefrin</label><div class="flex gap-2"><select id="neConc" class="field flex-1"><option value="80">1 ampul (4 mg/50 ml)</option><option value="160">2 ampul (8 mg/50 ml)</option></select><button id="neToggleBtn" type="button" onclick="toggleNEMode()" class="rounded-xl border border-slate-300 px-4 text-sm font-semibold">Custom</button></div><div id="neCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="neCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="neCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
+              <div id="concWrapperNica" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Konsentrasi Nicardipin</label><div class="flex gap-2"><select id="nicaConc" class="field flex-1"><option value="200">1 ampul (10 mg/50 ml)</option><option value="400">2 ampul (20 mg/50 ml)</option></select><button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()" class="rounded-xl border border-slate-300 px-4 text-sm font-semibold">Custom</button></div><div id="nicaCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="nicaCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="nicaCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
+              <div id="concWrapperOther" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Konsentrasi <span id="drugNameLabel"></span></label><div id="otherPresetArea" class="space-y-2"></div><div id="otherCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="otherCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="otherCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
+              <div id="concWrapperPPI" class="hidden space-y-2"><label id="ppiLabel" class="text-sm font-bold text-slate-700">Konsentrasi</label><div class="flex gap-2"><select id="ppiConc" class="field flex-1"></select><button type="button" onclick="togglePPICustom()" class="rounded-xl border border-slate-300 px-4 text-sm font-semibold">Custom</button></div><div id="ppiCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="ppiCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="ppiCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
+              <div id="concWrapperFuro" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Konsentrasi Furosemide</label><div class="flex gap-2"><select id="furoConcPreset" class="field flex-1"><option value="2000">5 ampul (100 mg/50 ml)</option><option value="5000">5 ampul (100 mg/20 ml)</option><option value="2400">6 ampul (120 mg/50 ml)</option><option value="4800">12 ampul (240 mg/50 ml)</option><option value="10000">10 ampul murni (200 mg/20 ml)</option></select><button type="button" onclick="toggleFuroCustom()" class="rounded-xl border border-slate-300 px-4 text-sm font-semibold">Custom</button></div><div id="furoCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="furoCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="furoCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
 
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG" data-label="NTG (tanpa BB)">NTG (tanpa BB)</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="PPI" data-label="OMZ / Panto">OMZ / Panto</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Furosemide" data-label="Furosemide">Furosemide</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Lansoprazole" data-label="Lansoprazole">Lansoprazole</button>
+              <div class="action-row flex flex-row-reverse gap-2 pt-2"><button type="submit" class="min-h-11 flex-1 rounded-xl bg-blue-600 px-5 font-bold text-white hover:bg-blue-700">Hitung</button><button type="button" onclick="printResultOnly()" class="min-h-11 flex-1 rounded-xl border border-slate-300 bg-white px-5 font-bold text-slate-700 hover:bg-slate-50">Print hasil</button></div>
+            </form>
+          </section>
 
-              <div id="drugEmptyState" class="hidden px-3 py-3 text-sm text-slate-500">
-                Obat tidak ditemukan.
-              </div>
-            </div>
-          </div>
-
-          <input type="hidden" id="drugSelect" value="">
-          <p class="text-[11px] text-slate-400">Klik kotak untuk melihat daftar. Gunakan pencarian di dalamnya jika ingin memfilter obat. Klik [x] jika ingin menghapus atau mengganti obat.</p>
-        </div>
-
-        <div id="weightWrapper" class="space-y-1">
-          <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
-          <input id="weightInput" type="number" min="1" class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
-        </div>
-<div id="doseWrapperHeparin" class="hidden space-y-1">
-  <label class="text-sm font-medium text-slate-700">Dosis Heparin custom</label>
-
-  <div class="flex items-center gap-2">
-    <input
-      id="doseInputHeparin"
-      type="number"
-      step="0.01"
-      min="0"
-      placeholder="Contoh: 18"
-      class="w-full rounded-lg border px-3 py-2 shadow-sm"
-    />
-
-    <span class="text-xs text-slate-600 whitespace-nowrap">
-      IU/kgBB/jam
-    </span>
-  </div>
-
-  <p class="text-[11px] text-slate-400">
-    Opsional. Kosongkan jika ingin melihat tabel standar.
-  </p>
-</div>
-        <div id="doseWrapperNoBB" class="hidden">
-          <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis (opsional)</label>
-          <div class="mt-1 flex items-center gap-2">
-            <input type="number" id="doseInput" step="0.01" min="0" placeholder="Contoh: 20" class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border" />
-            <span id="doseUnit" class="text-xs text-slate-600 whitespace-nowrap">mg/jam</span>
-          </div>
-          <p class="mt-1 text-[11px] text-slate-400">Kosongkan jika ingin melihat tabel dosis standar.</p>
-        </div>
-
-        <div id="concWrapperNE" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">Konsentrasi Norepinefrin</label>
-          <div class="flex gap-2">
-            <select id="neConc" class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
-              <option value="80">1 ampul (4 mg/50 ml)</option>
-              <option value="160">2 ampul (8 mg/50 ml)</option>
-            </select>
-            <button id="neToggleBtn" type="button" onclick="toggleNEMode()" class="border rounded-lg px-3 py-2 text-xs">Custom</button>
-          </div>
-          <div id="neCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="neCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="neCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
-            </div>
+          <div class="result-column space-y-4">
+            <section class="info-card rounded-2xl p-5 sm:p-6"><div class="flex items-start gap-3"><div class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-100 text-blue-700">i</div><div><h2 class="font-bold text-slate-800">Hasil perhitungan</h2><p class="mt-1 text-sm leading-6 text-slate-500">Periksa kembali nama obat, dosis, satuan, konsentrasi, dan berat badan sebelum digunakan.</p></div></div></section>
+            <section id="result" class="content-card min-h-40 overflow-x-auto rounded-2xl p-5 text-sm text-slate-800 sm:p-6"><p class="text-slate-400">Hasil akan tampil di sini setelah tombol Hitung ditekan.</p></section>
           </div>
         </div>
 
-        <div id="concWrapperNica" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">Konsentrasi Nicardipin</label>
-          <div class="flex gap-2">
-            <select id="nicaConc" class="flex-1 rounded-lg border px-3 py-2 text-sm shadow-sm mt-1">
-              <option value="200">1 ampul (10 mg/50 ml)</option>
-              <option value="400">2 ampul (20 mg/50 ml)</option>
-            </select>
-            <button id="nicaToggleBtn" type="button" onclick="toggleNicaMode()" class="border rounded-lg px-3 py-2 text-xs">Custom</button>
-          </div>
-          <div id="nicaCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="nicaCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="nicaCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div id="concWrapperOther" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">Konsentrasi <span id="drugNameLabel"></span></label>
-          <div id="otherPresetArea" class="space-y-2"></div>
-          <div id="otherCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input id="otherCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
-              <input id="otherCustomVolume" type="number" placeholder="ml" class="rounded-lg border px-3 py-2 text-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div id="concWrapperPPI" class="hidden space-y-1">
-          <label id="ppiLabel" class="text-sm font-medium text-slate-700">Konsentrasi</label>
-          <div class="flex gap-2">
-            <select id="ppiConc" class="flex-1 px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border"></select>
-            <button type="button" onclick="togglePPICustom()" class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">Custom</button>
-          </div>
-          <div id="ppiCustomWrapper" class="hidden">
-            <div class="grid grid-cols-2 gap-2 mt-2">
-              <input type="number" id="ppiCustomDose" placeholder="Dosis (mg)" class="rounded-lg border px-3 py-2 text-sm" />
-              <input type="number" id="ppiCustomVolume" placeholder="Volume (ml)" class="rounded-lg border px-3 py-2 text-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div id="concWrapperFuro" class="hidden space-y-1">
-          <label class="text-sm font-medium text-slate-700">Konsentrasi Furosemide</label>
-          <div class="flex gap-2">
-            <select id="furoConcPreset" class="flex-1 px-3 py-2 rounded-lg border text-sm shadow-sm">
-              <option value="2000">5 ampul (100 mg/50 ml)</option>
-              <option value="5000">5 ampul (100 mg/20 ml)</option>
-              <option value="2400">6 ampul (120 mg/50 ml)</option>
-              <option value="4800">12 ampul (240 mg/50 ml)</option>
-              <option value="10000">10 ampul murni (200 mg/20 ml)</option>
-            </select>
-            <button type="button" onclick="toggleFuroCustom()" class="rounded-lg border border-slate-300 px-3 py-2 text-xs bg-white">Custom</button>
-          </div>
-          <div id="furoCustomWrapper" class="hidden mt-2">
-            <div class="grid grid-cols-2 gap-2">
-              <input type="number" id="furoCustomDose" placeholder="Dosis (mg)" class="rounded-lg border px-3 py-2 text-sm" />
-              <input type="number" id="furoCustomVolume" placeholder="Volume (ml)" class="rounded-lg border px-3 py-2 text-sm" />
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row-reverse gap-2 pt-2">
-          <button type="submit" class="bg-blue-600 text-white font-medium px-4 py-2.5 rounded-lg">Hitung</button>
-          <button type="button" onclick="printResultOnly()" class="border bg-white font-medium px-4 py-2.5 rounded-lg text-slate-700">Print hasil</button>
-        </div>
-      </form>
-
-      <section id="result" class="mt-6 border rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-800 min-h-[3rem]"></section>
+        <div class="mobile-footer-nav top-card overflow-hidden rounded-2xl no-print"><nav class="footer-menu"><a href="index.html" class="active">Home</a><a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a></nav></div>
+        <footer class="px-4 py-6 text-center text-xs text-slate-500"><p>© 2025–2026 ZED Kalkulator. All Rights Reserved.</p><p class="mt-2"><a href="https://www.alkespky.store" target="_blank" rel="noopener" class="hover:text-teal-700">Powered by AlkesPKY</a> · <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-600">Contact</a> · <a href="about.html" class="hover:text-blue-600">Privacy Policy</a></p></footer>
+      </div>
     </div>
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-      <nav class="footer-menu">
-        <a href="index.html" class="active">Home</a>
-        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
-      </nav>
-    </div>
-<footer class="mt-8 border-t border-slate-200 bg-slate-50">
-  <div class="py-4 px-4 text-center text-[10px] text-slate-500">
+  </main>
 
-    <div>
-      © 2025–2026 Zed Kalkulator. All Rights Reserved.
-    </div>
-
-    <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
-
-      <a
-        href="https://www.alkespky.store"
-        target="_blank"
-        class="hover:text-teal-600 hover:underline"
-      >
-        Powered by AlkesPKY
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="mailto:mkhoirulzed@gmail.com"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Contact
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="/about.html"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Privacy Policy
-      </a>
-
-    </div>
-
-  </div>
-
-</footer>
-  </div>
-<script type="module" src="Asset/firebase-init.js"></script>
+  <script type="module" src="Asset/firebase-init.js"></script>
   <script src="Asset/appgabunganheparin.js" defer></script>
   <script src="Asset/swipe.js" defer></script>
-
   <script>
-    // Logika Dropdown Inti
-    document.addEventListener("DOMContentLoaded", function () {
-      const searchInput = document.getElementById("drugSearch");
-      const dropdown = document.getElementById("drugDropdown");
-      const hiddenSelect = document.getElementById("drugSelect");
-      const clearBtn = document.getElementById("clearDrugBtn");
-      const options = Array.from(document.querySelectorAll(".drug-option"));
-      const emptyState = document.getElementById("drugEmptyState");
-
-      if (!searchInput || !dropdown || !hiddenSelect) return;
-
-      function openDropdown() {
-        dropdown.classList.remove("hidden");
-        filterOptions("");
-      }
-
-      function closeDropdown() {
-        dropdown.classList.add("hidden");
-      }
-
-      function filterOptions(keyword) {
-        const q = keyword.trim().toLowerCase();
-        let visibleCount = 0;
-
-        options.forEach(option => {
-          const label = option.dataset.label.toLowerCase();
-          const value = option.dataset.value.toLowerCase();
-          const isMatch = !q || label.includes(q) || value.includes(q);
-
-          option.classList.toggle("hidden", !isMatch);
-          if (isMatch) visibleCount++;
-        });
-
-        if (emptyState) emptyState.classList.toggle("hidden", visibleCount !== 0);
-      }
-
-      function chooseDrug(option) {
-        searchInput.value = option.dataset.label;
-        hiddenSelect.value = option.dataset.value;
-        clearBtn.classList.remove("hidden");
-        closeDropdown();
-
-        if (typeof setDefaultConc === "function") {
-          setDefaultConc();
-        }
-      }
-
-      function clearDrug() {
-        searchInput.value = "";
-        hiddenSelect.value = "";
-        clearBtn.classList.add("hidden");
-        filterOptions("");
-
-        if (typeof setDefaultConc === "function") {
-          setDefaultConc();
-        }
-      }
-
-      // Event listener untuk opsi obat
-      options.forEach(option => {
-        option.addEventListener("click", () => chooseDrug(option));
-      });
-
-      clearBtn.addEventListener("click", clearDrug);
-
-      // Menutup dropdown jika klik di luar area
-      document.addEventListener("click", (event) => {
-        const displayBtn = document.getElementById("drugDisplayBtn");
-        const isClickInsideDropdown = dropdown.contains(event.target);
-        const isClickDisplayBtn = displayBtn ? displayBtn.contains(event.target) : false;
-        const isClickClearBtn = clearBtn.contains(event.target);
-
-        if (!isClickInsideDropdown && !isClickDisplayBtn && !isClickClearBtn) {
-          closeDropdown();
-        }
-      });
-
-      // Expose fungsi ke window agar bisa dipanggil oleh script bridge tanpa trigger focus
-      window._openDrugDropdown = openDropdown;
-      window._closeDrugDropdown = closeDropdown;
-      window._filterDrugOptions = filterOptions;
+    document.addEventListener('DOMContentLoaded',function(){
+      const displayBtn=document.getElementById('drugDisplayBtn');
+      const displayText=document.getElementById('drugDisplayText');
+      const searchInput=document.getElementById('drugSearch');
+      const hiddenSelect=document.getElementById('drugSelect');
+      const dropdown=document.getElementById('drugDropdown');
+      const innerSearch=document.getElementById('innerSearchBox');
+      const clearBtn=document.getElementById('clearDrugBtn');
+      const options=[...document.querySelectorAll('.drug-option')];
+      const emptyState=document.getElementById('drugEmptyState');
+      if(!displayBtn||!dropdown||!hiddenSelect)return;
+      const filterOptions=(keyword='')=>{const q=keyword.trim().toLowerCase();let count=0;options.forEach(o=>{const match=!q||o.dataset.label.toLowerCase().includes(q)||o.dataset.value.toLowerCase().includes(q);o.classList.toggle('hidden',!match);if(match)count++});emptyState?.classList.toggle('hidden',count!==0)};
+      const closeDropdown=()=>dropdown.classList.add('hidden');
+      const openDropdown=()=>{dropdown.classList.remove('hidden');filterOptions('');setTimeout(()=>innerSearch?.focus(),40)};
+      const setDisplay=(label='')=>{searchInput.value=label;displayText.textContent=label||'Pilih obat di sini...';displayText.className=label?'truncate font-semibold text-slate-800':'truncate text-slate-400'};
+      options.forEach(option=>option.addEventListener('click',()=>{hiddenSelect.value=option.dataset.value;setDisplay(option.dataset.label);clearBtn.classList.remove('hidden');innerSearch.value='';closeDropdown();if(typeof setDefaultConc==='function')setDefaultConc()}));
+      displayBtn.addEventListener('click',e=>{e.stopPropagation();dropdown.classList.contains('hidden')?openDropdown():closeDropdown()});
+      innerSearch?.addEventListener('input',()=>filterOptions(innerSearch.value));
+      clearBtn?.addEventListener('click',e=>{e.stopPropagation();hiddenSelect.value='';innerSearch.value='';setDisplay('');clearBtn.classList.add('hidden');filterOptions('');closeDropdown();if(typeof setDefaultConc==='function')setDefaultConc()});
+      document.addEventListener('click',e=>{if(!dropdown.contains(e.target)&&!displayBtn.contains(e.target))closeDropdown()});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDropdown()});
+      window._openDrugDropdown=openDropdown;window._closeDrugDropdown=closeDropdown;window._filterDrugOptions=filterOptions;
     });
-
-    // Kompatibilitas jika masih ada function lama yang dipanggil appgabungan.js
-    function clearDrugSearch() {
-      const btn = document.getElementById("clearDrugBtn");
-      if (btn) btn.click();
-    }
-
-    function syncSearchFromSelect() {
-      // Tidak diperlukan lagi karena select asli sudah diganti hidden input.
-    }
+    function clearDrugSearch(){document.getElementById('clearDrugBtn')?.click()}
+    function syncSearchFromSelect(){}
   </script>
-
-  <!-- Script Bridge untuk UI Baru (Menggantikan fungsi pencarian lama) -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const realInput = document.getElementById("drugSearch");
-      const displayBtn = document.getElementById("drugDisplayBtn");
-      const displayText = document.getElementById("drugDisplayText");
-      const innerSearch = document.getElementById("innerSearchBox");
-      const hiddenSelect = document.getElementById("drugSelect");
-      const clearBtn = document.getElementById("clearDrugBtn");
-      
-      if (!realInput || !displayBtn || !displayText || !innerSearch) return;
-
-      // Override setter value pada input asli untuk menyinkronkan teks tampilan
-      const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
-      if (originalDescriptor) {
-        Object.defineProperty(realInput, 'value', {
-          set: function(val) {
-            originalDescriptor.set.call(this, val);
-            if (val.trim() === "") {
-              displayText.textContent = "Pilih obat di sini...";
-              displayText.className = "text-slate-400 truncate";
-              innerSearch.value = ""; 
-            } else {
-              displayText.textContent = val;
-              displayText.className = "text-slate-800 truncate font-medium";
-            }
-          },
-          get: function() {
-            return originalDescriptor.get.call(this);
-          },
-          configurable: true
-        });
-      }
-
-      // Klik pada elemen visual palsu -> langsung buka dropdown (100% tanpa keyboard)
-      displayBtn.addEventListener("click", function(e) {
-        e.stopPropagation(); 
-        if (window._openDrugDropdown) window._openDrugDropdown();
-      });
-
-      // Ketika user mengetik di input pencarian dalam dropdown
-      innerSearch.addEventListener("input", function() {
-        // Hubungkan ke fungsi filter lama
-        if (window._filterDrugOptions) window._filterDrugOptions(innerSearch.value);
-        
-        // Sesuaikan state hidden select dan tombol clear saat sedang mengetik
-        if (hiddenSelect) hiddenSelect.value = "";
-        if (clearBtn) clearBtn.classList.add("hidden");
-      });
-    });
-  </script>
-
 </body>
 </html>
