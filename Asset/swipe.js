@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileHint = document.getElementById("mobileDrugHint");
 
   // Cegah keyboard muncul hanya karena dropdown dibuka.
-  // Keyboard tetap muncul ketika pengguna menyentuh kotak pencarian secara langsung.
+  // Keyboard tetap muncul saat kotak pencarian disentuh langsung.
   if (innerSearch) {
     const nativeFocus = innerSearch.focus.bind(innerSearch);
     innerSearch.focus = () => {};
@@ -103,19 +103,35 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!innerSearch.value.trim()) setTimeout(showAllMobileDrugs, 0);
   });
 
-  // Pindahkan peringatan ke bawah kotak hasil dan tepat sebelum tombol print.
-  const resultColumn = document.querySelector(".result-column");
-  const resultBox = document.getElementById("result");
-  const infoCard = resultColumn?.querySelector(".info-card");
-  const warningText = infoCard?.querySelector("p");
-  const printButton = resultColumn?.querySelector('button[onclick="printResultOnly()"]');
-  const printRow = printButton?.parentElement;
+  // Kembalikan logo dan judul ZED Kalkulator pada header utama.
+  // Sidebar Menu utama sengaja tidak disentuh.
+  const topHeader = document.querySelector(".top-card > header");
+  const headerLeft = topHeader?.querySelector(":scope > div:first-child");
+  const oldTitle = headerLeft?.querySelector("p");
 
-  if (resultColumn && resultBox && warningText && printRow) {
-    const warningBox = document.createElement("div");
-    warningBox.className = "rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 no-print";
-    warningText.className = "text-sm leading-6 text-amber-800";
-    warningBox.appendChild(warningText);
-    resultColumn.insertBefore(warningBox, printRow);
+  if (headerLeft && oldTitle) {
+    const brand = document.createElement("div");
+    brand.className = "flex min-w-0 items-center gap-2";
+    brand.innerHTML = `
+      <img src="192x192.png" class="h-9 w-9 shrink-0 rounded-lg" alt="Logo ZED Kalkulator">
+      <div class="min-w-0">
+        <p class="truncate text-sm font-bold text-slate-800">ZED Kalkulator</p>
+        <p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p>
+      </div>
+    `;
+    oldTitle.replaceWith(brand);
+  }
+
+  // Pindahkan peringatan ke dalam kotak Syringe Pump, tepat di bawah tombol Hitung.
+  const resultColumn = document.querySelector(".result-column");
+  const calculatorForm = document.getElementById("mainForm");
+  const actionRow = calculatorForm?.querySelector(".action-row");
+  const warningText = [...(resultColumn?.querySelectorAll("p") || [])].find(p =>
+    p.textContent.includes("Periksa kembali nama obat")
+  );
+
+  if (calculatorForm && actionRow && warningText) {
+    warningText.className = "mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-800 no-print";
+    actionRow.insertAdjacentElement("afterend", warningText);
   }
 });
