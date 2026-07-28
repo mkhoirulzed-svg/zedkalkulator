@@ -47,6 +47,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculatorForm = document.getElementById("mainForm");
   const resultBox = document.getElementById("result");
 
+  // Metadata satuan eksplisit untuk obat yang tidak menggunakan satuan massa.
+  window.ZED_CLINICAL_UNIT_METADATA = Object.freeze({
+    Heparin: Object.freeze({
+      amountUnit: "IU",
+      concentrationUnit: "IU/ml",
+      doseUnit: "IU/kgBB/jam",
+      rateUnit: "ml/jam"
+    })
+  });
+
+  // Pastikan label custom Heparin tidak pernah tampil sebagai mg/ml.
+  if (typeof getConcentrationLabelBB === "function") {
+    const originalGetConcentrationLabelBB = getConcentrationLabelBB;
+    getConcentrationLabelBB = function(drug) {
+      if (drug === "Heparin") {
+        const presetSelect = document.getElementById("otherPresetSelect");
+        if (presetSelect && !presetSelect.classList.contains("hidden")) {
+          return presetSelect.selectedOptions[0]?.text || "Preset Heparin";
+        }
+        const amount = document.getElementById("otherCustomDose")?.value || "";
+        const volume = document.getElementById("otherCustomVolume")?.value || "";
+        return `Custom: ${amount} IU / ${volume} ml`;
+      }
+      return originalGetConcentrationLabelBB(drug);
+    };
+  }
+
   // Kembalikan pemilih obat seperti index original.
   const currentDisplayBtn = document.getElementById("drugDisplayBtn");
   const drugField = currentDisplayBtn?.closest(".space-y-2") || currentDisplayBtn?.parentElement?.parentElement;
@@ -135,6 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (innerSearch) innerSearch.value = "";
       closeDropdown();
       if (typeof setDefaultConc === "function") setDefaultConc();
+      if (option.dataset.value === "Heparin") {
+        const label = document.getElementById("drugNameLabel");
+        if (label) label.textContent = "Heparin (IU/ml)";
+      }
     });
   });
 
