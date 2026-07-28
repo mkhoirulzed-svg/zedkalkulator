@@ -1,241 +1,81 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Profil</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>ZED Kalkulator - Profil</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="Asset/komunitas.css">
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#0f766e">
+  <style>
+    .hidden{display:none!important}*{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a}
+    button,a,input,select,textarea{touch-action:manipulation}.app-shell{width:min(100%,1280px);margin-inline:auto}
+    .card{background:#fff;border:1px solid #e2e8f0;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+    .side-link{display:flex;align-items:center;min-height:46px;padding:.7rem .8rem;border-radius:.8rem;color:#334155;text-decoration:none}
+    .side-link:hover{background:#eff6ff;color:#1d4ed8}.side-link.active{background:#dbeafe;color:#1d4ed8;font-weight:700}
+    .field{width:100%;min-height:48px;border:1px solid #cbd5e1;border-radius:.8rem;background:#fff;padding:.7rem .85rem;color:#0f172a}
+    .field:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);outline:none}
+    textarea.field{min-height:112px;resize:vertical}.desktop-aside{display:none}.mobile-bottom{display:none}.side-panel{transition:translate .22s ease}
+    .quick-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #e2e8f0}
+    .quick-nav a{min-width:0;padding:.7rem .35rem;text-align:center;color:#64748b;font-size:.72rem;font-weight:700;text-decoration:none}
+    .quick-nav a:hover{background:#f8fafc;color:#2563eb}.quick-nav img{width:30px;height:24px;margin:0 auto .2rem;opacity:.7}
+    @media(min-width:900px){body{padding:28px}.desktop-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}.desktop-aside{display:block;position:sticky;top:28px}.mobile-menu-button{display:none!important}.profile-grid{display:grid;grid-template-columns:minmax(300px,.7fr) minmax(0,1.3fr);gap:24px;align-items:start}#sideMenu,#backdrop,.mobile-bottom{display:none!important}}
+    @media(max-width:899px){body{padding:0 0 88px}.desktop-aside{display:none!important}.desktop-actions{display:none!important}.quick-nav{display:none!important}.top-header{border-radius:0!important;border-left:0;border-right:0;border-top:0;box-shadow:none}.profile-grid{display:block}#profileBox{margin-top:14px}#sideMenu{position:fixed;inset-block:0;right:0;left:auto;z-index:80;width:min(84vw,330px);translate:105% 0;overflow-y:auto;padding-bottom:110px;background:#f8fafc;box-shadow:-16px 0 40px rgba(15,23,42,.22);visibility:hidden;pointer-events:none}#sideMenu.open{translate:0 0;visibility:visible;pointer-events:auto}#backdrop{z-index:70}#sideMenu nav{display:flex;flex-direction:column;gap:7px;padding:12px}#sideMenu .side-link{min-height:54px;border:1px solid #dbeafe;background:#fff;color:#1e3a8a}.mobile-bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-top:1px solid #dbeafe;background:rgba(255,255,255,.98);box-shadow:0 -8px 24px rgba(15,23,42,.11);backdrop-filter:blur(14px)}.mobile-bottom a{display:flex;min-height:56px;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;color:#2563eb;font-size:10px;font-weight:700;text-decoration:none}.mobile-bottom .nav-icon{display:grid;width:25px;height:25px;place-items:center;color:#2563eb}.mobile-bottom img,.mobile-bottom svg{width:23px;height:23px}.mobile-bottom img{filter:brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(1602%) hue-rotate(207deg) brightness(91%) contrast(96%)}.mobile-bottom .home-item{transform:translateY(-11px)}.mobile-bottom .home-item .nav-icon{width:50px;height:50px;border-radius:50%;background:#dbeafe;box-shadow:0 7px 20px rgba(37,99,235,.22)}.mobile-bottom .active{background:#eff6ff;color:#1d4ed8}}
+    @media(max-width:560px){.content-card{border-left:0;border-right:0;border-radius:0;box-shadow:none}.page-wrap{gap:12px!important}.content-card{padding:18px!important}}
+  </style>
 </head>
-
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
-
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
-
-  <aside id="sideMenu" class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        ✕
-      </button>
-    </div>
-
-    <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
-       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
-      <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
-      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator</a>
-      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
-      <a href="profil.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Profil</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
-    </nav>
+<body>
+  <div id="backdrop" class="fixed inset-0 hidden bg-slate-950/45"></div>
+  <aside id="sideMenu" class="side-panel">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3"><h2 class="text-lg font-bold">Menu utama</h2><button id="closeMenuBtn" type="button" class="grid h-11 w-11 place-items-center rounded-xl text-2xl hover:bg-slate-100">×</button></div>
+    <nav><a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Kalkulator Tetesan Infus</a><a href="insulin.html" class="side-link">Kalkulator Insulin</a><a href="anestesi.html" class="side-link">Estimasi Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Kalkulator Pengenceran Obat</a><a href="asidosis.html" class="side-link">Kalkulator AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link active">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a></nav>
   </aside>
 
-  <div class="w-full max-w-2xl flex flex-col gap-4">
+  <main class="app-shell"><div class="desktop-grid">
+    <aside class="desktop-aside card overflow-hidden rounded-2xl"><div class="border-b border-slate-200 p-4"><h2 class="font-extrabold">Menu utama</h2></div><nav class="space-y-1 p-3 text-sm"><a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Tetesan Infus</a><a href="insulin.html" class="side-link">Insulin</a><a href="anestesi.html" class="side-link">Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Pengenceran Obat</a><a href="asidosis.html" class="side-link">AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link active">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a></nav></aside>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center justify-between px-3 py-2">
+    <div class="page-wrap flex min-w-0 flex-col gap-4">
+      <section class="top-header card overflow-hidden rounded-2xl"><header class="flex min-h-16 items-center justify-between gap-3 px-4 py-3"><div class="flex min-w-0 items-center gap-3"><img src="192x192.png" class="h-10 w-10 rounded-xl" alt="Logo ZED Kalkulator"><div><p class="font-bold">ZED Kalkulator</p><p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p></div></div><button id="openMenuBtn" type="button" class="mobile-menu-button grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-3xl text-blue-600">☰</button><div class="desktop-actions flex gap-2"><a href="kalkulatormanual.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Kalkulator Manual</a><a href="komunitas.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Diskusi</a></div></header><nav class="quick-nav"><a href="index.html"><img src="Asset/SP.svg" alt="">Syringe Pump</a><a href="infus.html"><img src="Asset/infus.svg" alt="">Infus</a><a href="insulin.html"><img src="Asset/insulin.svg" alt="">Actrapid</a><a href="kalkulatorpengenceranobat.html"><img src="Asset/Perdarahan.svg" alt="">Pengenceran</a></nav></section>
 
-  <div class="flex items-center gap-3">
+      <section class="content-card card rounded-2xl p-6"><p class="text-xs font-bold uppercase tracking-[.18em] text-blue-600">Akun</p><h1 class="mt-2 text-2xl font-extrabold">Profil pengguna</h1><p class="mt-2 text-sm leading-6 text-slate-500">Lengkapi nama, profesi, kota, dan bio agar identitas tampil dengan baik pada ruang diskusi.</p><div class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-xs leading-5 text-blue-800">Data profil digunakan sebagai identitas tampilan di ruang diskusi.</div></section>
 
-    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800"></div>
-    </button>
+      <div id="offline-banner" class="hidden rounded-xl bg-red-600 px-4 py-3 text-center text-sm font-bold text-white">⚠️ Kamu sedang offline. Fitur ini membutuhkan koneksi internet.</div>
 
-    <div class="flex items-center gap-2">
-      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-      <span class="text-xs sm:text-sm text-slate-600 font-medium">
-        ZED Kalkulator
-      </span>
-    </div>
-
-  </div>
-
-<div class="relative flex items-center gap-2">
-
-  <a
-    href="kalkulatormanual.html"
-    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
-    aria-label="Kalkulator Manual"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-4 h-4"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
-      <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  </a>
-
-  <a
-    href="komunitas.html"
-    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
-  >
-    Diskusi
-  </a>
-
-</div>
-
-</header>
-
-      <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn">
-          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
-        </a>
-        <a href="infus.html" class="pos-menu-btn">
-          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
-        </a>
-        <a href="insulin.html" class="pos-menu-btn">
-          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
-        </a>
-        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn">
-          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran
-        </a>
-      </nav>
-    </div>
-
-    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <h1 class="text-xl sm:text-2xl font-bold text-slate-800">PROFIL</h1>
-      <p class="text-sm text-slate-600 mt-2 leading-relaxed">
-        Lengkapi profil agar nama, profesi, dan asal kota tampil pada postingan Diskusi.
-      </p>
-
-      <div class="mt-4 p-3 rounded-xl bg-teal-50 border border-teal-200 text-xs text-teal-800 leading-relaxed">
-        Data profil ini hanya digunakan untuk identitas tampilan di ruang diskusi.
-      </div>
-    </div>
-
-    <div id="loginBox" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <div id="userInfo" class="hidden items-center justify-between gap-3">
-        <div>
-          <div class="text-sm font-semibold text-slate-800" id="userName"></div>
-          <div class="text-xs text-slate-500" id="userEmail"></div>
+      <div class="profile-grid">
+        <div class="space-y-4">
+          <section id="loginBox" class="card rounded-2xl p-5">
+            <div id="userInfo" class="hidden items-center justify-between gap-3"><div><div class="font-bold text-slate-800" id="userName"></div><div class="text-xs text-slate-500" id="userEmail"></div></div><button onclick="logoutGoogle()" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700">Logout</button></div>
+            <button id="loginBtn" onclick="loginGoogle()" class="min-h-12 w-full rounded-xl bg-blue-600 px-5 font-bold text-white">Login dengan Google</button>
+          </section>
+          <section class="card rounded-2xl p-5"><h2 class="font-extrabold">Tentang profil</h2><ul class="mt-3 space-y-2 text-sm leading-6 text-slate-600"><li>Nama, profesi, dan kota dapat tampil pada postingan.</li><li>Hindari mencantumkan data pasien atau informasi sensitif.</li><li>Gunakan identitas profesional yang mudah dikenali.</li></ul></section>
         </div>
 
-        <button onclick="logoutGoogle()" class="text-xs px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200">
-          Logout
-        </button>
-      </div>
-
-      <button id="loginBtn" onclick="loginGoogle()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-sm font-semibold">
-        Login dengan Google
-      </button>
-    </div>
-
-
-<div id="offline-banner" style="display:none; background:#ef4444; color:white; text-align:center; padding:10px;">
-  ⚠️ Kamu sedang offline. Fitur ini butuh koneksi internet.
-</div>
-
-   <div id="profileBox" class="hidden bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-
-  <div class="text-center mb-5">
-
-    <img
-      id="profileAvatar"
-      src="https://ui-avatars.com/api/?name=Z"
-      class="w-24 h-24 rounded-full border-4 border-teal-100 mx-auto object-cover"
-      alt="Foto Profil"
-    >
-
-    <div class="mt-3 font-bold text-slate-800">
-      Profil Saya
-    </div>
-
-    <div class="text-xs text-slate-500">
-      Informasi ini akan tampil di ruang diskusi
-    </div>
-
-  </div>
-
-      <div class="space-y-3">
-        <input
-          id="profileName"
-          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
-          placeholder="Nama tampilan"
-        >
-
-        <input
-          id="profileCity"
-          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
-          placeholder="Asal kota"
-        >
-
-        <select
-          id="profileProfession"
-          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600"
-        >
-          <option value="">Pilih profesi</option>
-          <option value="Dokter">Dokter</option>
-          <option value="Perawat">Perawat</option>
-          <option value="Bidan">Bidan</option>
-          <option value="Apoteker">Apoteker</option>
-          <option value="Analis Laboratorium">Analis Laboratorium</option>
-          <option value="Radiografer">Radiografer</option>
-          <option value="Fisioterapis">Fisioterapis</option>
-          <option value="Mahasiswa Kesehatan">Mahasiswa Kesehatan</option>
-          <option value="Tenaga Kesehatan Lainnya">Tenaga Kesehatan Lainnya</option>
-          <option value="Umum">Umum</option>
-        </select>
-
-        <textarea
-          id="profileBio"
-          class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
-          rows="4"
-          placeholder="Bio singkat"
-        ></textarea>
-
-        <button
-          onclick="saveProfile()"
-          class="w-full bg-teal-700 hover:bg-teal-800 text-white rounded-xl py-2 text-sm font-semibold"
-        >
-          Simpan Profil
-        </button>
+        <section id="profileBox" class="hidden content-card card rounded-2xl p-6">
+          <div class="mb-6 flex flex-col items-center text-center"><img id="profileAvatar" src="https://ui-avatars.com/api/?name=Z" class="h-24 w-24 rounded-full border-4 border-blue-100 object-cover" alt="Foto Profil"><h2 class="mt-3 text-xl font-extrabold">Profil Saya</h2><p class="mt-1 text-xs text-slate-500">Informasi ini akan tampil di ruang diskusi</p></div>
+          <div class="space-y-4">
+            <div><label for="profileName" class="mb-2 block text-sm font-bold">Nama tampilan</label><input id="profileName" class="field" placeholder="Nama tampilan"></div>
+            <div><label for="profileCity" class="mb-2 block text-sm font-bold">Asal kota</label><input id="profileCity" class="field" placeholder="Asal kota"></div>
+            <div><label for="profileProfession" class="mb-2 block text-sm font-bold">Profesi</label><select id="profileProfession" class="field"><option value="">Pilih profesi</option><option value="Dokter">Dokter</option><option value="Perawat">Perawat</option><option value="Bidan">Bidan</option><option value="Apoteker">Apoteker</option><option value="Analis Laboratorium">Analis Laboratorium</option><option value="Radiografer">Radiografer</option><option value="Fisioterapis">Fisioterapis</option><option value="Mahasiswa Kesehatan">Mahasiswa Kesehatan</option><option value="Tenaga Kesehatan Lainnya">Tenaga Kesehatan Lainnya</option><option value="Umum">Umum</option></select></div>
+            <div><label for="profileBio" class="mb-2 block text-sm font-bold">Bio singkat</label><textarea id="profileBio" class="field" rows="4" placeholder="Bio singkat"></textarea></div>
+            <button onclick="saveProfile()" class="min-h-12 w-full rounded-xl bg-blue-600 px-5 font-bold text-white">Simpan Profil</button>
+          </div>
+        </section>
       </div>
     </div>
+  </div></main>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-      <nav class="footer-menu">
-        <a href="index.html">Home</a>
-        <a href="komunitas.html">Diskusi</a><a href="profil.html" class="active">Profil</a>
-      </nav>
-    </div>
+  <nav class="mobile-bottom" aria-label="Navigasi utama mobile"><a href="infus.html"><span class="nav-icon"><img src="Asset/infus.svg" alt=""></span><span>Infus</span></a><a href="insulin.html"><span class="nav-icon"><img src="Asset/insulin.svg" alt=""></span><span>Actrapid</span></a><a href="index.html" class="home-item"><span class="nav-icon"><img src="Asset/SP.svg" alt=""></span><span>Home</span></a><a href="komunitas.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h6"/><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-5 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></span><span>Diskusi</span></a><a href="profil.html" class="active"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Akun</span></a></nav>
 
-    <footer class="mt-8 border-t border-slate-200 bg-slate-50">
-      <div class="py-4 px-4 text-center text-[10px] text-slate-500">
-        <div>© 2025–2026 ZED Kalkulator. All Rights Reserved.</div>
-
-        <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
-          <a href="https://www.alkespky.store" target="_blank" class="hover:text-teal-600 hover:underline">Powered by AlkesPKY</a>
-          <span class="text-slate-300">•</span>
-          <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-500 hover:underline">Contact</a>
-          <span class="text-slate-300">•</span>
-          <a href="/about.html" class="hover:text-blue-500 hover:underline">Privacy Policy</a>
-        </div>
-      </div>
-    </footer>
-
-  </div>
-
+  <script>
+    const sideMenu=document.getElementById('sideMenu');const backdrop=document.getElementById('backdrop');
+    function closeMenu(){sideMenu.classList.remove('open');backdrop.classList.add('hidden');document.body.style.overflow=''}
+    function openMenu(){if(!matchMedia('(max-width:899px)').matches)return;sideMenu.classList.add('open');backdrop.classList.remove('hidden');document.body.style.overflow='hidden'}
+    document.getElementById('openMenuBtn').addEventListener('click',openMenu);document.getElementById('closeMenuBtn').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);window.addEventListener('resize',()=>{if(innerWidth>=900)closeMenu()});
+  </script>
   <script type="module" src="Asset/profil.js"></script>
 </body>
 </html>
