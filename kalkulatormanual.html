@@ -1,468 +1,80 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Kalkulator Manual</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>ZED Kalkulator - Kalkulator Manual</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
   <link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#0f766e">
-
   <link rel="stylesheet" href="Asset/swipe.css">
-
   <style>
-    .hidden { display: none; }
-
-    @font-face {
-      font-family: 'Archicoco';
-      src: url('./Asset/Archicoco.otf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    .pos-menu-icon {
-      width: 30px;
-      height: 22px;
-      margin: 0 auto 2px;
-      display: block;
-      opacity: .55;
-    }
-
-    .pos-menu-btn.active .pos-menu-icon {
-      opacity: 1;
-    }
-
-    .pos-menu {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.25rem;
-      margin: 0;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .pos-menu-btn {
-      flex: 1;
-      padding: 0.6rem 0.2rem 0.5rem;
-      text-align: center;
-      color: #6b7280;
-      font-size: 0.7rem;
-      font-weight: 500;
-      position: relative;
-      transition: color .15s;
-    }
-
-    .pos-menu-btn:hover {
-      color: #2563eb;
-    }
-
-    .pos-menu-btn.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .pos-menu-btn.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      bottom: -1px;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 2px;
-    }
-
-    .calc-btn {
-      height: 64px;
-      border-radius: 1rem;
-      font-size: 1.3rem;
-      font-weight: 700;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      color: #0f172a;
-      box-shadow: 0 1px 2px rgba(15,23,42,.06);
-      transition: .12s;
-    }
-
-    .calc-btn:active {
-      transform: scale(.96);
-      background: #e2e8f0;
-    }
-
-    .calc-op {
-      background: #dbeafe;
-      color: #1d4ed8;
-      border-color: #bfdbfe;
-    }
-
-    .calc-equal {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
-    }
-
-    .calc-clear {
-      background: #fee2e2;
-      color: #dc2626;
-      border-color: #fecaca;
-    }
-
-    .calc-display {
-      min-height: 96px;
-      word-break: break-all;
-    }
-     .footer-menu {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    .footer-menu a {
-      flex: 1;
-      text-align: center;
-      padding: 0.65rem 0.2rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #6b7280;
-      position: relative;
-    }
-
-    .footer-menu a:hover {
-      color: #2563eb;
-    }
-
-    .footer-menu a.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .footer-menu a.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      top: 0;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 0 0 2px 2px;
-    }
+    .hidden{display:none!important}*{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a}
+    button,a{touch-action:manipulation}.app-shell{width:min(100%,1280px);margin-inline:auto}
+    .card{background:#fff;border:1px solid #e2e8f0;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+    .side-link{display:flex;align-items:center;min-height:46px;padding:.7rem .8rem;border-radius:.8rem;color:#334155;text-decoration:none}
+    .side-link:hover{background:#eff6ff;color:#1d4ed8}.side-link.active{background:#dbeafe;color:#1d4ed8;font-weight:700}
+    .desktop-aside{display:none}.mobile-bottom{display:none}.side-panel{transition:translate .22s ease}
+    .quick-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #e2e8f0}
+    .quick-nav a{min-width:0;padding:.7rem .35rem;text-align:center;color:#64748b;font-size:.72rem;font-weight:700;text-decoration:none}
+    .quick-nav a:hover{background:#f8fafc;color:#2563eb}.quick-nav img{width:30px;height:24px;margin:0 auto .2rem;opacity:.7}
+    .calc-display{min-height:112px;word-break:break-all}.calc-btn{display:grid;min-height:64px;place-items:center;border:1px solid #e2e8f0;border-radius:16px;background:#f8fafc;color:#0f172a;font-size:1.3rem;font-weight:800;box-shadow:0 1px 2px rgba(15,23,42,.05);transition:transform .1s,background .1s}.calc-btn:active{transform:scale(.96);background:#e2e8f0}.calc-op{border-color:#bfdbfe;background:#dbeafe;color:#1d4ed8}.calc-equal{border-color:#2563eb;background:#2563eb;color:#fff}.calc-clear{border-color:#fecaca;background:#fee2e2;color:#dc2626}
+    @media(min-width:900px){body{padding:28px}.desktop-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}.desktop-aside{display:block;position:sticky;top:28px}.mobile-menu-button{display:none!important}.calculator-layout{display:grid;grid-template-columns:minmax(0,560px) minmax(260px,1fr);gap:24px;align-items:start}#sideMenu,#backdrop,.mobile-bottom{display:none!important}}
+    @media(max-width:899px){body{padding:0 0 88px}.desktop-aside,.desktop-actions,.quick-nav{display:none!important}.top-header{border-radius:0!important;border-left:0;border-right:0;border-top:0;box-shadow:none}#sideMenu{position:fixed;inset-block:0;right:0;left:auto;z-index:80;width:min(84vw,330px);translate:105% 0;overflow-y:auto;padding-bottom:110px;background:#f8fafc;box-shadow:-16px 0 40px rgba(15,23,42,.22);visibility:hidden;pointer-events:none}#sideMenu.open{translate:0 0;visibility:visible;pointer-events:auto}#backdrop{z-index:70}#sideMenu nav{display:flex;flex-direction:column;gap:7px;padding:12px}#sideMenu .side-link{min-height:54px;border:1px solid #dbeafe;background:#fff;color:#1e3a8a}.mobile-bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-top:1px solid #dbeafe;background:rgba(255,255,255,.98);box-shadow:0 -8px 24px rgba(15,23,42,.11);backdrop-filter:blur(14px)}.mobile-bottom a{display:flex;min-height:56px;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;color:#2563eb;font-size:10px;font-weight:700;text-decoration:none}.mobile-bottom .nav-icon{display:grid;width:25px;height:25px;place-items:center;color:#2563eb}.mobile-bottom img,.mobile-bottom svg{width:23px;height:23px}.mobile-bottom img{filter:brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(1602%) hue-rotate(207deg) brightness(91%) contrast(96%)}.mobile-bottom .home-item{transform:translateY(-11px)}.mobile-bottom .home-item .nav-icon{width:50px;height:50px;border-radius:50%;background:#dbeafe;box-shadow:0 7px 20px rgba(37,99,235,.22)}}
+    @media(max-width:560px){.page-wrap{gap:12px!important}.calculator-card{border-left:0;border-right:0;border-radius:0;box-shadow:none;padding:18px!important}.calc-btn{min-height:58px;border-radius:14px}.calc-display{min-height:100px}}
   </style>
 </head>
-
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
-
-  <div id="backdrop" class="fixed inset-0 bg-black/30 z-30 hidden" onclick="toggleMenu()"></div>
-
-  <aside id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out">
-
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
-        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
-      </button>
-    </div>
-
-        <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
-       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
-          <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
-      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Kalkulator</a>
-      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
-      <a href="profil.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Profil</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
-    </nav>
+<body>
+  <div id="backdrop" class="fixed inset-0 hidden bg-slate-950/45"></div>
+  <aside id="sideMenu" class="side-panel no-print">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3"><h2 class="text-lg font-bold">Menu utama</h2><button id="closeMenuBtn" type="button" class="grid h-11 w-11 place-items-center rounded-xl text-2xl hover:bg-slate-100" aria-label="Tutup menu">×</button></div>
+    <nav><a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Kalkulator Tetesan Infus</a><a href="insulin.html" class="side-link">Kalkulator Insulin</a><a href="anestesi.html" class="side-link">Estimasi Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Kalkulator Pengenceran Obat</a><a href="asidosis.html" class="side-link">Kalkulator AGD/ABG</a><a href="kalkulatormanual.html" class="side-link active">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a></nav>
   </aside>
 
-   <div class="w-full max-w-2xl flex flex-col gap-4">
+  <main class="app-shell"><div class="desktop-grid">
+    <aside class="desktop-aside card overflow-hidden rounded-2xl no-print"><div class="border-b border-slate-200 p-4"><h2 class="font-extrabold">Menu utama</h2></div><nav class="space-y-1 p-3 text-sm"><a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Tetesan Infus</a><a href="insulin.html" class="side-link">Insulin</a><a href="anestesi.html" class="side-link">Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Pengenceran Obat</a><a href="asidosis.html" class="side-link">AGD/ABG</a><a href="kalkulatormanual.html" class="side-link active">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a></nav></aside>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center justify-between px-3 py-2">
+    <div class="page-wrap flex min-w-0 flex-col gap-4">
+      <section class="top-header card overflow-hidden rounded-2xl no-print"><header class="flex min-h-16 items-center justify-between gap-3 px-4 py-3"><div class="flex min-w-0 items-center gap-3"><img src="192x192.png" class="h-10 w-10 rounded-xl" alt="Logo ZED Kalkulator"><div><p class="font-bold">ZED Kalkulator</p><p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p></div></div><button id="openMenuBtn" type="button" class="mobile-menu-button grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-3xl text-blue-600" aria-label="Buka menu">☰</button><div class="desktop-actions flex gap-2"><a href="kalkulatormanual.html" class="rounded-full border border-blue-300 bg-blue-600 px-3 py-2 text-xs font-bold text-white">Kalkulator Manual</a><a href="komunitas.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Diskusi</a></div></header><nav class="quick-nav"><a href="index.html"><img src="Asset/SP.svg" alt="">Syringe Pump</a><a href="infus.html"><img src="Asset/infus.svg" alt="">Infus</a><a href="insulin.html"><img src="Asset/insulin.svg" alt="">Actrapid</a><a href="kalkulatorpengenceranobat.html"><img src="Asset/Perdarahan.svg" alt="">Pengenceran</a></nav></section>
 
-  <div class="flex items-center gap-3">
-
-    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800"></div>
-    </button>
-
-    <div class="flex items-center gap-2">
-      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-      <span class="text-xs sm:text-sm text-slate-600 font-medium">
-        ZED Kalkulator
-      </span>
-    </div>
-
-  </div>
-
-<div class="relative flex items-center gap-2">
-
-  <a
-    href="kalkulatormanual.html"
-    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
-    aria-label="Kalkulator Manual"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-4 h-4"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
-      <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  </a>
-
-  <a
-    href="komunitas.html"
-    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
-  >
-    Diskusi
-  </a>
-        </div>
-      </header>
-      <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn">
-          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
-        </a>
-        <a href="infus.html" class="pos-menu-btn">
-          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
-        </a>
-        <a href="insulin.html" class="pos-menu-btn">
-          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
-        </a>
-             <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn"><img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran</a>
-      </nav>
-    </div>
-
-    <div class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <header class="mb-4">
-        <h1 class="text-xl sm:text-3xl font-bold tracking-tight text-slate-800">
-          Kalkulator Manual
-        </h1>
-        <p class="mt-1 text-xs sm:text-sm text-slate-500">
-          Kalkulator sederhana seperti kalkulator di handphone.
-        </p>
-      </header>
-
-      <div class="rounded-2xl bg-slate-900 p-4 mb-4 calc-display flex flex-col justify-end text-right">
-        <div id="history" class="text-xs text-slate-400 min-h-5"></div>
-        <div id="display" class="text-4xl font-bold text-white">0</div>
-      </div>
-
-      <div class="grid grid-cols-4 gap-2 sm:gap-3">
-        <button class="calc-btn calc-clear" onclick="clearCalc()">C</button>
-        <button class="calc-btn calc-op" onclick="deleteLast()">⌫</button>
-        <button class="calc-btn calc-op" onclick="appendOperator('%')">%</button>
-        <button class="calc-btn calc-op" onclick="appendOperator('/')">÷</button>
-
-        <button class="calc-btn" onclick="appendNumber('7')">7</button>
-        <button class="calc-btn" onclick="appendNumber('8')">8</button>
-        <button class="calc-btn" onclick="appendNumber('9')">9</button>
-        <button class="calc-btn calc-op" onclick="appendOperator('*')">×</button>
-
-        <button class="calc-btn" onclick="appendNumber('4')">4</button>
-        <button class="calc-btn" onclick="appendNumber('5')">5</button>
-        <button class="calc-btn" onclick="appendNumber('6')">6</button>
-        <button class="calc-btn calc-op" onclick="appendOperator('-')">−</button>
-
-        <button class="calc-btn" onclick="appendNumber('1')">1</button>
-        <button class="calc-btn" onclick="appendNumber('2')">2</button>
-        <button class="calc-btn" onclick="appendNumber('3')">3</button>
-        <button class="calc-btn calc-op" onclick="appendOperator('+')">+</button>
-
-        <button class="calc-btn" onclick="toggleMinus()">±</button>
-        <button class="calc-btn" onclick="appendNumber('0')">0</button>
-        <button class="calc-btn" onclick="appendDot()">.</button>
-        <button class="calc-btn calc-equal" onclick="calculateResult()">=</button>
+      <div class="calculator-layout">
+        <section class="calculator-card card rounded-2xl p-6">
+          <p class="text-xs font-bold uppercase tracking-[.18em] text-blue-600">Kalkulator umum</p><h1 class="mt-2 text-2xl font-extrabold">Kalkulator Manual</h1><p class="mt-2 text-sm leading-6 text-slate-500">Kalkulator sederhana untuk operasi aritmetika sehari-hari.</p>
+          <div class="calc-display mt-6 flex flex-col justify-end rounded-2xl bg-slate-900 p-4 text-right"><div id="history" class="min-h-5 text-xs text-slate-400"></div><div id="display" class="text-4xl font-extrabold text-white">0</div></div>
+          <div class="mt-4 grid grid-cols-4 gap-2 sm:gap-3">
+            <button class="calc-btn calc-clear" onclick="clearCalc()">C</button><button class="calc-btn calc-op" onclick="deleteLast()">⌫</button><button class="calc-btn calc-op" onclick="appendOperator('%')">%</button><button class="calc-btn calc-op" onclick="appendOperator('/')">÷</button>
+            <button class="calc-btn" onclick="appendNumber('7')">7</button><button class="calc-btn" onclick="appendNumber('8')">8</button><button class="calc-btn" onclick="appendNumber('9')">9</button><button class="calc-btn calc-op" onclick="appendOperator('*')">×</button>
+            <button class="calc-btn" onclick="appendNumber('4')">4</button><button class="calc-btn" onclick="appendNumber('5')">5</button><button class="calc-btn" onclick="appendNumber('6')">6</button><button class="calc-btn calc-op" onclick="appendOperator('-')">−</button>
+            <button class="calc-btn" onclick="appendNumber('1')">1</button><button class="calc-btn" onclick="appendNumber('2')">2</button><button class="calc-btn" onclick="appendNumber('3')">3</button><button class="calc-btn calc-op" onclick="appendOperator('+')">+</button>
+            <button class="calc-btn" onclick="toggleMinus()">±</button><button class="calc-btn" onclick="appendNumber('0')">0</button><button class="calc-btn" onclick="appendDot()">.</button><button class="calc-btn calc-equal" onclick="calculateResult()">=</button>
+          </div>
+        </section>
+        <aside class="card rounded-2xl p-5"><h2 class="font-extrabold">Petunjuk singkat</h2><ul class="mt-4 space-y-3 text-sm leading-6 text-slate-600"><li><b>C</b> menghapus seluruh perhitungan.</li><li><b>⌫</b> menghapus satu karakter terakhir.</li><li><b>±</b> mengubah nilai menjadi positif atau negatif.</li><li>Keyboard angka, operator, Enter, Backspace, dan Escape juga didukung.</li></ul><div class="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-4 text-xs leading-5 text-blue-900">Kalkulator ini untuk perhitungan umum. Perhitungan dosis klinis tetap perlu diverifikasi dengan kalkulator khusus dan protokol setempat.</div></aside>
       </div>
     </div>
+  </div></main>
 
-      <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-      <nav class="footer-menu">
-        <a href="index.html" >Home</a>
-        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
-      </nav>
-    </div>
-
-    <footer class="mt-8 border-t border-slate-200 bg-slate-50">
-      <div class="py-4 px-4 text-center text-[10px] text-slate-500">
-        <div>© 2025–2026 ZED Kalkulator. All Rights Reserved.</div>
-
-        <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
-          <a href="https://www.alkespky.store" target="_blank" class="hover:text-teal-600 hover:underline">
-            Powered by AlkesPKY
-          </a>
-          <span class="text-slate-300">•</span>
-          <a href="mailto:mkhoirulzed@gmail.com" class="hover:text-blue-500 hover:underline">
-            Contact
-          </a>
-          <span class="text-slate-300">•</span>
-          <a href="/about.html" class="hover:text-blue-500 hover:underline">
-            Privacy Policy
-          </a>
-        </div>
-      </div>
-    </footer>
-
-  </div>
+  <nav class="mobile-bottom no-print" aria-label="Navigasi utama mobile"><a href="infus.html"><span class="nav-icon"><img src="Asset/infus.svg" alt=""></span><span>Infus</span></a><a href="insulin.html"><span class="nav-icon"><img src="Asset/insulin.svg" alt=""></span><span>Actrapid</span></a><a href="index.html" class="home-item"><span class="nav-icon"><img src="Asset/SP.svg" alt=""></span><span>Home</span></a><a href="komunitas.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h6"/><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-5 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></span><span>Diskusi</span></a><a href="profil.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Akun</span></a></nav>
 
   <script>
-    function toggleMenu() {
-      const menu = document.getElementById('sideMenu');
-      const backdrop = document.getElementById('backdrop');
-      const isOpen = !menu.classList.contains('-translate-x-full');
-
-      if (isOpen) {
-        menu.classList.add('-translate-x-full');
-        backdrop.classList.add('hidden');
-      } else {
-        menu.classList.remove('-translate-x-full');
-        backdrop.classList.remove('hidden');
-      }
-    }
-
-    let currentInput = "0";
-    let historyInput = "";
-    let justCalculated = false;
-
-    const display = document.getElementById("display");
-    const history = document.getElementById("history");
-
-    function updateDisplay() {
-      display.textContent = formatDisplay(currentInput);
-      history.textContent = historyInput.replaceAll("*", "×").replaceAll("/", "÷");
-    }
-
-    function formatDisplay(value) {
-      return value.toString();
-    }
-
-    function appendNumber(num) {
-      if (justCalculated) {
-        currentInput = num;
-        historyInput = "";
-        justCalculated = false;
-      } else if (currentInput === "0") {
-        currentInput = num;
-      } else {
-        currentInput += num;
-      }
-      updateDisplay();
-    }
-
-    function appendDot() {
-      const parts = currentInput.split(/[\+\-\*\/%]/);
-      const lastPart = parts[parts.length - 1];
-
-      if (!lastPart.includes(".")) {
-        currentInput += ".";
-      }
-
-      updateDisplay();
-    }
-
-    function appendOperator(op) {
-      justCalculated = false;
-
-      if (/[+\-*/%]$/.test(currentInput)) {
-        currentInput = currentInput.slice(0, -1) + op;
-      } else {
-        currentInput += op;
-      }
-
-      updateDisplay();
-    }
-
-    function clearCalc() {
-      currentInput = "0";
-      historyInput = "";
-      justCalculated = false;
-      updateDisplay();
-    }
-
-    function deleteLast() {
-      if (justCalculated) {
-        clearCalc();
-        return;
-      }
-
-      currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : "0";
-      updateDisplay();
-    }
-
-    function toggleMinus() {
-      if (currentInput === "0") return;
-
-      if (currentInput.startsWith("-")) {
-        currentInput = currentInput.slice(1);
-      } else {
-        currentInput = "-" + currentInput;
-      }
-
-      updateDisplay();
-    }
-
-    function calculateResult() {
-      try {
-        if (/[+\-*/%]$/.test(currentInput)) {
-          currentInput = currentInput.slice(0, -1);
-        }
-
-        historyInput = currentInput + " =";
-
-        const result = Function('"use strict"; return (' + currentInput + ')')();
-
-        if (!isFinite(result)) {
-          currentInput = "Error";
-        } else {
-          currentInput = Number.isInteger(result)
-            ? result.toString()
-            : parseFloat(result.toFixed(10)).toString();
-        }
-
-        justCalculated = true;
-        updateDisplay();
-
-      } catch (e) {
-        currentInput = "Error";
-        justCalculated = true;
-        updateDisplay();
-      }
-    }
-
-    document.addEventListener("keydown", function(e) {
-      if (!isNaN(e.key)) appendNumber(e.key);
-      if (e.key === ".") appendDot();
-      if (["+", "-", "*", "/", "%"].includes(e.key)) appendOperator(e.key);
-      if (e.key === "Enter") calculateResult();
-      if (e.key === "Backspace") deleteLast();
-      if (e.key === "Escape") clearCalc();
-    });
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
-      });
-    }
+    const sideMenu=document.getElementById('sideMenu');const backdrop=document.getElementById('backdrop');
+    function closeMenu(){sideMenu.classList.remove('open');backdrop.classList.add('hidden');document.body.style.overflow=''}
+    function openMenu(){if(!matchMedia('(max-width:899px)').matches)return;sideMenu.classList.add('open');backdrop.classList.remove('hidden');document.body.style.overflow='hidden'}
+    document.getElementById('openMenuBtn').addEventListener('click',openMenu);document.getElementById('closeMenuBtn').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);window.addEventListener('resize',()=>{if(innerWidth>=900)closeMenu()});
+    let currentInput='0',historyInput='',justCalculated=false;const display=document.getElementById('display'),history=document.getElementById('history');
+    function updateDisplay(){display.textContent=currentInput.toString();history.textContent=historyInput.replaceAll('*','×').replaceAll('/','÷')}
+    function appendNumber(num){if(justCalculated){currentInput=num;historyInput='';justCalculated=false}else if(currentInput==='0'||currentInput==='Error')currentInput=num;else currentInput+=num;updateDisplay()}
+    function appendDot(){if(currentInput==='Error')currentInput='0';const parts=currentInput.split(/[+\-*\/%]/),lastPart=parts[parts.length-1];if(!lastPart.includes('.'))currentInput+='.';updateDisplay()}
+    function appendOperator(op){if(currentInput==='Error')return;justCalculated=false;if(/[+\-*\/%]$/.test(currentInput))currentInput=currentInput.slice(0,-1)+op;else currentInput+=op;updateDisplay()}
+    function clearCalc(){currentInput='0';historyInput='';justCalculated=false;updateDisplay()}
+    function deleteLast(){if(justCalculated){clearCalc();return}currentInput=currentInput.length>1?currentInput.slice(0,-1):'0';updateDisplay()}
+    function toggleMinus(){if(currentInput==='0'||currentInput==='Error')return;currentInput=currentInput.startsWith('-')?currentInput.slice(1):'-'+currentInput;updateDisplay()}
+    function calculateResult(){try{if(/[+\-*\/%]$/.test(currentInput))currentInput=currentInput.slice(0,-1);historyInput=currentInput+' =';const result=Function('"use strict"; return ('+currentInput+')')();currentInput=!isFinite(result)?'Error':(Number.isInteger(result)?result.toString():parseFloat(result.toFixed(10)).toString());justCalculated=true;updateDisplay()}catch(e){currentInput='Error';justCalculated=true;updateDisplay()}}
+    document.addEventListener('keydown',e=>{if(!isNaN(e.key)&&e.key!==' ')appendNumber(e.key);else if(e.key==='.')appendDot();else if(['+','-','*','/','%'].includes(e.key))appendOperator(e.key);else if(e.key==='Enter'){e.preventDefault();calculateResult()}else if(e.key==='Backspace')deleteLast();else if(e.key==='Escape')clearCalc()});
+    if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
   </script>
-
-  <script src="Asset/swipe.js" defer></script>
-
 </body>
 </html>
