@@ -5,7 +5,7 @@ const pages = [
   "kalkulatorpengenceranobat.html"
 ];
 
-const currentPage = location.pathname.split("/").pop();
+const currentPage = location.pathname.split("/").pop() || "index.html";
 const currentIndex = pages.indexOf(currentPage);
 let startX = 0;
 let endX = 0;
@@ -18,16 +18,11 @@ document.addEventListener("touchstart", event => {
 document.addEventListener("touchend", event => {
   endX = event.changedTouches[0].clientX;
   if (document.getElementById("sideMenu")?.classList.contains("zed-menu-open")) return;
-  handleSwipe();
-}, { passive: true });
-
-function handleSwipe() {
-  if (isAnimating) return;
   const diff = startX - endX;
-  if (Math.abs(diff) < 80) return;
+  if (isAnimating || Math.abs(diff) < 80) return;
   if (diff > 0 && currentIndex < pages.length - 1) slideTo(pages[currentIndex + 1], "left");
   if (diff < 0 && currentIndex > 0) slideTo(pages[currentIndex - 1], "right");
-}
+}, { passive: true });
 
 function slideTo(url, direction) {
   isAnimating = true;
@@ -37,28 +32,28 @@ function slideTo(url, direction) {
   iframe.style.border = "none";
   iframe.classList.add(direction === "left" ? "slide-in-right" : "slide-in-left");
   document.body.appendChild(iframe);
-
   requestAnimationFrame(() => {
     iframe.classList.remove("slide-in-right", "slide-in-left");
     iframe.classList.add("slide-center");
     document.body.classList.add(direction === "left" ? "slide-out-left" : "slide-out-right");
   });
-
-  setTimeout(() => {
-    window.location.href = url;
-  }, 300);
+  setTimeout(() => { window.location.href = url; }, 300);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const pageName = location.pathname.split("/").pop() || "index.html";
-  if (pageName !== "index.html") return;
+  if (currentPage !== "index.html") return;
 
   const innerSearch = document.getElementById("innerSearchBox");
   const displayBtn = document.getElementById("drugDisplayBtn");
+  const dropdown = document.getElementById("drugDropdown");
   const drugOptions = [...document.querySelectorAll(".drug-option")];
   const emptyState = document.getElementById("drugEmptyState");
   const mobileHint = document.getElementById("mobileDrugHint");
+  const resultColumn = document.querySelector(".result-column");
+  const calculatorForm = document.getElementById("mainForm");
+  const resultBox = document.getElementById("result");
 
+  // Saat dropdown dibuka di mobile, tampilkan seluruh daftar tanpa memunculkan keyboard.
   if (innerSearch) {
     const nativeFocus = innerSearch.focus.bind(innerSearch);
     innerSearch.focus = () => {};
@@ -75,15 +70,35 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileHint?.classList.add("hidden");
   };
 
-  displayBtn?.addEventListener("click", () => setTimeout(showAllMobileDrugs, 60));
-  innerSearch?.addEventListener("input", () => {
-    if (!innerSearch.value.trim()) setTimeout(showAllMobileDrugs, 0);
+  const keepDrugListVisible = () => {
+    if (!dropdown || dropdown.classList.contains("hidden")) return;
+    if (!innerSearch?.value.trim()) showAllMobileDrugs();
+  };
+
+  displayBtn?.addEventListener("click", () => {
+    requestAnimationFrame(() => {
+      showAllMobileDrugs();
+      setTimeout(showAllMobileDrugs, 80);
+      setTimeout(showAllMobileDrugs, 220);
+    });
   });
 
+  innerSearch?.addEventListener("input", () => {
+    if (!innerSearch.value.trim()) showAllMobileDrugs();
+  });
+
+  dropdown?.addEventListener("click", keepDrugListVisible);
+  dropdown?.addEventListener("transitionend", keepDrugListVisible);
+
+  const dropdownObserver = dropdown ? new MutationObserver(keepDrugListVisible) : null;
+  if (dropdown && dropdownObserver) {
+    dropdownObserver.observe(dropdown, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  // Identitas aplikasi pada header.
   const topHeader = document.querySelector(".top-card > header");
   const headerLeft = topHeader?.querySelector(":scope > div:first-child");
   const oldTitle = headerLeft?.querySelector("p");
-
   if (headerLeft && oldTitle && !headerLeft.querySelector('img[alt="Logo ZED Kalkulator"]')) {
     const brand = document.createElement("div");
     brand.className = "flex min-w-0 items-center gap-2";
@@ -96,13 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
     oldTitle.replaceWith(brand);
   }
 
-  const resultColumn = document.querySelector(".result-column");
-  const calculatorForm = document.getElementById("mainForm");
+  // Peringatan klinis berada di bawah tombol Hitung.
   const actionRow = calculatorForm?.querySelector(".action-row");
   const warningText = [...(resultColumn?.querySelectorAll("p") || [])].find(paragraph =>
     paragraph.textContent.includes("Periksa kembali nama obat")
   );
-
   if (calculatorForm && actionRow && warningText) {
     warningText.className = "clinical-warning mt-3 text-xs leading-5 text-slate-500 no-print";
     actionRow.insertAdjacentElement("afterend", warningText);
@@ -117,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .result-card-unified #result{min-height:260px;max-height:520px;overflow:auto;border:0!important;border-radius:0!important;box-shadow:none!important;padding:20px!important;scroll-margin-top:90px}
     .result-card-unified + button{margin-top:12px;min-height:48px}
     .zed-mobile-bottom{display:none}
+    footer{display:none!important}
 
     @media(min-width:900px){
       .app-shell{width:min(100%,1280px)!important}
@@ -129,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .side-link{font-size:14px!important}
       .quick-nav a{font-size:12px!important;padding-top:12px!important;padding-bottom:12px!important}
       .action-row button{min-height:48px!important;font-size:15px!important}
-      footer{margin-top:8px!important}
     }
 
     @media(max-width:899px){
@@ -171,10 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }`;
   document.head.appendChild(style);
 
+  // Satukan judul dan isi hasil.
   const infoCard = resultColumn?.querySelector(".info-card");
-  const resultBox = document.getElementById("result");
   const printButton = resultColumn?.querySelector('button[onclick="printResultOnly()"]');
-
   if (resultColumn && infoCard && resultBox && !resultColumn.querySelector(".result-card-unified")) {
     const unifiedCard = document.createElement("section");
     unifiedCard.className = "result-card-unified";
@@ -187,18 +199,17 @@ document.addEventListener("DOMContentLoaded", () => {
     infoCard.remove();
   }
 
+  // Sidebar kanan mobile.
   const sideMenu = document.getElementById("sideMenu");
   const backdrop = document.getElementById("backdrop");
   const menuButton = document.querySelector(".mobile-menu-button");
   const closeButton = sideMenu?.querySelector("button");
-
   const closeRightMenu = () => {
     sideMenu?.classList.remove("zed-menu-open");
     if (sideMenu) sideMenu.style.translate = "105% 0";
     backdrop?.classList.add("hidden");
     document.body.style.overflow = "";
   };
-
   const openRightMenu = event => {
     event?.preventDefault();
     event?.stopPropagation();
@@ -207,7 +218,6 @@ document.addEventListener("DOMContentLoaded", () => {
     backdrop?.classList.remove("hidden");
     document.body.style.overflow = "hidden";
   };
-
   closeRightMenu();
   window.addEventListener("pageshow", closeRightMenu);
   menuButton?.removeAttribute("onclick");
@@ -217,10 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
   closeButton?.addEventListener("click", closeRightMenu);
   backdrop?.addEventListener("click", closeRightMenu);
   sideMenu?.querySelectorAll("a").forEach(link => link.addEventListener("click", closeRightMenu));
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeRightMenu();
-  });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") closeRightMenu(); });
 
+  // Navigasi bawah mobile.
   document.querySelector(".zed-mobile-bottom")?.remove();
   const mobileBottom = document.createElement("nav");
   mobileBottom.className = "zed-mobile-bottom no-print";
@@ -233,18 +242,14 @@ document.addEventListener("DOMContentLoaded", () => {
     <a href="profil.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Akun</span></a>`;
   document.body.appendChild(mobileBottom);
 
-  // Hilangkan kesan footer website pada halaman aplikasi.
-  const footer = document.querySelector("footer");
-  const copyright = footer?.querySelector("p:first-child");
-  if (copyright) copyright.remove();
+  // Hapus seluruh footer agar tampilan terasa seperti aplikasi.
+  document.querySelector("footer")?.remove();
 
-  // Setelah kalkulasi valid mengubah isi hasil, gulir otomatis ke kotak hasil.
+  // Auto-scroll setelah hasil valid muncul.
   let calculationRequested = false;
-  const submitButton = calculatorForm?.querySelector('button[type="submit"]');
-  submitButton?.addEventListener("click", () => {
+  calculatorForm?.querySelector('button[type="submit"]')?.addEventListener("click", () => {
     calculationRequested = true;
   });
-
   if (resultBox) {
     const observer = new MutationObserver(() => {
       if (!calculationRequested) return;
@@ -252,13 +257,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const isPlaceholder = !text || text.includes("Hasil akan tampil di sini");
       const isError = /pilih|masukkan|wajib|tidak valid|error|gagal|kosong/i.test(text);
       if (isPlaceholder || isError) return;
-
       calculationRequested = false;
       setTimeout(() => {
-        resultBox.closest(".result-card-unified")?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+        resultBox.closest(".result-card-unified")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 120);
     });
     observer.observe(resultBox, { childList: true, subtree: true, characterData: true });
