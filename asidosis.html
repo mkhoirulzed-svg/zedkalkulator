@@ -27,6 +27,7 @@
     .quick-nav a:hover{background:#f8fafc;color:#2563eb}.quick-nav a.active{color:#2563eb;background:#eff6ff}
     .quick-nav img{width:30px;height:24px;margin:0 auto .2rem;opacity:.7}.quick-nav a.active img{opacity:1}
     .guide-table{width:100%;border-collapse:collapse}.guide-table th,.guide-table td{border:1px solid #e2e8f0;padding:.65rem;text-align:left;vertical-align:top}.guide-table th{background:#f8fafc;font-weight:800;color:#334155}
+    details summary{cursor:pointer;list-style:none}details summary::-webkit-details-marker{display:none}
     @media(min-width:900px){
       body{padding:28px}.desktop-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
       .desktop-aside{display:block;position:sticky;top:28px}.mobile-menu-button{display:none!important}.content-grid{display:grid;grid-template-columns:minmax(360px,.8fr) minmax(0,1.2fr);gap:24px;align-items:start}
@@ -82,38 +83,44 @@
 
         <div class="content-grid">
           <section class="content-card card rounded-2xl p-6">
-            <p class="text-xs font-bold uppercase tracking-[.18em] text-blue-600">AGD / ABG</p>
-            <h1 class="mt-2 text-2xl font-extrabold">Kalkulator Asidosis & Alkalosis</h1>
-            <p class="mt-2 text-sm leading-6 text-slate-500">Interpretasi dasar gas darah arteri berdasarkan pH, PaCO₂, dan HCO₃⁻.</p>
+            <p class="text-xs font-bold uppercase tracking-[.18em] text-blue-600">AGD / ABG lanjutan</p>
+            <h1 class="mt-2 text-2xl font-extrabold">Analisis Asam Basa</h1>
+            <p class="mt-2 text-sm leading-6 text-slate-500">Menilai gangguan primer, kompensasi yang diharapkan, kemungkinan gangguan campuran, dan anion gap opsional.</p>
 
             <form id="abgForm" class="mt-6 space-y-5">
-              <div><label for="ph" class="mb-2 block text-sm font-bold text-slate-700">pH</label><input id="ph" type="number" step="0.01" placeholder="7.40" class="field"></div>
-              <div><label for="pco2" class="mb-2 block text-sm font-bold text-slate-700">PaCO₂ (mmHg)</label><input id="pco2" type="number" step="1" placeholder="40" class="field"></div>
-              <div><label for="hco3" class="mb-2 block text-sm font-bold text-slate-700">HCO₃⁻ (mEq/L)</label><input id="hco3" type="number" step="1" placeholder="24" class="field"></div>
+              <div><label for="ph" class="mb-2 block text-sm font-bold text-slate-700">pH</label><input id="ph" type="number" min="6.5" max="8" step="0.001" placeholder="7.400" class="field" required></div>
+              <div><label for="pco2" class="mb-2 block text-sm font-bold text-slate-700">PaCO₂ (mmHg)</label><input id="pco2" type="number" min="5" max="150" step="0.1" placeholder="40" class="field" required></div>
+              <div><label for="hco3" class="mb-2 block text-sm font-bold text-slate-700">HCO₃⁻ (mEq/L)</label><input id="hco3" type="number" min="2" max="60" step="0.1" placeholder="24" class="field" required></div>
+
+              <details class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <summary class="flex items-center justify-between gap-3 font-bold text-slate-700"><span>Pemeriksaan tambahan (opsional)</span><span class="text-blue-600">＋</span></summary>
+                <p class="mt-2 text-xs leading-5 text-slate-500">Isi natrium dan klorida untuk menghitung anion gap. Albumin memperbaiki nilai anion gap pada hipoalbuminemia.</p>
+                <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div><label for="na" class="mb-2 block text-sm font-bold text-slate-700">Na⁺ (mEq/L)</label><input id="na" type="number" min="80" max="200" step="0.1" placeholder="140" class="field"></div>
+                  <div><label for="cl" class="mb-2 block text-sm font-bold text-slate-700">Cl⁻ (mEq/L)</label><input id="cl" type="number" min="50" max="160" step="0.1" placeholder="104" class="field"></div>
+                  <div class="sm:col-span-2"><label for="albumin" class="mb-2 block text-sm font-bold text-slate-700">Albumin (g/dL)</label><input id="albumin" type="number" min="0.5" max="6" step="0.1" placeholder="4,0" class="field"></div>
+                </div>
+              </details>
+
               <div class="grid grid-cols-2 gap-3 pt-2"><button type="button" id="resetBtn" class="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-bold text-slate-700">Reset</button><button type="submit" class="min-h-12 rounded-xl bg-blue-600 px-4 font-bold text-white">Analisa</button></div>
-              <p class="flex gap-2 text-xs leading-5 text-slate-500"><span class="text-blue-600">ⓘ</span><span>Interpretasi harus dikaitkan dengan kondisi klinis dan penilaian tenaga kesehatan.</span></p>
+              <p class="flex gap-2 text-xs leading-5 text-slate-500"><span class="text-blue-600">ⓘ</span><span>Alat bantu edukasi dan skrining. Interpretasi akhir harus mempertimbangkan kondisi klinis, waktu terjadinya gangguan, ventilasi, elektrolit, dan hasil laboratorium lain.</span></p>
             </form>
           </section>
 
           <section id="resultCard" class="result-card card overflow-hidden rounded-2xl">
             <div class="border-b border-slate-200 px-5 py-4"><h2 class="font-extrabold">Hasil interpretasi</h2></div>
-            <div id="hasil" class="min-h-[220px] p-5 text-sm text-slate-800"><p class="text-slate-400">Hasil akan tampil setelah tombol Analisa ditekan.</p></div>
+            <div id="hasil" class="min-h-[260px] p-5 text-sm text-slate-800"><p class="text-slate-400">Hasil akan tampil setelah tombol Analisa ditekan.</p></div>
           </section>
         </div>
 
         <section class="card overflow-hidden rounded-2xl">
-          <div class="border-b border-slate-200 px-5 py-4"><h2 class="font-extrabold">Nilai normal ABG</h2></div>
-          <div class="overflow-x-auto p-5"><table class="guide-table text-sm"><thead><tr><th>Parameter</th><th>Nilai normal</th></tr></thead><tbody><tr><td>pH</td><td>7,35–7,45</td></tr><tr><td>PaCO₂</td><td>35–45 mmHg</td></tr><tr><td>HCO₃⁻</td><td>22–26 mEq/L</td></tr><tr><td>PaO₂</td><td>80–100 mmHg</td></tr><tr><td>SaO₂</td><td>95–100%</td></tr></tbody></table></div>
-        </section>
-
-        <section class="card overflow-hidden rounded-2xl">
-          <div class="border-b border-slate-200 px-5 py-4"><h2 class="font-extrabold">Panduan cepat interpretasi</h2></div>
-          <div class="overflow-x-auto p-5"><table class="guide-table text-sm"><thead><tr><th>Gangguan</th><th>pH</th><th>PaCO₂</th><th>HCO₃⁻</th></tr></thead><tbody><tr><td>Asidosis Respiratorik</td><td>↓</td><td>↑</td><td>Normal / ↑</td></tr><tr><td>Alkalosis Respiratorik</td><td>↑</td><td>↓</td><td>Normal / ↓</td></tr><tr><td>Asidosis Metabolik</td><td>↓</td><td>↓ (kompensasi)</td><td>↓</td></tr><tr><td>Alkalosis Metabolik</td><td>↑</td><td>↑ (kompensasi)</td><td>↑</td></tr></tbody></table></div>
+          <div class="border-b border-slate-200 px-5 py-4"><h2 class="font-extrabold">Rumus kompensasi yang digunakan</h2></div>
+          <div class="overflow-x-auto p-5"><table class="guide-table text-sm"><thead><tr><th>Gangguan primer</th><th>Kompensasi yang diharapkan</th></tr></thead><tbody><tr><td>Asidosis metabolik</td><td>PaCO₂ = 1,5 × HCO₃⁻ + 8 (±2)</td></tr><tr><td>Alkalosis metabolik</td><td>PaCO₂ ≈ 40 + 0,6 × (HCO₃⁻ − 24), toleransi ±5</td></tr><tr><td>Asidosis respiratorik akut</td><td>HCO₃⁻ naik ≈1 mEq/L tiap kenaikan PaCO₂ 10 mmHg</td></tr><tr><td>Asidosis respiratorik kronik</td><td>HCO₃⁻ naik ≈3,5 mEq/L tiap kenaikan PaCO₂ 10 mmHg</td></tr><tr><td>Alkalosis respiratorik akut</td><td>HCO₃⁻ turun ≈2 mEq/L tiap penurunan PaCO₂ 10 mmHg</td></tr><tr><td>Alkalosis respiratorik kronik</td><td>HCO₃⁻ turun ≈5 mEq/L tiap penurunan PaCO₂ 10 mmHg</td></tr></tbody></table></div>
         </section>
 
         <div class="grid gap-4 md:grid-cols-2">
-          <section class="rounded-2xl border border-amber-200 bg-amber-50 p-5"><h2 class="font-extrabold">Penyebab umum</h2><ul class="mt-3 space-y-3 text-sm leading-6"><li><b>Asidosis Metabolik:</b> syok, sepsis, DKA, gagal ginjal, diare berat.</li><li><b>Alkalosis Metabolik:</b> muntah, NGT suction, diuretik, hipokalemia.</li><li><b>Asidosis Respiratorik:</b> COPD, depresi napas, overdosis opioid, gagal napas.</li><li><b>Alkalosis Respiratorik:</b> nyeri, cemas, hipoksia, emboli paru, sepsis awal.</li></ul></section>
-          <section class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5"><h2 class="font-extrabold">Langkah interpretasi</h2><ol class="mt-3 list-decimal space-y-2 pl-5 text-sm leading-6"><li>Lihat pH.</li><li>Lihat PaCO₂.</li><li>Lihat HCO₃⁻.</li><li>Tentukan gangguan utama.</li><li>Nilai kompensasi.</li><li>Curigai mixed disorder bila kompensasi tidak sesuai.</li><li>Hubungkan dengan kondisi klinis pasien.</li></ol></section>
+          <section class="rounded-2xl border border-amber-200 bg-amber-50 p-5"><h2 class="font-extrabold">Hal yang perlu diperhatikan</h2><ul class="mt-3 space-y-3 text-sm leading-6"><li>Kompensasi yang tidak sesuai mengarah pada kemungkinan gangguan campuran.</li><li>pH normal tidak selalu berarti tidak ada gangguan asam basa.</li><li>Anion gap harus dikoreksi bila albumin rendah.</li><li>Nilai ekstrem atau pasien tidak stabil memerlukan evaluasi segera.</li></ul></section>
+          <section class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5"><h2 class="font-extrabold">Alur interpretasi</h2><ol class="mt-3 list-decimal space-y-2 pl-5 text-sm leading-6"><li>Periksa konsistensi pH, PaCO₂, dan HCO₃⁻.</li><li>Tentukan acidemia, alkalemia, atau pH normal.</li><li>Tentukan gangguan primer.</li><li>Bandingkan kompensasi aktual dengan nilai yang diharapkan.</li><li>Hitung anion gap dan delta ratio bila datanya tersedia.</li><li>Korelasikan dengan kondisi klinis.</li></ol></section>
         </div>
       </div>
     </div>
@@ -133,30 +140,123 @@
     function openMenu(){if(!matchMedia('(max-width:899px)').matches)return;sideMenu.classList.add('open');backdrop.classList.remove('hidden');document.body.style.overflow='hidden'}
     document.getElementById('openMenuBtn').addEventListener('click',openMenu);document.getElementById('closeMenuBtn').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);window.addEventListener('resize',()=>{if(innerWidth>=900)closeMenu()});
 
-    document.getElementById('abgForm').addEventListener('submit',event=>{event.preventDefault();analisaABG()});
-    document.getElementById('resetBtn').addEventListener('click',()=>{document.getElementById('abgForm').reset();document.getElementById('hasil').innerHTML='<p class="text-slate-400">Hasil akan tampil setelah tombol Analisa ditekan.</p>'});
+    const form=document.getElementById('abgForm');const result=document.getElementById('hasil');
+    form.addEventListener('submit',event=>{event.preventDefault();analisaABG()});
+    document.getElementById('resetBtn').addEventListener('click',()=>{form.reset();result.innerHTML='<p class="text-slate-400">Hasil akan tampil setelah tombol Analisa ditekan.</p>'});
+
+    const fmt=(value,digits=1)=>Number(value).toLocaleString('id-ID',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+    const inRange=(value,min,max)=>value>=min&&value<=max;
+
+    function compensationAssessment(actual,expected,tolerance,lowLabel,highLabel){
+      if(actual<expected-tolerance)return lowLabel;
+      if(actual>expected+tolerance)return highLabel;
+      return 'Kompensasi sesuai perkiraan';
+    }
 
     function analisaABG(){
-      const ph=parseFloat(document.getElementById('ph').value);const pco2=parseFloat(document.getElementById('pco2').value);const hco3=parseFloat(document.getElementById('hco3').value);const out=document.getElementById('hasil');
-      if(isNaN(ph)||isNaN(pco2)||isNaN(hco3)){out.innerHTML='<p class="font-semibold text-red-600">Semua nilai harus diisi.</p>';return}
-      let statusPH='';if(ph<7.35)statusPH='Asidosis';else if(ph>7.45)statusPH='Alkalosis';else statusPH='Normal';
-      let gangguan='';let kompensasi='';
-      if(statusPH==='Asidosis'){
-        if(pco2>45){gangguan='Asidosis Respiratorik';if(hco3>=22&&hco3<=26)kompensasi='Tidak terkompensasi';else if(hco3>26)kompensasi='Terkompensasi sebagian'}
-        else if(hco3<22){gangguan='Asidosis Metabolik';if(pco2>=35&&pco2<=45)kompensasi='Tidak terkompensasi';else if(pco2<35)kompensasi='Terkompensasi sebagian'}
-      }else if(statusPH==='Alkalosis'){
-        if(pco2<35){gangguan='Alkalosis Respiratorik';if(hco3>=22&&hco3<=26)kompensasi='Tidak terkompensasi';else if(hco3<22)kompensasi='Terkompensasi sebagian'}
-        else if(hco3>26){gangguan='Alkalosis Metabolik';if(pco2>=35&&pco2<=45)kompensasi='Tidak terkompensasi';else if(pco2>45)kompensasi='Terkompensasi sebagian'}
-      }else{
-        if(pco2>45&&hco3>26){gangguan='Asidosis Respiratorik';kompensasi='Terkompensasi sempurna'}
-        else if(pco2<35&&hco3<22){gangguan='Alkalosis Respiratorik';kompensasi='Terkompensasi sempurna'}
-        else if(pco2<35&&hco3<22){gangguan='Asidosis Metabolik';kompensasi='Terkompensasi sempurna'}
-        else if(pco2>45&&hco3>26){gangguan='Alkalosis Metabolik';kompensasi='Terkompensasi sempurna'}
-        else{gangguan='Normal';kompensasi='-'}
+      const ph=parseFloat(document.getElementById('ph').value);
+      const pco2=parseFloat(document.getElementById('pco2').value);
+      const hco3=parseFloat(document.getElementById('hco3').value);
+      const na=parseFloat(document.getElementById('na').value);
+      const cl=parseFloat(document.getElementById('cl').value);
+      const albumin=parseFloat(document.getElementById('albumin').value);
+
+      if(!Number.isFinite(ph)||!Number.isFinite(pco2)||!Number.isFinite(hco3)){
+        result.innerHTML='<p class="font-semibold text-red-600">pH, PaCO₂, dan HCO₃⁻ harus diisi.</p>';return;
       }
-      out.innerHTML=`<div class="space-y-3"><div class="rounded-xl bg-blue-50 p-4"><p class="text-xs font-bold uppercase tracking-wider text-blue-600">Status pH</p><p class="mt-1 text-2xl font-extrabold">${statusPH}</p></div><div class="grid gap-3 sm:grid-cols-2"><div class="rounded-xl border border-slate-200 p-4"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Gangguan utama</p><p class="mt-1 font-extrabold">${gangguan||'-'}</p></div><div class="rounded-xl border border-slate-200 p-4"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Kompensasi</p><p class="mt-1 font-extrabold">${kompensasi||'-'}</p></div></div></div>`;
+      if(ph<6.5||ph>8||pco2<=0||hco3<=0){
+        result.innerHTML='<p class="font-semibold text-red-600">Nilai berada di luar rentang yang dapat dianalisis.</p>';return;
+      }
+
+      const calculatedPH=6.1+Math.log10(hco3/(0.03*pco2));
+      const consistencyDiff=Math.abs(calculatedPH-ph);
+      const consistent=consistencyDiff<=0.03;
+      const phStatus=ph<7.35?'Acidemia':ph>7.45?'Alkalemia':'pH dalam rentang normal';
+      let primary='Tidak dapat ditentukan';
+      let compensation='Perlu korelasi klinis';
+      let expectedText='-';
+      let mixedWarning='';
+
+      if(ph<7.35){
+        if(hco3<24&&pco2>40){
+          primary='Gangguan campuran: asidosis metabolik + asidosis respiratorik';
+          compensation='Kedua komponen memperberat acidemia';
+          mixedWarning='Pola ini bukan kompensasi fisiologis sederhana.';
+        }else if(hco3<24){
+          primary='Asidosis metabolik';
+          const expected=1.5*hco3+8;
+          expectedText=`PaCO₂ yang diharapkan ${fmt(expected-2)}–${fmt(expected+2)} mmHg (Winter)`;
+          compensation=compensationAssessment(pco2,expected,2,'Kemungkinan tambahan alkalosis respiratorik','Kemungkinan tambahan asidosis respiratorik');
+        }else if(pco2>40){
+          primary='Asidosis respiratorik';
+          const delta=(pco2-40)/10;
+          const acute=24+delta;
+          const chronic=24+3.5*delta;
+          const acuteDiff=Math.abs(hco3-acute);const chronicDiff=Math.abs(hco3-chronic);
+          expectedText=`HCO₃⁻ akut ≈ ${fmt(acute)}; kronik ≈ ${fmt(chronic)} mEq/L`;
+          if(Math.min(acuteDiff,chronicDiff)<=2)compensation=acuteDiff<=chronicDiff?'Pola lebih sesuai asidosis respiratorik akut':'Pola lebih sesuai asidosis respiratorik kronik';
+          else compensation=hco3<Math.min(acute,chronic)-2?'Kemungkinan tambahan asidosis metabolik':'Kemungkinan tambahan alkalosis metabolik';
+        }
+      }else if(ph>7.45){
+        if(hco3>24&&pco2<40){
+          primary='Gangguan campuran: alkalosis metabolik + alkalosis respiratorik';
+          compensation='Kedua komponen memperberat alkalemia';
+          mixedWarning='Pola ini bukan kompensasi fisiologis sederhana.';
+        }else if(hco3>24){
+          primary='Alkalosis metabolik';
+          const expected=40+0.6*(hco3-24);
+          expectedText=`PaCO₂ yang diharapkan sekitar ${fmt(expected)} mmHg (kisaran ${fmt(expected-5)}–${fmt(expected+5)})`;
+          compensation=compensationAssessment(pco2,expected,5,'Kemungkinan tambahan alkalosis respiratorik','Kemungkinan tambahan asidosis respiratorik');
+        }else if(pco2<40){
+          primary='Alkalosis respiratorik';
+          const delta=(40-pco2)/10;
+          const acute=24-2*delta;
+          const chronic=24-5*delta;
+          const acuteDiff=Math.abs(hco3-acute);const chronicDiff=Math.abs(hco3-chronic);
+          expectedText=`HCO₃⁻ akut ≈ ${fmt(acute)}; kronik ≈ ${fmt(chronic)} mEq/L`;
+          if(Math.min(acuteDiff,chronicDiff)<=2)compensation=acuteDiff<=chronicDiff?'Pola lebih sesuai alkalosis respiratorik akut':'Pola lebih sesuai alkalosis respiratorik kronik';
+          else compensation=hco3<Math.min(acute,chronic)-2?'Kemungkinan tambahan asidosis metabolik':'Kemungkinan tambahan alkalosis metabolik';
+        }
+      }else{
+        if(inRange(pco2,35,45)&&inRange(hco3,22,26)){
+          primary='Tidak tampak gangguan asam basa utama';compensation='Nilai berada dalam rentang rujukan umum';
+        }else if(pco2>45&&hco3>26){
+          primary=ph<7.40?'Asidosis respiratorik terkompensasi':'Alkalosis metabolik terkompensasi atau gangguan campuran';
+          compensation='pH normal tidak menyingkirkan gangguan; gunakan riwayat klinis dan rumus kompensasi';
+        }else if(pco2<35&&hco3<22){
+          primary=ph<7.40?'Asidosis metabolik terkompensasi atau gangguan campuran':'Alkalosis respiratorik terkompensasi';
+          compensation='pH normal tidak menyingkirkan gangguan; gunakan riwayat klinis dan rumus kompensasi';
+        }else{
+          primary='Kemungkinan gangguan campuran atau nilai borderline';
+          compensation='Perlu evaluasi data klinis dan pemeriksaan ulang';
+        }
+      }
+
+      let gapHtml='';
+      if(Number.isFinite(na)&&Number.isFinite(cl)){
+        const ag=na-(cl+hco3);
+        const corrected=Number.isFinite(albumin)?ag+2.5*(4-albumin):ag;
+        let agStatus=corrected>14?'Meningkat':corrected<10?'Rendah':'Dalam kisaran umum';
+        let deltaText='';
+        if(corrected>14&&hco3<24){
+          const ratio=(corrected-12)/(24-hco3);
+          let interpretation=ratio<1?'Kemungkinan tambahan asidosis metabolik non-anion-gap':ratio<=2?'Sesuai pola asidosis metabolik anion-gap tinggi sederhana':'Kemungkinan tambahan alkalosis metabolik atau retensi HCO₃⁻ sebelumnya';
+          deltaText=`<p class="mt-2"><b>Delta ratio:</b> ${fmt(ratio,2)} — ${interpretation}</p>`;
+        }
+        gapHtml=`<div class="rounded-xl border border-violet-200 bg-violet-50 p-4"><p class="text-xs font-bold uppercase tracking-wider text-violet-700">Anion gap</p><p class="mt-1"><b>AG:</b> ${fmt(ag)} mEq/L</p>${Number.isFinite(albumin)?`<p><b>AG terkoreksi albumin:</b> ${fmt(corrected)} mEq/L</p>`:''}<p><b>Interpretasi:</b> ${agStatus}</p>${deltaText}</div>`;
+      }else if(Number.isFinite(na)||Number.isFinite(cl)){
+        gapHtml='<div class="rounded-xl border border-amber-200 bg-amber-50 p-4">Isi Na⁺ dan Cl⁻ keduanya untuk menghitung anion gap.</div>';
+      }
+
+      const urgent=ph<7.20||ph>7.55?'<div class="rounded-xl border border-red-300 bg-red-50 p-4 font-semibold text-red-700">pH sangat abnormal. Nilai seperti ini memerlukan evaluasi klinis segera, terutama bila pasien tidak stabil.</div>':'';
+      const consistencyHtml=consistent
+        ?`<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><b>Konsistensi data:</b> sesuai perkiraan Henderson–Hasselbalch (pH hitung ${fmt(calculatedPH,3)}).</div>`
+        :`<div class="rounded-xl border border-amber-300 bg-amber-50 p-4"><b>Peringatan konsistensi:</b> pH hitung ${fmt(calculatedPH,3)} berbeda dari pH input. Periksa apakah pH, PaCO₂, dan HCO₃⁻ berasal dari sampel/waktu yang sama.</div>`;
+
+      result.innerHTML=`<div class="space-y-3">${urgent}${consistencyHtml}<div class="rounded-xl bg-blue-50 p-4"><p class="text-xs font-bold uppercase tracking-wider text-blue-600">Status pH</p><p class="mt-1 text-2xl font-extrabold">${phStatus}</p></div><div class="rounded-xl border border-slate-200 p-4"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Gangguan utama</p><p class="mt-1 text-lg font-extrabold">${primary}</p>${mixedWarning?`<p class="mt-2 text-amber-700">${mixedWarning}</p>`:''}</div><div class="rounded-xl border border-slate-200 p-4"><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Penilaian kompensasi</p><p class="mt-1 font-extrabold">${compensation}</p><p class="mt-2 text-slate-600">${expectedText}</p></div>${gapHtml}<div class="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-5 text-slate-600">Hasil ini adalah bantuan interpretasi, bukan diagnosis otomatis. Gangguan akut/kronik dan mixed disorder tetap membutuhkan konteks klinis, elektrolit, riwayat penyakit, dan tren serial.</div></div>`;
       setTimeout(()=>document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'}),100);
     }
+
     if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
   </script>
 </body>
