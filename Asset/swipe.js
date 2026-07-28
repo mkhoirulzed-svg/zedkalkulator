@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerLeft = topHeader?.querySelector(":scope > div:first-child");
   const oldTitle = headerLeft?.querySelector("p");
 
-  if (headerLeft && oldTitle) {
+  if (headerLeft && oldTitle && !headerLeft.querySelector('img[alt="Logo ZED Kalkulator"]')) {
     const brand = document.createElement("div");
     brand.className = "flex min-w-0 items-center gap-2";
     brand.innerHTML = `
@@ -131,7 +131,84 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   if (calculatorForm && actionRow && warningText) {
-    warningText.className = "mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-800 no-print";
+    warningText.className = "clinical-warning mt-3 text-xs leading-5 text-slate-500 no-print";
     actionRow.insertAdjacentElement("afterend", warningText);
+  }
+
+  // Rapikan tampilan desktop: tinggi alami, ukuran lebih nyaman, dan hasil menjadi satu kartu.
+  const style = document.createElement("style");
+  style.textContent = `
+    @media (min-width: 900px) {
+      .app-shell { width: min(100%, 1280px) !important; }
+      .desktop-grid { grid-template-columns: 260px minmax(0,1fr) !important; gap: 24px !important; }
+      .main-grid { grid-template-columns: minmax(420px,.95fr) minmax(420px,1.05fr) !important; align-items: start !important; gap: 24px !important; }
+      .calculator-card, .result-column { height: auto !important; min-height: 0 !important; }
+      .calculator-card { overflow: visible !important; padding: 28px !important; }
+      .result-column { display: block !important; }
+      .field { min-height: 48px !important; font-size: 15px !important; }
+      .side-link { font-size: 14px !important; }
+      .quick-nav a { font-size: 12px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
+      .action-row button { min-height: 48px !important; font-size: 15px !important; }
+      footer { margin-top: 8px !important; }
+    }
+    .clinical-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding-top: 2px;
+    }
+    .clinical-warning::before {
+      content: "ⓘ";
+      flex: 0 0 auto;
+      color: #b45309;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .result-card-unified {
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 12px 35px rgba(15,23,42,.06);
+    }
+    .result-card-unified__header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 800;
+      color: #1e293b;
+      background: #fff;
+    }
+    .result-card-unified #result {
+      min-height: 260px;
+      max-height: 520px;
+      overflow: auto;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 20px !important;
+    }
+    .result-card-unified + button {
+      margin-top: 12px;
+      min-height: 48px;
+    }
+  `;
+  document.head.appendChild(style);
+
+  const infoCard = resultColumn?.querySelector(".info-card");
+  const resultBox = document.getElementById("result");
+  const printButton = resultColumn?.querySelector('button[onclick="printResultOnly()"]');
+
+  if (resultColumn && infoCard && resultBox && !resultColumn.querySelector(".result-card-unified")) {
+    const unifiedCard = document.createElement("section");
+    unifiedCard.className = "result-card-unified";
+
+    const unifiedHeader = document.createElement("div");
+    unifiedHeader.className = "result-card-unified__header";
+    unifiedHeader.textContent = infoCard.textContent.trim() || "Hasil perhitungan";
+
+    unifiedCard.appendChild(unifiedHeader);
+    unifiedCard.appendChild(resultBox);
+    resultColumn.insertBefore(unifiedCard, printButton || null);
+    infoCard.remove();
   }
 });
