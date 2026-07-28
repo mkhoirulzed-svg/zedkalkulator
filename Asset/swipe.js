@@ -57,6 +57,88 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   });
 
+  // Tambahkan Nicardipin tanpa BB sebagai mode tersendiri.
+  if (typeof NO_WEIGHT_DRUGS !== "undefined" && !NO_WEIGHT_DRUGS.includes("Nicardipin_NoBB")) {
+    NO_WEIGHT_DRUGS.push("Nicardipin_NoBB");
+  }
+  if (typeof DRUG_SEARCH_ITEMS !== "undefined" && !DRUG_SEARCH_ITEMS.some(item => item.value === "Nicardipin_NoBB")) {
+    DRUG_SEARCH_ITEMS.push({
+      value: "Nicardipin_NoBB",
+      label: "Nicardipin (tanpa BB)",
+      aliases: ["nicardipin tanpa bb", "nicardipine tanpa bb", "cardene tanpa bb"]
+    });
+  }
+
+  if (typeof setDefaultConcNoBB === "function") {
+    const originalSetDefaultConcNoBB = setDefaultConcNoBB;
+    setDefaultConcNoBB = function() {
+      originalSetDefaultConcNoBB();
+      if (selectedDrug() !== "Nicardipin_NoBB") return;
+
+      const wrapper = document.getElementById("concWrapperPPI");
+      const label = document.getElementById("ppiLabel");
+      const preset = document.getElementById("ppiConc");
+      const doseUnit = document.getElementById("doseUnit");
+      const doseInput = document.getElementById("doseInput");
+
+      wrapper?.classList.remove("hidden");
+      if (label) label.textContent = "Konsentrasi Nicardipin";
+      if (doseUnit) doseUnit.textContent = "mg/jam";
+      if (doseInput) doseInput.placeholder = "Contoh: 5";
+      if (preset) {
+        preset.innerHTML = [
+          '<option value="200">1 ampul (10 mg/50 ml → 0,2 mg/ml)</option>',
+          '<option value="400">2 ampul (20 mg/50 ml → 0,4 mg/ml)</option>',
+          '<option value="600">3 ampul (30 mg/50 ml → 0,6 mg/ml)</option>',
+          '<option value="800">4 ampul (40 mg/50 ml → 0,8 mg/ml)</option>',
+          '<option value="1000">5 ampul (50 mg/50 ml → 1 mg/ml)</option>'
+        ].join("");
+      }
+    };
+  }
+
+  if (typeof calculateNoBB === "function") {
+    const originalCalculateNoBB = calculateNoBB;
+    calculateNoBB = function() {
+      if (selectedDrug() !== "Nicardipin_NoBB") {
+        originalCalculateNoBB();
+        return;
+      }
+
+      const result = document.getElementById("result");
+      const concentration = getActiveConcentrationNoBB();
+      const dose = parseFloat(document.getElementById("doseInput")?.value);
+
+      if (!concentration || !Number.isFinite(concentration)) {
+        result.innerHTML = "<p class='text-red-600'>Konsentrasi Nicardipin belum diatur dengan benar.</p>";
+        return;
+      }
+      if (!Number.isFinite(dose) || dose <= 0) {
+        result.innerHTML = "<p class='text-red-600'>Masukkan dosis Nicardipin dalam mg/jam.</p>";
+        return;
+      }
+
+      const mlHour = (dose * 1000) / concentration;
+      const preset = document.getElementById("ppiConc");
+      const customMode = preset?.classList.contains("hidden");
+      const concentrationLabel = customMode
+        ? `Custom: ${document.getElementById("ppiCustomDose")?.value || ""} mg / ${document.getElementById("ppiCustomVolume")?.value || ""} ml`
+        : (preset?.selectedOptions[0]?.text || "Preset Nicardipin");
+
+      result.innerHTML = `
+        <h3 class='font-semibold mb-1'>Nicardipin (tanpa BB)</h3>
+        <p class='text-xs'>Dosis: <b>${dose} mg/jam</b></p>
+        <p class='text-xs'>Pengenceran: <b>${concentrationLabel}</b></p>
+        <p class='text-xs'>Konsentrasi: <b>${(concentration / 1000).toFixed(2)} mg/ml</b></p>
+        <hr class='my-2'>
+        <div class='rounded-xl bg-blue-50 p-4'>
+          <p class='text-xs font-bold uppercase tracking-wider text-blue-600'>Kecepatan syringe pump</p>
+          <p class='mt-2 text-2xl font-bold text-blue-700'>${mlHour.toFixed(2)} ml/jam</p>
+        </div>
+        <p class='mt-3 text-xs leading-5 text-slate-500'>Rumus: dosis mg/jam ÷ konsentrasi mg/ml.</p>`;
+    };
+  }
+
   // Pastikan label custom Heparin tidak pernah tampil sebagai mg/ml.
   if (typeof getConcentrationLabelBB === "function") {
     const originalGetConcentrationLabelBB = getConcentrationLabelBB;
@@ -104,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
           <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
           <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t border-b border-slate-100 sticky top-[45px]">Tanpa Berat Badan</div>
+          <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Nicardipin_NoBB" data-label="Nicardipin (tanpa BB)">Nicardipin (tanpa BB)</button>
           <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG" data-label="NTG (tanpa BB)">NTG (tanpa BB)</button>
           <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="PPI" data-label="OMZ / Panto">OMZ / Panto</button>
           <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Furosemide" data-label="Furosemide">Furosemide</button>
