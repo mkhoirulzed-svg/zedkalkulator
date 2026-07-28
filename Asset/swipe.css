@@ -1,31 +1,44 @@
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
+}
+
+.page-slide {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 9999;
+  transition: transform 0.3s ease-out;
+}
+
+.slide-in-right {
+  transform: translateX(100%);
+}
+
+.slide-in-left {
+  transform: translateX(-100%);
+}
+
+.slide-center {
+  transform: translateX(0);
+}
+
+.slide-out-left {
+  transform: translateX(-100%);
+}
+
+.slide-out-right {
+  transform: translateX(100%);
+}
+
+/* Sidebar geser dan navigasi bawah hanya untuk mode mobile. */
+@media (min-width: 900px) {
+  #sideMenu,
+  #backdrop,
+  .zed-mobile-bottom {
+    display: none !important;
   }
 
-  .page-slide {
-    position: fixed;
-    inset: 0;
-    background: white;
-    z-index: 9999;
-    transition: transform 0.3s ease-out;
+  body {
+    overflow-y: auto !important;
   }
-
-  .slide-in-right {
-    transform: translateX(100%);
-  }
-
-  .slide-in-left {
-    transform: translateX(-100%);
-  }
-
-  .slide-center {
-    transform: translateX(0);
-  }
-
-  .slide-out-left {
-    transform: translateX(-100%);
-  }
-
-  .slide-out-right {
-    transform: translateX(100%);
-  }
+}
