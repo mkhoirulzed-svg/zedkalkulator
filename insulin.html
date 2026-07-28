@@ -1,628 +1,97 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Insulin</title>
-
-  <!-- Tailwind CSS v4 via CDN -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>ZED Kalkulator - Actrapid</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
   <link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
-  <!-- PWA iOS Compatibility -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<!-- Warna tema (opsional tapi bagus) -->
-<meta name="theme-color" content="#0f766e">
-   <link rel="stylesheet" href="Asset/swipe.css">
-
-<style>
-    .hidden { display: none; }
-@font-face {
-  font-family: 'Archicoco';
-  src: url('./Asset/Archicoco.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-/* === TAB PROTAP ACTIVE === */
-  .tab-btn {
-    transition: all .15s ease;
-  }
-
-  .tab-btn.active {
-    background-color: #2563eb; /* blue-600 */
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
-    position: relative;
-}
-
-.tab-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -4px;
-  height: 3px;
-  background-color: #2563eb;
-  border-radius: 2px;
-}
-
-  .tab-btn:not(.active):hover {
-    background-color: #e5e7eb; /* slate-200 */
-  }
-    /* ICON MENU IMG */
-    .pos-menu-icon {
-      width: 30px;
-      height: 22px;
-      margin: 0 auto 2px;
-      display: block;
-      opacity: .55;
+  <link rel="stylesheet" href="Asset/swipe.css">
+  <style>
+    .hidden{display:none!important}*{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a}
+    button,a,input,select{touch-action:manipulation}.app-shell{width:min(100%,1280px);margin-inline:auto}
+    .card{background:#fff;border:1px solid #e2e8f0;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+    .side-link{display:flex;align-items:center;min-height:46px;padding:.7rem .8rem;border-radius:.8rem;color:#334155;text-decoration:none}
+    .side-link:hover{background:#eff6ff;color:#1d4ed8}.side-link.active{background:#dbeafe;color:#1d4ed8;font-weight:700}
+    .quick-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #e2e8f0}
+    .quick-nav a{min-width:0;padding:.7rem .35rem;text-align:center;color:#64748b;font-size:.72rem;font-weight:700;text-decoration:none}
+    .quick-nav a:hover{background:#f8fafc;color:#2563eb}.quick-nav a.active{color:#2563eb;background:#eff6ff}
+    .quick-nav img{width:30px;height:24px;margin:0 auto .2rem;opacity:.7}.quick-nav a.active img{opacity:1}
+    .desktop-aside{display:none}.mobile-bottom{display:none}.side-panel{transition:translate .22s ease}
+    .tab-btn{min-height:44px;border-radius:.75rem;background:#e2e8f0;padding:.65rem .9rem;font-size:.875rem;font-weight:700;color:#475569;transition:.15s}
+    .tab-btn.active{background:#2563eb;color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.25)}
+    #konten table{width:100%;border-collapse:collapse}#konten th,#konten td{vertical-align:middle}
+    @media(min-width:900px){
+      body{padding:28px}.desktop-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+      .desktop-aside{display:block;position:sticky;top:28px}.mobile-menu-button{display:none!important}
+      #sideMenu,#backdrop,.mobile-bottom{display:none!important}
     }
-
-    .pos-menu-btn.active .pos-menu-icon {
-      opacity: 1;
+    @media(max-width:899px){
+      body{padding:0 0 88px}.desktop-aside{display:none!important}.desktop-actions{display:none!important}.quick-nav{display:none!important}
+      .top-header{border-radius:0!important;border-left:0;border-right:0;border-top:0;box-shadow:none}.page-wrap{gap:12px!important}
+      #sideMenu{position:fixed;inset-block:0;right:0;left:auto;z-index:80;width:min(84vw,330px);translate:105% 0;overflow-y:auto;padding-bottom:110px;background:#f8fafc;box-shadow:-16px 0 40px rgba(15,23,42,.22);visibility:hidden;pointer-events:none}
+      #sideMenu.open{translate:0 0;visibility:visible;pointer-events:auto}#backdrop{z-index:70}
+      #sideMenu nav{display:flex;flex-direction:column;gap:7px;padding:12px}#sideMenu .side-link{min-height:54px;border:1px solid #dbeafe;background:#fff;color:#1e3a8a}
+      .mobile-bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-top:1px solid #dbeafe;background:rgba(255,255,255,.98);box-shadow:0 -8px 24px rgba(15,23,42,.11);backdrop-filter:blur(14px)}
+      .mobile-bottom a{display:flex;min-height:56px;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;color:#2563eb;font-size:10px;font-weight:700;text-decoration:none}.mobile-bottom .nav-icon{display:grid;width:25px;height:25px;place-items:center;color:#2563eb}.mobile-bottom img,.mobile-bottom svg{width:23px;height:23px}.mobile-bottom img{filter:brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(1602%) hue-rotate(207deg) brightness(91%) contrast(96%)}
+      .mobile-bottom .home-item{transform:translateY(-11px)}.mobile-bottom .home-item .nav-icon{width:50px;height:50px;border-radius:50%;background:#dbeafe;box-shadow:0 7px 20px rgba(37,99,235,.22)}.mobile-bottom .active{background:#eff6ff;color:#1d4ed8}
     }
-
-    /* === POS TAB MENU === */
-    .pos-menu {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.25rem;
-      margin: 0;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .pos-menu-btn {
-      flex: 1;
-      padding: 0.6rem 0.2rem 0.5rem;
-      text-align: center;
-      color: #6b7280;
-      font-size: 0.7rem;
-      font-weight: 500;
-      position: relative;
-      transition: color .15s;
-    }
-
-    .pos-menu-btn:hover {
-      color: #2563eb;
-    }
-
-    .pos-menu-btn.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .pos-menu-btn.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      bottom: -1px;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 2px;
-    }
-
-  @media print {
-  body * {
-    visibility: hidden;
-  }
-
-  .print-area, .print-area * {
-    visibility: visible;
-  }
-
-  .print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-}
-   .footer-menu {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    .footer-menu a {
-      flex: 1;
-      text-align: center;
-      padding: 0.65rem 0.2rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #6b7280;
-      position: relative;
-    }
-
-    .footer-menu a:hover {
-      color: #2563eb;
-    }
-
-    .footer-menu a.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .footer-menu a.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      top: 0;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 0 0 2px 2px;
-    }
+    @media(max-width:560px){.content-card{border-left:0;border-right:0;border-radius:0;box-shadow:none;padding:16px!important}.tab-wrap{padding-inline:12px}.tab-btn{padding-inline:.65rem;font-size:.8rem}}
+    @media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;inset:0;width:100%}.no-print{display:none!important}}
   </style>
 </head>
-
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-3 sm:p-6">
-
-  <!-- BACKDROP -->
-  <div
-    id="backdrop"
-    class="fixed inset-0 bg-black/30 z-30 hidden"
-    onclick="toggleMenu()"
-  ></div>
-
-  <!-- SIDE MENU -->
-  <aside
-    id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
-  >
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
-        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
-      </button>
-    </div>
-
-       <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
-       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
-         <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
-      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator</a>
-      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
-      <a href="profil.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Profil</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+<body>
+  <div id="backdrop" class="fixed inset-0 hidden bg-slate-950/45"></div>
+  <aside id="sideMenu" class="side-panel no-print">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3"><h2 class="text-lg font-bold">Menu utama</h2><button id="closeMenuBtn" type="button" class="grid h-11 w-11 place-items-center rounded-xl text-2xl hover:bg-slate-100" aria-label="Tutup menu">×</button></div>
+    <nav>
+      <a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Kalkulator Tetesan Infus</a><a href="insulin.html" class="side-link active">Kalkulator Actrapid</a><a href="anestesi.html" class="side-link">Estimasi Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Kalkulator Pengenceran Obat</a><a href="asidosis.html" class="side-link">Kalkulator AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a>
     </nav>
   </aside>
 
-  <div class="w-full max-w-2xl flex flex-col gap-4">
+  <main class="app-shell">
+    <div class="desktop-grid">
+      <aside class="desktop-aside card overflow-hidden rounded-2xl no-print">
+        <div class="border-b border-slate-200 p-4"><h2 class="font-extrabold">Menu utama</h2></div>
+        <nav class="space-y-1 p-3 text-sm"><a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Tetesan Infus</a><a href="insulin.html" class="side-link active">Actrapid</a><a href="anestesi.html" class="side-link">Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link">Pengenceran Obat</a><a href="asidosis.html" class="side-link">AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a></nav>
+      </aside>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center justify-between px-3 py-2">
+      <div class="page-wrap flex min-w-0 flex-col gap-4">
+        <section class="top-header card overflow-hidden rounded-2xl no-print">
+          <header class="flex min-h-16 items-center justify-between gap-3 px-4 py-3">
+            <div class="flex min-w-0 items-center gap-3"><img src="192x192.png" class="h-10 w-10 rounded-xl" alt="Logo ZED Kalkulator"><div><p class="font-bold">ZED Kalkulator</p><p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p></div></div>
+            <button id="openMenuBtn" type="button" class="mobile-menu-button grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-3xl text-blue-600" aria-label="Buka menu">☰</button>
+            <div class="desktop-actions flex gap-2"><a href="kalkulatormanual.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Kalkulator Manual</a><a href="komunitas.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Diskusi</a></div>
+          </header>
+          <nav class="quick-nav"><a href="index.html"><img src="Asset/SP.svg" alt="">Syringe Pump</a><a href="infus.html"><img src="Asset/infus.svg" alt="">Infus</a><a href="insulin.html" class="active"><img src="Asset/insulin.svg" alt="">Actrapid</a><a href="kalkulatorpengenceranobat.html"><img src="Asset/Perdarahan.svg" alt="">Pengenceran</a></nav>
+        </section>
 
-  <div class="flex items-center gap-3">
-
-    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800"></div>
-    </button>
-
-    <div class="flex items-center gap-2">
-      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-      <span class="text-xs sm:text-sm text-slate-600 font-medium">
-        ZED Kalkulator
-      </span>
+        <div class="tab-wrap flex gap-2 no-print"><button class="tab-btn active" onclick="showPage('insulinIV',this)">Protap 1</button><button class="tab-btn" onclick="showPage('syringePump',this)">Protap 2</button><button class="tab-btn" onclick="showPage('RapidActing',this)">Protap 3</button></div>
+        <main id="konten" class="content-card card min-w-0 overflow-hidden rounded-2xl p-5 sm:p-6"></main>
+      </div>
     </div>
+  </main>
 
-  </div>
-
-<div class="relative flex items-center gap-2">
-
-  <a
-    href="kalkulatormanual.html"
-    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
-    aria-label="Kalkulator Manual"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-4 h-4"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
-      <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  </a>
-
-  <a
-    href="komunitas.html"
-    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
-  >
-    Diskusi
-  </a>
-        </div>
-      </header>
-
-      <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn">
-          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
-        </a>
-        <a href="infus.html" class="pos-menu-btn">
-          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
-        </a>
-        <a href="insulin.html" class="pos-menu-btn active">
-          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
-        </a>
-        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn">
-          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran
-        </a>
-      </nav>
-
-    </div>
-
-  <!-- TAB -->
- <div class="flex gap-2 mb-2">
-  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
-    onclick="showPage('insulinIV', this)">Protap 1</button>
-  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
-    onclick="showPage('syringePump', this)">Protap 2</button>
-  <button class="tab-btn px-3 py-2 rounded-lg bg-slate-200 text-sm"
-    onclick="showPage('RapidActing', this)">Protap 3</button>
-</div>
-    <!-- MAIN PANEL -->
-    <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-    </main>
- <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-      <nav class="footer-menu">
-        <a href="index.html">Home</a>
-        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
-      </nav>
-    </div>
-  <footer class="mt-8 border-t border-slate-200 bg-slate-50">
-  <div class="py-4 px-4 text-center text-[10px] text-slate-500">
-
-    <div>
-      © 2025–2026 ZED Kalkulator. All Rights Reserved.
-    </div>
-
-    <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
-
-      <a
-        href="https://www.alkespky.store"
-        target="_blank"
-        class="hover:text-teal-600 hover:underline"
-      >
-        Powered by AlkesPKY
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="mailto:mkhoirulzed@gmail.com"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Contact
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="/about.html"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Privacy Policy
-      </a>
-
-    </div>
-
-  </div>
-</footer>
-
-  </div>
+  <nav class="mobile-bottom no-print" aria-label="Navigasi utama mobile"><a href="infus.html"><span class="nav-icon"><img src="Asset/infus.svg" alt=""></span><span>Infus</span></a><a href="insulin.html" class="active"><span class="nav-icon"><img src="Asset/insulin.svg" alt=""></span><span>Actrapid</span></a><a href="index.html" class="home-item"><span class="nav-icon"><img src="Asset/SP.svg" alt=""></span><span>Home</span></a><a href="komunitas.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h6"/><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-5 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></span><span>Diskusi</span></a><a href="profil.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Akun</span></a></nav>
 
 <script>
-// Pastikan elemen konten ter-referensi dengan aman
-const konten = document.getElementById('konten');
-
-/* ========== DATA PROTAP ========== */
-const tabelInsulinIV = [
-  { label: "< 60", min: -Infinity, max: 59, vals: ["Hipoglikemia → terapi dextrose","","",""]},
-  { label: "60 - 70", min: 60, max: 70, vals: [0,0,0,0]},
-  { label: "70 - 109", min: 71, max: 109, vals: [0.2,0.5,1,1.5]},
-  { label: "110 - 119", min: 110, max: 119, vals: [0.5,1,2,3]},
-  { label: "120 - 149", min: 120, max: 149, vals: [1,1.5,3,5]},
-  { label: "150 - 179", min: 150, max: 179, vals: [1.5,2,4,7]},
-  { label: "180 - 209", min: 180, max: 209, vals: [2,3,5,9]},
-  { label: "210 - 239", min: 210, max: 239, vals: [2,4,6,12]},
-  { label: "240 - 269", min: 240, max: 269, vals: [3,5,8,16]},
-  { label: "270 - 299", min: 270, max: 299, vals: [3,6,10,20]},
-  { label: "300 - 329", min: 300, max: 329, vals: [4,7,12,24]},
-  { label: "330 - 359", min: 330, max: 359, vals: [4,8,14,28]},
-  { label: ">= 360", min: 360, max: Infinity, vals: [6,12,16,28]}
-];
-
-const syringePump = [
-  { gds: "< 150", rate: "0 Unit" },
-  { gds: "151 – 200", rate: "0.5 Unit" },
-  { gds: "201 – 250", rate: "1 Unit" },
-  { gds: "251 – 300", rate: "2 Unit" },
-  { gds: "301 – 350", rate: "3 Unit" },
-  { gds: "> 350", rate: "4 Unit" },
-];
-const RapidActing = [
-  { bg: "<150", sens: 0, normal: 0, resist: 0, hs: "-" },
-  { bg: "150-199", sens: 1, normal: 2, resist: 3, hs: "-" },
-  { bg: "200-249", sens: 2, normal: 4, resist: 6, hs: "-" },
-  { bg: "250-299", sens: 3, normal: 6, resist: 9, hs: "0-2" },
-  { bg: "300-349", sens: 4, normal: 8, resist: 12, hs: "2-4" },
-  { bg: "≥350", sens: 5, normal: 10, resist: 15, hs: "4-6" },
-];
-
-/* ========== RENDER FUNCTIONS ========== */
-function renderInsulinIV() {
-  if (!konten) return;
-  konten.innerHTML = `
-    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 1</h1>
-    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr. Regy, Sp.PD, dr. Dayang, Sp.PD, dr. Maria, Sp.PD, dr. Didin, Sp.PD</p>
-
-    <div class="mb-3 flex items-center gap-3">
-      <label class="text-sm text-slate-600">Pilih Algoritma</label>
-      <select id="algSelect" class="px-2 py-1 border rounded bg-white text-sm">
-        <option value="">-- Pilih Algoritma --</option>
-        <option value="0">Algoritma 1</option>
-        <option value="1">Algoritma 2</option>
-        <option value="2">Algoritma 3</option>
-        <option value="3">Algoritma 4</option>
-      </select>
-      <button id="insClearBtn" class="ml-2 px-3 py-1 text-sm rounded border bg-white hidden" onclick="clearAlgSelect()">Clear</button>
-    </div>
-
-    <div id="insFullTable" class="overflow-auto border rounded-lg mb-4">
-      <table class="min-w-full text-sm table-fixed">
-        <thead class="bg-teal-50">
-          <tr>
-            <th class="px-3 py-2 text-left">GDR (mg/dL)</th>
-            <th class="px-3 py-2">Alg 1</th>
-            <th class="px-3 py-2">Alg 2</th>
-            <th class="px-3 py-2">Alg 3</th>
-            <th class="px-3 py-2">Alg 4</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${tabelInsulinIV.map((r,i)=>`
-            <tr class="${i%2?'bg-slate-50':''}">
-              <td class="px-3 py-2 font-medium">${r.label}</td>
-              <td class="px-3 py-2">${r.vals[0] || ""}</td>
-              <td class="px-3 py-2">${r.vals[1] || ""}</td>
-              <td class="px-3 py-2">${r.vals[2] || ""}</td>
-              <td class="px-3 py-2">${r.vals[3] || ""}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Area that will show filtered algorithm-only table + print button -->
-    <div id="insAlgViewContainer" class="hidden">
-      <div class="mb-3 text-sm text-slate-600" id="insAlgTitle"></div>
-      <div id="insAlgPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
-        <!-- Injected algorithm-only table will appear here -->
-      </div>
-      <div class="flex gap-2">
-        <button id="insPrintBtn" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printElement('insAlgPrintArea')">Print Algoritma</button>
-        <button class="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="showPage('insulinIV', document.querySelector('.tab-btn'))">Kembali</button>
-      </div>
-    </div>
-  `;
-
-  const selectEl = document.getElementById('algSelect');
-  if (selectEl) {
-    selectEl.addEventListener('change', (e)=>{
-      const val = e.target.value;
-      const clearBtn = document.getElementById('insClearBtn');
-      const fullTable = document.getElementById('insFullTable');
-      const container = document.getElementById('insAlgViewContainer');
-
-      if(val === "") {
-        if (container) container.classList.add('hidden');
-        if (clearBtn) clearBtn.classList.add('hidden');
-        if (fullTable) fullTable.classList.remove('hidden');
-      } else {
-        if (clearBtn) clearBtn.classList.remove('hidden');
-        if (fullTable) fullTable.classList.add('hidden');
-        if (container) container.classList.remove('hidden');
-        renderInsulinAlgTable(parseInt(val,10));
-      }
-    });
-  }
-}
-
-function clearAlgSelect(){
-  const sel = document.getElementById('algSelect');
-  if (!sel) return;
-  sel.value = "";
-  sel.dispatchEvent(new Event('change'));
-}
-
-function renderInsulinAlgTable(algIndex){
-  const title = `Algoritma ${algIndex + 1}`;
-  const titleEl = document.getElementById('insAlgTitle');
-  if (titleEl) titleEl.textContent = `Menampilkan: ${title} — hanya kolom GDR dan ${title}`;
-  const container = document.getElementById('insAlgPrintArea');
-  if (!container) return;
-
-  const rows = tabelInsulinIV.map((r,i)=>`
-    <tr class="${i%2?'bg-slate-50':''}">
-      <td class="px-3 py-2 font-medium">${r.label}</td>
-      <td class="px-3 py-2">${formatVal(r.vals[algIndex])}</td>
-    </tr>
-  `).join("");
-
-  container.innerHTML = `
-    <table class="min-w-full text-sm">
-      <thead class="bg-teal-50">
-        <tr>
-          <th class="px-3 py-2 text-left">GDR (mg/dL)</th>
-          <th class="px-3 py-2 text-left">Alg ${algIndex + 1}</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows}
-      </tbody>
-    </table>
-  `;
-}
-
-function formatVal(v){
-  if(v === "" || v === undefined || v === null) return "";
-  if(typeof v === 'string') return v;
-  if(typeof v === 'number'){
-    return Number.isInteger(v) ? v.toString() : v.toString().replace(/(?:\.0+|(\.\d+?)0+)$/,'$1');
-  }
-  return v;
-}
-
-function renderSyringePump() {
-  if (!konten) return;
-  konten.innerHTML = `
-    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 2</h1>
-    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">dr.Dessy, Sp.PD, dr.Dayang,Sp.PD</p>
-
-    <div id="syringePrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
-      <table class="min-w-full text-sm">
-        <thead class="bg-teal-50">
-          <tr><th class="px-3 py-2 text-left">GDS</th><th class="px-3 py-2 text-left">Kecepatan Pump</th></tr>
-        </thead>
-        <tbody>
-          ${syringePump.map((r,i)=>`
-            <tr class="${i%2?'bg-slate-50':''}">
-              <td class="px-3 py-2">${r.gds}</td><td class="px-3 py-2">${r.rate}</td>
-            </tr>`).join("")}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="flex gap-2">
-      <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="printElement('syringePrintArea')">Print Protap 2</button>
-      <button class="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200" onclick="showPage('syringePump', document.querySelectorAll('.tab-btn')[1])">Kembali</button>
-    </div>
-  `;
-}
-
-  function renderRapidActing() {
-  if (!konten) return;
-  konten.innerHTML = `
-    <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Protap 3</h1>
-    <p class="text-xs sm:text-sm mb-3 text-slate-500 mt-0">
-      dr. Didin Sp.PD
-    </p>
-
-   <div id="rapidPrintArea" class="overflow-auto border rounded-lg mb-3 print-area p-2 bg-white">
-
-  <h2 class="text-sm font-semibold text-center mb-2">
-    Short/Rapid-Acting Insulin* Dose
-  </h2>
-
-  <table class="min-w-full text-xs border-collapse text-center">
-    
-    <thead class="bg-teal-50">
-      <!-- BARIS 1 -->
-      <tr>
-        <th rowspan="2" class="px-2 py-2 border">BG<br>(mg/dL)</th>
-        <th colspan="3" class="px-2 py-2 border">AC</th>
-        <th rowspan="2" class="px-2 py-2 border">HS</th>
-      </tr>
-
-      <!-- BARIS 2 -->
-      <tr>
-        <th class="px-2 py-2 border">Highly Insulin Sensitive</th>
-        <th class="px-2 py-2 border">
-          Normal Insulin Sensitivity<br>
-          <span class="text-[10px]">(for most patients)</span>
-        </th>
-        <th class="px-2 py-2 border">Highly Insulin Resistant</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      ${RapidActing.map((r,i)=>`
-        <tr class="${i%2?'bg-slate-50':''}">
-          <td class="px-2 py-2 border">${r.bg}</td>
-          <td class="px-2 py-2 border">${r.sens}U</td>
-          <td class="px-2 py-2 border font-semibold">${r.normal}U</td>
-          <td class="px-2 py-2 border">${r.resist}U</td>
-          <td class="px-2 py-2 border">
-            ${r.hs === "-" ? "" : r.hs + "U"}
-          </td>
-        </tr>
-      `).join("")}
-    </tbody>
-
-  </table>
-</div>
-
-
-    <div class="flex gap-2">
-      <button class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        onclick="printElement('rapidPrintArea')">Print Protap 3</button>
-    </div>
-  `;
-}
-
-
-/* ========== PAGE HANDLER ========== */
-function showPage(page, el) {
-  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-  if(el) el.classList.add("active");
-
-  if(page === "insulinIV") renderInsulinIV();
-  if(page === "syringePump") renderSyringePump();
-  if(page === "RapidActing") renderRapidActing();
-}
-
-// Default page load
-window.addEventListener('DOMContentLoaded', () => {
-  const firstTab = document.querySelector(".tab-btn");
-  if (firstTab) firstTab.classList.add("active");
-  renderInsulinIV();
-});
-
-/* ========== SIDEBAR ========== */
-function toggleMenu(){
-  document.getElementById("sideMenu").classList.toggle("-translate-x-full");
-  document.getElementById("backdrop").classList.toggle("hidden");
-}
-
-/* ========== PRINT HELPERS ========== */
-function printElement(elementId){
-  const el = document.getElementById(elementId);
-  if(!el){
-    alert('Elemen untuk dicetak tidak ditemukan.');
-    return;
-  }
-
-  // Pastikan elemen target punya kelas print-area
-  if (!el.classList.contains('print-area')) {
-    el.classList.add('print-area');
-  }
-
-  // Trigger print - CSS @media print akan mengatur elemen yang tampil
-  window.print();
-}
-
+const konten=document.getElementById('konten');
+const tabelInsulinIV=[{label:"< 60",min:-Infinity,max:59,vals:["Hipoglikemia → terapi dextrose","","",""]},{label:"60 - 70",min:60,max:70,vals:[0,0,0,0]},{label:"70 - 109",min:71,max:109,vals:[0.2,0.5,1,1.5]},{label:"110 - 119",min:110,max:119,vals:[0.5,1,2,3]},{label:"120 - 149",min:120,max:149,vals:[1,1.5,3,5]},{label:"150 - 179",min:150,max:179,vals:[1.5,2,4,7]},{label:"180 - 209",min:180,max:209,vals:[2,3,5,9]},{label:"210 - 239",min:210,max:239,vals:[2,4,6,12]},{label:"240 - 269",min:240,max:269,vals:[3,5,8,16]},{label:"270 - 299",min:270,max:299,vals:[3,6,10,20]},{label:"300 - 329",min:300,max:329,vals:[4,7,12,24]},{label:"330 - 359",min:330,max:359,vals:[4,8,14,28]},{label:">= 360",min:360,max:Infinity,vals:[6,12,16,28]}];
+const syringePump=[{gds:"< 150",rate:"0 Unit"},{gds:"151 – 200",rate:"0.5 Unit"},{gds:"201 – 250",rate:"1 Unit"},{gds:"251 – 300",rate:"2 Unit"},{gds:"301 – 350",rate:"3 Unit"},{gds:"> 350",rate:"4 Unit"}];
+const RapidActing=[{bg:"<150",sens:0,normal:0,resist:0,hs:"-"},{bg:"150-199",sens:1,normal:2,resist:3,hs:"-"},{bg:"200-249",sens:2,normal:4,resist:6,hs:"-"},{bg:"250-299",sens:3,normal:6,resist:9,hs:"0-2"},{bg:"300-349",sens:4,normal:8,resist:12,hs:"2-4"},{bg:"≥350",sens:5,normal:10,resist:15,hs:"4-6"}];
+function formatVal(v){if(v===""||v===undefined||v===null)return"";if(typeof v==='number')return Number.isInteger(v)?String(v):String(v).replace(/(?:\.0+|(\.\d+?)0+)$/,'$1');return v}
+function renderInsulinIV(){konten.innerHTML=`<h1 class="text-2xl font-extrabold text-slate-800">Protap 1</h1><p class="mt-1 text-xs text-slate-500">dr. Regy, Sp.PD, dr. Dayang, Sp.PD, dr. Maria, Sp.PD, dr. Didin, Sp.PD</p><div class="mt-5 flex flex-wrap items-center gap-3"><label class="text-sm font-bold text-slate-600">Pilih Algoritma</label><select id="algSelect" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"><option value="">-- Pilih Algoritma --</option><option value="0">Algoritma 1</option><option value="1">Algoritma 2</option><option value="2">Algoritma 3</option><option value="3">Algoritma 4</option></select><button id="insClearBtn" class="hidden rounded-xl border px-3 py-2 text-sm" onclick="clearAlgSelect()">Clear</button></div><div id="insFullTable" class="mt-4 overflow-auto rounded-xl border"><table class="min-w-[620px] text-sm"><thead class="bg-blue-50"><tr><th class="px-3 py-3 text-left">GDR (mg/dL)</th><th class="px-3 py-3">Alg 1</th><th class="px-3 py-3">Alg 2</th><th class="px-3 py-3">Alg 3</th><th class="px-3 py-3">Alg 4</th></tr></thead><tbody>${tabelInsulinIV.map((r,i)=>`<tr class="${i%2?'bg-slate-50':''}"><td class="px-3 py-2 font-medium">${r.label}</td>${r.vals.map(v=>`<td class="px-3 py-2 text-center">${formatVal(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><div id="insAlgViewContainer" class="hidden mt-4"><div id="insAlgTitle" class="mb-3 text-sm text-slate-600"></div><div id="insAlgPrintArea" class="print-area overflow-auto rounded-xl border bg-white p-2"></div><div class="mt-3 flex gap-2"><button class="rounded-xl bg-blue-600 px-4 py-2 font-bold text-white" onclick="printElement('insAlgPrintArea')">Print Algoritma</button><button class="rounded-xl bg-slate-100 px-4 py-2 font-bold" onclick="clearAlgSelect()">Kembali</button></div></div>`;const s=document.getElementById('algSelect');s.addEventListener('change',e=>{const val=e.target.value;document.getElementById('insClearBtn').classList.toggle('hidden',val==='');document.getElementById('insFullTable').classList.toggle('hidden',val!=='');document.getElementById('insAlgViewContainer').classList.toggle('hidden',val==='');if(val!=='')renderInsulinAlgTable(Number(val))})}
+function clearAlgSelect(){const s=document.getElementById('algSelect');if(s){s.value='';s.dispatchEvent(new Event('change'))}}
+function renderInsulinAlgTable(i){document.getElementById('insAlgTitle').textContent=`Menampilkan Algoritma ${i+1}`;document.getElementById('insAlgPrintArea').innerHTML=`<table class="min-w-full text-sm"><thead class="bg-blue-50"><tr><th class="px-3 py-3 text-left">GDR (mg/dL)</th><th class="px-3 py-3 text-left">Alg ${i+1}</th></tr></thead><tbody>${tabelInsulinIV.map((r,n)=>`<tr class="${n%2?'bg-slate-50':''}"><td class="px-3 py-2 font-medium">${r.label}</td><td class="px-3 py-2">${formatVal(r.vals[i])}</td></tr>`).join('')}</tbody></table>`}
+function renderSyringePump(){konten.innerHTML=`<h1 class="text-2xl font-extrabold">Protap 2</h1><p class="mt-1 text-xs text-slate-500">dr. Dessy, Sp.PD, dr. Dayang, Sp.PD</p><div id="syringePrintArea" class="print-area mt-5 overflow-auto rounded-xl border bg-white"><table class="min-w-full text-sm"><thead class="bg-blue-50"><tr><th class="px-3 py-3 text-left">GDS</th><th class="px-3 py-3 text-left">Kecepatan Pump</th></tr></thead><tbody>${syringePump.map((r,i)=>`<tr class="${i%2?'bg-slate-50':''}"><td class="px-3 py-3">${r.gds}</td><td class="px-3 py-3">${r.rate}</td></tr>`).join('')}</tbody></table></div><button class="mt-4 rounded-xl bg-blue-600 px-4 py-2 font-bold text-white" onclick="printElement('syringePrintArea')">Print Protap 2</button>`}
+function renderRapidActing(){konten.innerHTML=`<h1 class="text-2xl font-extrabold">Protap 3</h1><p class="mt-1 text-xs text-slate-500">dr. Didin, Sp.PD</p><div id="rapidPrintArea" class="print-area mt-5 overflow-auto rounded-xl border bg-white p-2"><h2 class="mb-3 text-center text-sm font-bold">Short/Rapid-Acting Insulin Dose</h2><table class="min-w-[680px] text-center text-xs"><thead class="bg-blue-50"><tr><th rowspan="2" class="border px-2 py-2">BG<br>(mg/dL)</th><th colspan="3" class="border px-2 py-2">AC</th><th rowspan="2" class="border px-2 py-2">HS</th></tr><tr><th class="border px-2 py-2">Highly Sensitive</th><th class="border px-2 py-2">Normal Sensitivity</th><th class="border px-2 py-2">Highly Resistant</th></tr></thead><tbody>${RapidActing.map((r,i)=>`<tr class="${i%2?'bg-slate-50':''}"><td class="border px-2 py-2">${r.bg}</td><td class="border px-2 py-2">${r.sens}U</td><td class="border px-2 py-2 font-bold">${r.normal}U</td><td class="border px-2 py-2">${r.resist}U</td><td class="border px-2 py-2">${r.hs==='-'?'':r.hs+'U'}</td></tr>`).join('')}</tbody></table></div><button class="mt-4 rounded-xl bg-blue-600 px-4 py-2 font-bold text-white" onclick="printElement('rapidPrintArea')">Print Protap 3</button>`}
+function showPage(page,el){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));el?.classList.add('active');if(page==='insulinIV')renderInsulinIV();if(page==='syringePump')renderSyringePump();if(page==='RapidActing')renderRapidActing()}
+function printElement(id){const el=document.getElementById(id);if(!el){alert('Elemen untuk dicetak tidak ditemukan.');return}el.classList.add('print-area');window.print()}
+const sideMenu=document.getElementById('sideMenu'),backdrop=document.getElementById('backdrop');function closeMenu(){sideMenu.classList.remove('open');backdrop.classList.add('hidden');document.body.style.overflow=''}function openMenu(){if(!matchMedia('(max-width:899px)').matches)return;sideMenu.classList.add('open');backdrop.classList.remove('hidden');document.body.style.overflow='hidden'}document.getElementById('openMenuBtn').addEventListener('click',openMenu);document.getElementById('closeMenuBtn').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);window.addEventListener('resize',()=>{if(innerWidth>=900)closeMenu()});window.addEventListener('DOMContentLoaded',renderInsulinIV);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
-<link rel="stylesheet" href="Asset/swipe.css">
-<script src="Asset/swipe.js" defer></script>
-
 </body>
 </html>
