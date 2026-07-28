@@ -173,4 +173,13 @@ async function initNotifikasi() {
   }
 }
 
+// Muat dukungan tambahan khusus kalkulator utama tanpa mengubah halaman lain.
+const currentPage = location.pathname.split("/").pop() || "index.html";
+if (currentPage === "index.html") {
+  const icunesScript = document.createElement("script");
+  icunesScript.src = "Asset/icunes.js";
+  icunesScript.defer = true;
+  document.head.appendChild(icunesScript);
+}
+
 initNotifikasi();
