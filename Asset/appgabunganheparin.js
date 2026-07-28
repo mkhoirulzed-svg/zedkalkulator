@@ -104,6 +104,45 @@ function initDrugSearch(){
 function selectedDrug(){ return el("drugSelect").value; }
 function isNoWeightDrug(drug){ return NO_WEIGHT_DRUGS.includes(drug); }
 
+const BB_DOSE_META = {
+  Heparin: { unit: "IU/kgBB/jam", formula: "iu_per_kg_hour", example: "Contoh: 18" },
+  NE: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,05" },
+  Adrenalin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,1" },
+  Dopamin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 5" },
+  Dobutamin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,5" },
+  Milrinone: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,375" },
+  Nicardipin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,5" },
+  Herbeser: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 1" },
+  NTG_BB: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,5" }
+};
+
+function toggleBBDoseInput(forceOpen){
+  const panel = el("doseBBPanel");
+  const button = el("doseBBToggle");
+  const chevron = el("doseBBChevron");
+  if(!panel || !button) return;
+  const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : panel.classList.contains("hidden");
+  panel.classList.toggle("hidden", !shouldOpen);
+  button.setAttribute("aria-expanded", String(shouldOpen));
+  if(chevron) chevron.style.transform = shouldOpen ? "rotate(180deg)" : "";
+  if(shouldOpen) setTimeout(() => el("doseInputBB")?.focus(), 30);
+}
+
+function updateBBDoseInput(drug){
+  const wrapper = el("doseWrapperBB");
+  const input = el("doseInputBB");
+  const unit = el("doseBBUnit");
+  const label = el("doseBBLabel");
+  const meta = BB_DOSE_META[drug];
+  if(!wrapper) return;
+  wrapper.classList.toggle("hidden", !meta);
+  if(!meta) return;
+  if(input){ input.value = ""; input.placeholder = meta.example; }
+  if(unit) unit.textContent = meta.unit;
+  if(label) label.textContent = `Dosis khusus ${drug === "NE" ? "Norepinefrin" : drug}`;
+  toggleBBDoseInput(false);
+}
+
 // ===============================
 // ROUTER UTAMA
 // ===============================
@@ -113,6 +152,7 @@ function setDefaultConc(){
 
   hideAllConcWrappers();
   resetNoBBWrappers();
+  updateBBDoseInput(drug);
 
   if(!drug){
     el("weightWrapper").classList.remove("hidden");
@@ -179,10 +219,6 @@ const DRUG_PRESETS = {
 function setDefaultConcBB(){
   hideAllConcWrappers();
   const drug = selectedDrug();
-  const heparinDose = el("doseWrapperHeparin");
-if(heparinDose){
-  heparinDose.classList.toggle("hidden", drug !== "Heparin");
-}
   const presetArea = el("otherPresetArea");
   presetArea.innerHTML = "";
   if(!drug) return;
@@ -256,8 +292,6 @@ function hideAllConcWrappers(){
     if(s) s.classList.remove("hidden");
   });
 
-  const heparinDose = el("doseWrapperHeparin");
-  if(heparinDose) heparinDose.classList.add("hidden");
 }
 
 function calculateConcentration(amount, ml, drug){
@@ -331,9 +365,28 @@ function calculateBB(){
 <thead><tr><th>Dosis</th><th>Kecepatan</th></tr></thead><tbody>`;
 
   let doses = [];
+  const customBBDose = parseFloat(el("doseInputBB")?.value);
+  if(drug !== "Heparin" && Number.isFinite(customBBDose) && customBBDose > 0){
+    const meta = BB_DOSE_META[drug] || BB_DOSE_META.NE;
+    const mlHour = meta.formula === "iu_per_kg_hour"
+      ? (customBBDose * weight) / conc
+      : (customBBDose * weight * 60) / conc;
+    result.innerHTML = `<h3 class='font-semibold mb-1'>${drug}</h3>
+      <p class='text-xs'>BB: <b>${weight} kg</b></p>
+      <p class='text-xs'>Dosis khusus: <b>${customBBDose} ${meta.unit}</b></p>
+      <p class='text-xs'>Pengenceran: <b>${concLabel}</b></p>
+      <p class='text-xs'>Konsentrasi: <b>${conc.toFixed(2)} mcg/ml</b></p>
+      <hr class='my-2'>
+      <div class='rounded-xl bg-blue-50 p-4'>
+        <p class='text-xs font-bold uppercase tracking-wider text-blue-600'>Kecepatan syringe pump</p>
+        <p class='mt-2 text-2xl font-bold text-blue-700'>${mlHour.toFixed(2)} ml/jam</p>
+      </div>
+      <p class='mt-3 text-xs leading-5 text-slate-500'>Hasil dihitung dari dosis khusus. Kosongkan input dosis untuk kembali menampilkan tabel standar.</p>`;
+    return;
+  }
   if(drug === "Heparin"){
 
-  const customDose = parseFloat(el("doseInputHeparin")?.value);
+  const customDose = parseFloat(el("doseInputBB")?.value);
 
   if(!isNaN(customDose) && customDose > 0){
 

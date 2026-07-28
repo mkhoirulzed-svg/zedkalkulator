@@ -190,7 +190,17 @@
               </div>
 
               <div id="weightWrapper" class="space-y-2"><label class="text-sm font-bold text-slate-700">Berat badan (kg)</label><input id="weightInput" type="number" min="1" class="field" placeholder="Contoh: 60"></div>
-              <div id="doseWrapperHeparin" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Dosis Heparin custom</label><div class="flex items-center gap-2"><input id="doseInputHeparin" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 18"><span class="whitespace-nowrap text-xs text-slate-600">IU/kgBB/jam</span></div><p class="text-xs text-slate-400">Opsional. Kosongkan untuk tabel standar.</p></div>
+              <div id="doseWrapperBB" class="hidden overflow-hidden rounded-xl border border-slate-200 bg-slate-50/70">
+                <button id="doseBBToggle" type="button" onclick="toggleBBDoseInput()" class="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-bold text-slate-700" aria-expanded="false" aria-controls="doseBBPanel">
+                  <span>Dosis khusus <span class="font-normal text-slate-400">(opsional)</span></span>
+                  <span id="doseBBChevron" class="text-lg text-slate-400 transition-transform">⌄</span>
+                </button>
+                <div id="doseBBPanel" class="hidden border-t border-slate-200 p-4">
+                  <label id="doseBBLabel" for="doseInputBB" class="mb-2 block text-sm font-bold text-slate-700">Masukkan dosis</label>
+                  <div class="flex items-center gap-2"><input id="doseInputBB" type="number" inputmode="decimal" step="any" min="0" class="field" placeholder="Contoh: 0,5"><span id="doseBBUnit" class="whitespace-nowrap text-xs font-semibold text-slate-600">mcg/kgBB/menit</span></div>
+                  <p class="mt-2 text-xs leading-5 text-slate-400">Kosongkan untuk menampilkan tabel dosis standar. Dosis khusus tidak mengubah daftar protap.</p>
+                </div>
+              </div>
               <div id="doseWrapperNoBB" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Dosis (opsional)</label><div class="flex items-center gap-2"><input id="doseInput" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 20"><span id="doseUnit" class="whitespace-nowrap text-xs text-slate-600">mg/jam</span></div></div>
 
               <div id="concWrapperNE" class="hidden space-y-2"><label class="text-sm font-bold text-slate-700">Konsentrasi Norepinefrin</label><div class="flex gap-2"><select id="neConc" class="field flex-1"><option value="80">1 ampul (4 mg/50 ml)</option><option value="160">2 ampul (8 mg/50 ml)</option></select><button id="neToggleBtn" type="button" onclick="toggleNEMode()" class="rounded-xl border border-slate-300 px-4 text-sm font-semibold">Custom</button></div><div id="neCustomWrapper" class="hidden two-inputs grid grid-cols-2 gap-2"><input id="neCustomDose" type="number" class="field" placeholder="Dosis (mg)"><input id="neCustomVolume" type="number" class="field" placeholder="Volume (ml)"></div></div>
