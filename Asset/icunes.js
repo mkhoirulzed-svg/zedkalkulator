@@ -88,16 +88,37 @@
           result.innerHTML = "<p class='text-red-600'>Masukkan berat badan yang valid.</p>";
           return;
         }
-        if (!Number.isFinite(dose) || dose <= 0) {
-          result.innerHTML = "<p class='text-red-600'>Buka Dosis khusus dan masukkan dosis Icunes dalam mcg/kgBB/jam.</p>";
-          return;
-        }
 
-        const mlHour = (dose * weight) / concentration;
         const concentrationLabel = typeof getConcentrationLabelBB === 'function'
           ? getConcentrationLabelBB('Icunes')
           : '1 ampul (200 mcg/50 ml)';
 
+        if (!Number.isFinite(dose) || dose <= 0) {
+          const maintenanceDoses = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
+          const rows = maintenanceDoses.map(maintenanceDose => {
+            const mlHour = (maintenanceDose * weight) / concentration;
+            return `<tr>
+              <td>${maintenanceDose.toFixed(1)} mcg/kgBB/jam</td>
+              <td>${mlHour.toFixed(2)} ml/jam</td>
+            </tr>`;
+          }).join('');
+
+          result.innerHTML = `
+            <h3 class='font-semibold mb-1'>Icunes / Dexmedetomidine</h3>
+            <p class='text-xs'>BB: <b>${weight} kg</b></p>
+            <p class='text-xs'>Pengenceran: <b>${concentrationLabel}</b></p>
+            <p class='text-xs'>Konsentrasi: <b>${concentration.toFixed(2)} mcg/ml</b></p>
+            <hr class='my-2'>
+            <p class='mb-2 text-xs font-bold uppercase tracking-wider text-blue-600'>Rentang dosis pemeliharaan</p>
+            <table class='result-table'>
+              <thead><tr><th>Dosis</th><th>Kecepatan</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+            <p class='mt-3 text-xs leading-5 text-slate-500'>Rentang referensi: 0,2–0,7 mcg/kgBB/jam. Sesuaikan laju infus untuk mencapai efek klinis yang diinginkan serta ikuti protokol fasilitas dan instruksi dokter.</p>`;
+          return;
+        }
+
+        const mlHour = (dose * weight) / concentration;
         result.innerHTML = `
           <h3 class='font-semibold mb-1'>Icunes / Dexmedetomidine</h3>
           <p class='text-xs'>BB: <b>${weight} kg</b></p>
