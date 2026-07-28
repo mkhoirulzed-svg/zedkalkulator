@@ -1,0 +1,36 @@
+name: Apply optional BB dose input
+
+on:
+  push:
+    branches:
+      - agent/index-responsive
+    paths:
+      - scripts/apply_custom_bb_dose.py
+      - .github/workflows/apply-custom-bb-dose.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/index-responsive
+
+      - name: Apply patch
+        run: python scripts/apply_custom_bb_dose.py
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html Asset/appgabunganheparin.js
+          git commit -m "Add optional custom dose for weight-based drugs"
+          git push
