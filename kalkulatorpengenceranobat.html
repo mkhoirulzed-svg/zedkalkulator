@@ -1,383 +1,114 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Pengenceran Obat</title>
-
-  <!-- Tailwind CSS v4 via CDN -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>ZED Kalkulator - Pengenceran Obat</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  
-<link rel="icon" type="image/png" href="512x512.png">
-  <link rel="apple-touch-icon" href="512x512.png">
+  <link rel="icon" type="image/png" href="512x512.png">
+  <link rel="apple-touch-icon" href="192x192.png">
   <link rel="manifest" href="manifest.json">
-  <!-- PWA iOS Compatibility -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<!-- Warna tema (opsional tapi bagus) -->
-<meta name="theme-color" content="#0f766e">
+  <link rel="stylesheet" href="Asset/swipe.css">
   <style>
-     .tab-btn {
-    transition: all .15s ease;
-  }
-
-  .tab-btn.active {
-    background-color: #2563eb; /* blue-600 */
-    color: #ffffff;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
-    position: relative;
-}
-
-.tab-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 20%;
-  right: 20%;
-  bottom: -4px;
-  height: 3px;
-  background-color: #2563eb;
-  border-radius: 2px;
-}
-
-  .tab-btn:not(.active):hover {
-    background-color: #e5e7eb; /* slate-200 */
-  }
-
-@font-face {
-  font-family: 'Archicoco';
-  src: url('./Asset/Archicoco.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-    /* ICON MENU IMG */
-    .pos-menu-icon {
-      width: 30px;
-      height: 22px;
-      margin: 0 auto 2px;
-      display: block;
-      opacity: .55;
+    .hidden{display:none!important}*{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f1f5f9;color:#0f172a}
+    button,a,input,select{touch-action:manipulation}.app-shell{width:min(100%,1280px);margin-inline:auto}
+    .card{background:#fff;border:1px solid #e2e8f0;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+    .side-link{display:flex;align-items:center;min-height:46px;padding:.7rem .8rem;border-radius:.8rem;color:#334155;text-decoration:none}
+    .side-link:hover{background:#eff6ff;color:#1d4ed8}.side-link.active{background:#dbeafe;color:#1d4ed8;font-weight:700}
+    .field{width:100%;min-height:48px;border:1px solid #cbd5e1;border-radius:.8rem;background:#fff;padding:.7rem .85rem;color:#0f172a}
+    .field:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12);outline:none}
+    .quick-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #e2e8f0}
+    .quick-nav a{min-width:0;padding:12px 6px;text-align:center;color:#64748b;font-size:12px;font-weight:700;text-decoration:none}
+    .quick-nav a:hover{background:#f8fafc;color:#2563eb}.quick-nav a.active{background:#eff6ff;color:#1d4ed8}
+    .quick-nav img{display:block;width:30px;height:24px;margin:0 auto 4px;object-fit:contain;filter:brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(1602%) hue-rotate(207deg) brightness(91%) contrast(96%)}
+    .desktop-aside{display:none}.mobile-bottom{display:none}.side-panel{transition:translate .22s ease}
+    @media(min-width:900px){
+      body{padding:28px}.desktop-grid{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+      .desktop-aside{display:block;position:sticky;top:28px}.mobile-menu-button{display:none!important}.content-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+      #sideMenu,#backdrop,.mobile-bottom{display:none!important}
     }
-
-    .pos-menu-btn.active .pos-menu-icon {
-      opacity: 1;
+    @media(max-width:899px){
+      body{padding:0 0 88px}.desktop-aside{display:none!important}.desktop-actions{display:none!important}.quick-nav{display:none!important}
+      .top-header{border-radius:0!important;border-left:0;border-right:0;border-top:0;box-shadow:none}.content-grid{display:block}.result-card{margin-top:14px}
+      #sideMenu{position:fixed;inset-block:0;right:0;left:auto;z-index:80;width:min(84vw,330px);translate:105% 0;overflow-y:auto;padding-bottom:110px;background:#f8fafc;box-shadow:-16px 0 40px rgba(15,23,42,.22);visibility:hidden;pointer-events:none}
+      #sideMenu.open{translate:0 0;visibility:visible;pointer-events:auto}#backdrop{z-index:70}
+      #sideMenu nav{display:flex;flex-direction:column;gap:7px;padding:12px}#sideMenu .side-link{min-height:54px;border:1px solid #dbeafe;background:#fff;color:#1e3a8a}
+      .mobile-bottom{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-top:1px solid #dbeafe;background:rgba(255,255,255,.98);box-shadow:0 -8px 24px rgba(15,23,42,.11);backdrop-filter:blur(14px)}
+      .mobile-bottom a{display:flex;min-height:56px;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:12px;color:#2563eb;font-size:10px;font-weight:700;text-decoration:none}.mobile-bottom .nav-icon{display:grid;width:25px;height:25px;place-items:center;color:#2563eb}.mobile-bottom img,.mobile-bottom svg{width:23px;height:23px}.mobile-bottom img{filter:brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(1602%) hue-rotate(207deg) brightness(91%) contrast(96%)}
+      .mobile-bottom .home-item{transform:translateY(-11px)}.mobile-bottom .home-item .nav-icon{width:50px;height:50px;border-radius:50%;background:#dbeafe;box-shadow:0 7px 20px rgba(37,99,235,.22)}.mobile-bottom .active{background:#eff6ff;color:#1d4ed8}
     }
-
-    /* === POS TAB MENU === */
-    .pos-menu {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.25rem;
-      margin: 0;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .pos-menu-btn {
-      flex: 1;
-      padding: 0.6rem 0.2rem 0.5rem;
-      text-align: center;
-      color: #6b7280;
-      font-size: 0.7rem;
-      font-weight: 500;
-      position: relative;
-      transition: color .15s;
-    }
-
-    .pos-menu-btn:hover {
-      color: #2563eb;
-    }
-
-    .pos-menu-btn.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .pos-menu-btn.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      bottom: -1px;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 2px;
-    }
-    
-    /* Area yang akan dicetak saja yang terlihat */
-    @media print {
-      /* Sembunyikan semua secara visual */
-      body * {
-        visibility: hidden;
-      }
-
-      /* Tampilkan kembali area yang akan diprint */
-      .print-area,
-      .print-area * {
-        visibility: visible;
-      }
-
-      /* Posisikan area cetak memenuhi halaman */
-      .print-area {
-        position: absolute !important;
-        inset: 0;
-        width: 100% !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        background: white !important;
-      }
-    }
-     .footer-menu {
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    .footer-menu a {
-      flex: 1;
-      text-align: center;
-      padding: 0.65rem 0.2rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #6b7280;
-      position: relative;
-    }
-
-    .footer-menu a:hover {
-      color: #2563eb;
-    }
-
-    .footer-menu a.active {
-      color: #2563eb;
-      font-weight: 600;
-    }
-
-    .footer-menu a.active::after {
-      content: "";
-      position: absolute;
-      left: 20%;
-      right: 20%;
-      top: 0;
-      height: 3px;
-      background: #2563eb;
-      border-radius: 0 0 2px 2px;
-    }
+    @media(max-width:560px){.content-card{border-left:0;border-right:0;border-radius:0;box-shadow:none}.page-wrap{gap:12px!important}.content-card{padding:18px!important}.form-grid{grid-template-columns:1fr!important}}
+    @media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute!important;inset:0;width:100%!important;margin:0!important;background:#fff!important}.no-print{display:none!important}}
   </style>
 </head>
-
-<body class="font-sans bg-slate-100 min-h-screen flex justify-center p-4 sm:p-6">
-
-<!-- BACKDROP -->
-  <div
-    id="backdrop"
-    class="fixed inset-0 bg-black/30 z-30 hidden"
-    onclick="toggleMenu()"
-  ></div>
-
-  <!-- SIDE MENU -->
-  <aside
-    id="sideMenu"
-    class="fixed inset-y-0 left-0 z-40 w-64 max-w-full bg-teal-100 shadow-xl transform -translate-x-full transition-transform duration-200 ease-out"
-  >
-    <div class="p-4 border-b border-teal-200 flex items-center justify-between">
-      <div class="font-semibold text-slate-800 text-sm">Menu Kalkulator</div>
-      <button onclick="toggleMenu()" class="p-1 rounded-md hover:bg-teal-200">
-        <span class="block w-4 h-0.5 bg-slate-700 rotate-45 translate-y-[1px]"></span>
-        <span class="block w-4 h-0.5 bg-slate-700 -rotate-45 -translate-y-[1px]"></span>
-      </button>
-    </div>
-
-          <nav class="p-4 text-sm space-y-1 text-slate-800">
-      <a href="index.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump</a>
-       <a href="spmanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Syringe Pump Manual</a>
-            <a href="tableprotap.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Table Protap</a>
-      <a href="infus.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Tetesan Infus</a>
-      <a href="insulin.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator Insulin</a>
-      <a href="anestesi.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Estimasi kehilangan darah</a>
-      <a href="kalkulatorpengenceranobat.html" class="px-2 py-2 rounded-md bg-teal-200 flex items-center">Kalkulator Pengenceran Obat</a>
-      <a href="asidosis.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator AGD/ABG</a>
-       <a href="kalkulatormanual.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Kalkulator</a>
-      <a href="komunitas.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Diskusi</a>
-      <a href="profil.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Profil</a>
-      <a href="about.html" class="px-2 py-2 rounded-md hover:bg-teal-200 flex items-center">Privacy Policy & Disclaimer</a>
+<body>
+  <div id="backdrop" class="fixed inset-0 hidden bg-slate-950/45"></div>
+  <aside id="sideMenu" class="side-panel no-print">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3"><h2 class="text-lg font-bold">Menu utama</h2><button id="closeMenuBtn" type="button" class="grid h-11 w-11 place-items-center rounded-xl text-2xl hover:bg-slate-100" aria-label="Tutup menu">×</button></div>
+    <nav>
+      <a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Kalkulator Tetesan Infus</a><a href="insulin.html" class="side-link">Kalkulator Insulin</a><a href="anestesi.html" class="side-link">Estimasi Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link active">Kalkulator Pengenceran Obat</a><a href="asidosis.html" class="side-link">Kalkulator AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="komunitas.html" class="side-link">Diskusi</a><a href="profil.html" class="side-link">Profil</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a>
     </nav>
   </aside>
 
-  <div class="w-full max-w-2xl flex flex-col gap-4">
+  <main class="app-shell">
+    <div class="desktop-grid">
+      <aside class="desktop-aside card overflow-hidden rounded-2xl no-print">
+        <div class="border-b border-slate-200 p-4"><h2 class="font-extrabold">Menu utama</h2></div>
+        <nav class="space-y-1 p-3 text-sm">
+          <a href="index.html" class="side-link">Syringe Pump</a><a href="spmanual.html" class="side-link">Syringe Pump Manual</a><a href="tableprotap.html" class="side-link">Tabel Protap</a><a href="infus.html" class="side-link">Tetesan Infus</a><a href="insulin.html" class="side-link">Insulin</a><a href="anestesi.html" class="side-link">Kehilangan Darah</a><a href="kalkulatorpengenceranobat.html" class="side-link active">Pengenceran Obat</a><a href="asidosis.html" class="side-link">AGD/ABG</a><a href="kalkulatormanual.html" class="side-link">Kalkulator Manual</a><a href="about.html" class="side-link">Privacy Policy & Disclaimer</a>
+        </nav>
+      </aside>
 
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-      <header class="flex items-center justify-between px-3 py-2">
+      <div class="page-wrap flex min-w-0 flex-col gap-4">
+        <section class="top-header card overflow-hidden rounded-2xl no-print">
+          <header class="flex min-h-16 items-center justify-between gap-3 px-4 py-3">
+            <div class="flex min-w-0 items-center gap-3"><img src="192x192.png" class="h-10 w-10 rounded-xl" alt="Logo ZED Kalkulator"><div><p class="font-bold">ZED Kalkulator</p><p class="hidden text-xs text-slate-500 sm:block">Perhitungan klinis dalam satu aplikasi</p></div></div>
+            <button id="openMenuBtn" type="button" class="mobile-menu-button grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-3xl text-blue-600" aria-label="Buka menu">☰</button>
+            <div class="desktop-actions flex gap-2"><a href="kalkulatormanual.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Kalkulator Manual</a><a href="komunitas.html" class="rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700">Diskusi</a></div>
+          </header>
+          <nav class="quick-nav">
+            <a href="index.html"><img src="Asset/SP.svg" alt="">Syringe Pump</a><a href="infus.html"><img src="Asset/infus.svg" alt="">Infus</a><a href="insulin.html"><img src="Asset/insulin.svg" alt="">Actrapid</a><a href="kalkulatorpengenceranobat.html" class="active"><img src="Asset/Perdarahan.svg" alt="">Pengenceran</a>
+          </nav>
+        </section>
 
-  <div class="flex items-center gap-3">
+        <div class="content-grid">
+          <section class="content-card card rounded-2xl p-6">
+            <p class="text-xs font-bold uppercase tracking-[.18em] text-blue-600">Pengenceran obat</p>
+            <h1 class="mt-2 text-2xl font-extrabold">Kalkulator Pengenceran Obat</h1>
+            <p class="mt-2 text-sm leading-6 text-slate-500">Hitung volume yang harus diambil berdasarkan dosis tersedia, volume pelarut, dan dosis yang diminta.</p>
+            <form id="dilutionForm" class="mt-6 space-y-5">
+              <div class="form-grid grid gap-4">
+                <div><label for="doseTotal" class="mb-2 block text-sm font-bold text-slate-700">Dosis total dalam vial/ampul</label><div class="flex items-center gap-2"><input id="doseTotal" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 1000"><span class="whitespace-nowrap text-xs text-slate-500">mg/unit</span></div></div>
+                <div><label for="volumeTotal" class="mb-2 block text-sm font-bold text-slate-700">Volume total pelarut</label><div class="flex items-center gap-2"><input id="volumeTotal" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 10"><span class="whitespace-nowrap text-xs text-slate-500">ml</span></div></div>
+                <div><label for="doseRequested" class="mb-2 block text-sm font-bold text-slate-700">Dosis yang diminta</label><div class="flex items-center gap-2"><input id="doseRequested" type="number" step="0.01" min="0" class="field" placeholder="Contoh: 750"><span class="whitespace-nowrap text-xs text-slate-500">mg/unit</span></div></div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 pt-2"><button type="button" id="resetBtn" class="min-h-12 rounded-xl border border-slate-300 bg-white px-4 font-bold text-slate-700">Reset</button><button type="submit" class="min-h-12 rounded-xl bg-blue-600 px-4 font-bold text-white">Hitung</button></div>
+              <p class="flex gap-2 text-xs leading-5 text-slate-500"><span class="text-blue-600">ⓘ</span><span>Pastikan satuan dosis tersedia dan dosis yang diminta sama sebelum menghitung.</span></p>
+            </form>
+          </section>
 
-    <button onclick="toggleMenu()" class="p-2 rounded-lg hover:bg-slate-100">
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800 mb-1"></div>
-      <div class="w-5 h-0.5 bg-slate-800"></div>
-    </button>
-
-    <div class="flex items-center gap-2">
-      <img src="192x192.png" class="h-7 w-7 rounded-md" alt="Logo">
-      <span class="text-xs sm:text-sm text-slate-600 font-medium">
-        ZED Kalkulator
-      </span>
-    </div>
-
-  </div>
-
-<div class="relative flex items-center gap-2">
-
-  <a
-    href="kalkulatormanual.html"
-    class="flex items-center gap-1 text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-100 transition"
-    aria-label="Kalkulator Manual"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg"
-         class="w-4 h-4"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="currentColor">
-      <path stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 7h6m-6 4h6m-6 4h2m5 0h.01M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/>
-    </svg>
-  </a>
-
-  <a
-    href="komunitas.html"
-    class="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1.5 rounded-full hover:bg-teal-100 transition"
-  >
-    Diskusi
-  </a>
-        </div>
-      </header>
-
-      <nav class="pos-menu">
-        <a href="index.html" class="pos-menu-btn">
-          <img src="Asset/SP.svg" class="pos-menu-icon" alt="">Syringe Pump
-        </a>
-        <a href="infus.html" class="pos-menu-btn">
-          <img src="Asset/infus.svg" class="pos-menu-icon" alt="">Infus
-        </a>
-        <a href="insulin.html" class="pos-menu-btn">
-          <img src="Asset/insulin.svg" class="pos-menu-icon" alt="">Insulin
-        </a>
-        <a href="kalkulatorpengenceranobat.html" class="pos-menu-btn active">
-          <img src="Asset/Perdarahan.svg" class="pos-menu-icon" alt="">Pengenceran
-        </a>
-      </nav>
-
-    </div>
-
-    <!-- MAIN PANEL -->
-    <main id="konten" class="bg-white shadow-xl border border-slate-200 rounded-2xl p-4 sm:p-6">
-      <h1 class="text-xl sm:text-2xl font-bold mb-1 text-slate-800">Kalkulator Pengenceran Obat</h1>
-      <p class="text-xs sm:text-sm mb-4 text-slate-500 mt-0">
-        Hitung volume yang harus diambil berdasarkan dosis obat yang tersedia, volume pelarut, dan dosis yang diminta.
-      </p>
-
-      <form id="dilutionForm" class="space-y-4">
-        <div class="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label for="doseTotal" class="block text-sm font-medium text-slate-700 mb-1">Dosis total dalam vial/ampul</label>
-            <div class="flex items-center gap-2">
-              <input id="doseTotal" type="number" step="0.01" min="0" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Misal: 1000" />
-              <span class="text-xs text-slate-500 whitespace-nowrap">mg (atau unit)</span>
-            </div>
-          </div>
-
-          <div>
-            <label for="volumeTotal" class="block text-sm font-medium text-slate-700 mb-1">Volume total pelarut</label>
-            <div class="flex items-center gap-2">
-              <input id="volumeTotal" type="number" step="0.01" min="0" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Misal: 10" />
-              <span class="text-xs text-slate-500 whitespace-nowrap">ml</span>
-            </div>
-          </div>
-
-          <div>
-            <label for="doseRequested" class="block text-sm font-medium text-slate-700 mb-1">Dosis yang diminta</label>
-            <div class="flex items-center gap-2">
-              <input id="doseRequested" type="number" step="0.01" min="0" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Misal: 750" />
-              <span class="text-xs text-slate-500 whitespace-nowrap">mg (atau unit)</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap gap-2 mt-2">
-          <button type="submit" class="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-1">
-            Hitung
-          </button>
-          <button type="button" id="resetBtn" class="px-4 py-2 bg-slate-100 text-sm font-medium rounded-lg hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-1">
-            Reset
-          </button>
-          <button type="button" class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1" onclick="printElement('resultContainer')">
-            Print Hasil
-          </button>
-        </div>
-      </form>
-
-      <div id="resultContainer" class="mt-5 border border-teal-200 rounded-xl bg-teal-50/80 p-4 text-sm text-slate-800 print-area">
-        <h2 class="text-base sm:text-lg font-semibold mb-2">Hasil Perhitungan</h2>
-        <div id="resultText" class="text-slate-700">
-          Belum ada perhitungan. Masukkan data di formulir di atas, lalu klik <span class="font-semibold">Hitung</span>.
+          <section id="resultCard" class="result-card card overflow-hidden rounded-2xl print-area">
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4"><h2 class="font-extrabold">Hasil perhitungan</h2><button type="button" class="no-print rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700" onclick="printElement('resultContainer')">Print</button></div>
+            <div id="resultContainer" class="min-h-[260px] p-5 text-sm text-slate-800"><div id="resultText" class="text-slate-400">Belum ada perhitungan. Masukkan data, lalu tekan Hitung.</div></div>
+          </section>
         </div>
       </div>
-    </main>
-
-     <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-4">
-      <nav class="footer-menu">
-        <a href="index.html">Home</a>
-        <a href="komunitas.html">Diskusi</a><a href="profil.html">Profil</a>
-      </nav>
     </div>
-    
-<footer class="mt-8 border-t border-slate-200 bg-slate-50">
-  <div class="py-4 px-4 text-center text-[10px] text-slate-500">
+  </main>
 
-    <div>
-      © 2025–2026 ZED Kalkulator. All Rights Reserved.
-    </div>
+  <nav class="mobile-bottom no-print" aria-label="Navigasi utama mobile">
+    <a href="infus.html"><span class="nav-icon"><img src="Asset/infus.svg" alt=""></span><span>Infus</span></a><a href="insulin.html"><span class="nav-icon"><img src="Asset/insulin.svg" alt=""></span><span>Actrapid</span></a><a href="index.html" class="home-item"><span class="nav-icon"><img src="Asset/SP.svg" alt=""></span><span>Home</span></a><a href="komunitas.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10M7 12h6"/><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-5 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg></span><span>Diskusi</span></a><a href="profil.html"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Akun</span></a>
+  </nav>
 
-    <div class="mt-2 flex flex-wrap justify-center items-center gap-2">
-
-      <a
-        href="https://www.alkespky.store"
-        target="_blank"
-        class="hover:text-teal-600 hover:underline"
-      >
-        Powered by AlkesPKY
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="mailto:mkhoirulzed@gmail.com"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Contact
-      </a>
-
-      <span class="text-slate-300">•</span>
-
-      <a
-        href="/about.html"
-        class="hover:text-blue-500 hover:underline"
-      >
-        Privacy Policy
-      </a>
-
-    </div>
-
-  </div>
-</footer>
-    
-  </div>
-<script src="Asset/pengenceran.js" defer></script>
-<link rel="stylesheet" href="Asset/swipe.css">
-<script src="Asset/swipe.js" defer></script>
+  <script>
+    const sideMenu=document.getElementById('sideMenu');const backdrop=document.getElementById('backdrop');
+    function closeMenu(){sideMenu.classList.remove('open');backdrop.classList.add('hidden');document.body.style.overflow=''}
+    function openMenu(){if(!matchMedia('(max-width:899px)').matches)return;sideMenu.classList.add('open');backdrop.classList.remove('hidden');document.body.style.overflow='hidden'}
+    document.getElementById('openMenuBtn').addEventListener('click',openMenu);document.getElementById('closeMenuBtn').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);window.addEventListener('resize',()=>{if(innerWidth>=900)closeMenu()});
+    document.getElementById('dilutionForm').addEventListener('submit',()=>setTimeout(()=>{const text=document.getElementById('resultText').textContent.trim();if(text&&!/belum ada|tidak valid|masukkan|harus/i.test(text))document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'})},100));
+  </script>
+  <script src="Asset/pengenceran.js" defer></script>
 </body>
 </html>
