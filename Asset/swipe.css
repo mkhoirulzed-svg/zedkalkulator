@@ -41,41 +41,4 @@ body {
   body {
     overflow-y: auto !important;
   }
-
-  /*
-   * Perbaikan tahap pertama khusus index.html.
-   * Index dikenali dari tautan Syringe Pump yang aktif pada drawer mobile.
-   * Drawer mobile yang sudah berisi menu lengkap dipakai sebagai sidebar desktop,
-   * sedangkan sidebar desktop lama disembunyikan tanpa mengubah HTML kalkulator.
-   */
-  body:has(#sideMenu a[href="index.html"].active) .desktop-aside {
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  body:has(#sideMenu a[href="index.html"].active) #sideMenu {
-    display: block !important;
-    position: fixed !important;
-    inset: 28px auto auto max(28px, calc((100vw - 1180px) / 2)) !important;
-    width: 250px !important;
-    max-width: 250px !important;
-    max-height: calc(100vh - 56px) !important;
-    overflow-y: auto !important;
-    transform: translateX(0) !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 1rem !important;
-    background: #fff !important;
-    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06) !important;
-    z-index: 20 !important;
-  }
-
-  body:has(#sideMenu a[href="index.html"].active) #sideMenu > div:first-child {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 1 !important;
-  }
-
-  body:has(#sideMenu a[href="index.html"].active) #sideMenu > div:first-child button {
-    display: none !important;
-  }
 }
