@@ -30,11 +30,45 @@ body {
   transform: translateX(100%);
 }
 
-/* Sidebar geser dan navigasi bawah hanya untuk mode mobile. */
+/*
+ * Desktop memakai daftar menu lengkap dari drawer mobile.
+ * Kolom .desktop-aside tetap dipertahankan sebagai ruang layout agar
+ * struktur setiap halaman tidak perlu dirombak saat masih tahap pembangunan.
+ */
 @media (min-width: 900px) {
-  #sideMenu,
   #backdrop,
   .zed-mobile-bottom {
+    display: none !important;
+  }
+
+  .desktop-aside {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #sideMenu {
+    display: block !important;
+    position: fixed !important;
+    inset: 28px auto auto max(28px, calc((100vw - 1180px) / 2)) !important;
+    width: 250px !important;
+    max-width: 250px !important;
+    max-height: calc(100vh - 56px) !important;
+    overflow-y: auto !important;
+    transform: translateX(0) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 1rem !important;
+    background: #fff !important;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06) !important;
+    z-index: 20 !important;
+  }
+
+  #sideMenu > div:first-child {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+  }
+
+  #sideMenu > div:first-child button {
     display: none !important;
   }
 
