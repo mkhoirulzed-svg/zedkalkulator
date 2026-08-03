@@ -30,23 +30,30 @@ body {
   transform: translateX(100%);
 }
 
-/*
- * Desktop memakai daftar menu lengkap dari drawer mobile.
- * Kolom .desktop-aside tetap dipertahankan sebagai ruang layout agar
- * struktur setiap halaman tidak perlu dirombak saat masih tahap pembangunan.
- */
+/* Sidebar geser dan navigasi bawah hanya untuk mode mobile. */
 @media (min-width: 900px) {
+  #sideMenu,
   #backdrop,
   .zed-mobile-bottom {
     display: none !important;
   }
 
-  .desktop-aside {
+  body {
+    overflow-y: auto !important;
+  }
+
+  /*
+   * Perbaikan tahap pertama khusus index.html.
+   * Index dikenali dari tautan Syringe Pump yang aktif pada drawer mobile.
+   * Drawer mobile yang sudah berisi menu lengkap dipakai sebagai sidebar desktop,
+   * sedangkan sidebar desktop lama disembunyikan tanpa mengubah HTML kalkulator.
+   */
+  body:has(#sideMenu a[href="index.html"].active) .desktop-aside {
     visibility: hidden !important;
     pointer-events: none !important;
   }
 
-  #sideMenu {
+  body:has(#sideMenu a[href="index.html"].active) #sideMenu {
     display: block !important;
     position: fixed !important;
     inset: 28px auto auto max(28px, calc((100vw - 1180px) / 2)) !important;
@@ -62,17 +69,13 @@ body {
     z-index: 20 !important;
   }
 
-  #sideMenu > div:first-child {
+  body:has(#sideMenu a[href="index.html"].active) #sideMenu > div:first-child {
     position: sticky !important;
     top: 0 !important;
     z-index: 1 !important;
   }
 
-  #sideMenu > div:first-child button {
+  body:has(#sideMenu a[href="index.html"].active) #sideMenu > div:first-child button {
     display: none !important;
-  }
-
-  body {
-    overflow-y: auto !important;
   }
 }
