@@ -1,4 +1,4 @@
-const CACHE_NAME = "zedkalkulator-v7";
+const CACHE_NAME = "zedkalkulator-v8";
 
 const FILES_TO_CACHE = [
   "/",
