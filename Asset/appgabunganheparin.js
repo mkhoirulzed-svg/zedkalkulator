@@ -112,7 +112,6 @@ function updateHeparinDoseUnit(){
 function isNoWeightDrug(drug){ return NO_WEIGHT_DRUGS.includes(drug); }
 
 const BB_DOSE_META = {
-  Heparin: { unit: "IU/kgBB/jam", formula: "iu_per_kg_hour", example: "Contoh: 18" },
   NE: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,05" },
   Adrenalin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,1" },
   Dopamin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 5" },
@@ -528,6 +527,7 @@ function setDefaultConcNoBB(){
   el("doseInput").value = "";
   const heparinMode = el("heparinDoseMode");
   const heparinModeWrap = el("heparinDoseModeWrap");
+  if(heparinMode) heparinMode.value = "hour";
   if(heparinModeWrap) heparinModeWrap.classList.toggle("hidden", d !== "Heparin");
   if(d === "NTG") el("doseUnit").textContent = "mcg/menit";
   else if(d === "Heparin") el("doseUnit").textContent = heparinMode?.value === "day" ? "IU/24 jam" : "IU/jam";
