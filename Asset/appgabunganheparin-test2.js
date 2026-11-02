@@ -3,8 +3,8 @@
 // BB + Non BB dalam 1 halaman
 // ===============================
 
-const NO_WEIGHT_DRUGS = ["NTG", "PPI", "Furosemide", "Lansoprazole", "Heparin"];
-const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB"];
+const NO_WEIGHT_DRUGS = ["NTG", "PPI", "Furosemide", "Lansoprazole", "Heparin_NoBB"];
+const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB", "Heparin"];
 
 function el(id){ return document.getElementById(id); }
 
@@ -26,11 +26,12 @@ const DRUG_SEARCH_ITEMS = [
   { value: "Nicardipin", label: "Nicardipin", aliases: ["nicardipin", "nicardipine", "cardene"] },
   { value: "Herbeser", label: "Herbeser", aliases: ["herbeser", "diltiazem"] },
   { value: "NTG_BB", label: "NTG (dengan BB)", aliases: ["ntg dengan bb", "nitrogliserin bb", "nitroglycerin bb"] },
+  {value: "Heparin",label: "Heparin",aliases: ["heparin dengan bb", "heparin berdasarkan berat badan"]},
+  {value: "Heparin_NoBB",label: "Heparin (tanpa BB)",aliases: ["heparin tanpa bb", "heparin iu jam", "heparin iu 24 jam"]},
   { value: "NTG", label: "NTG (tanpa BB)", aliases: ["ntg tanpa bb", "ntg", "nitrogliserin", "nitroglycerin"] },
   { value: "PPI", label: "OMZ / Panto", aliases: ["ppi", "omz", "omeprazole", "omeprazol", "panto", "pantoprazole", "pantoprazol"] },
   { value: "Furosemide", label: "Furosemide", aliases: ["furosemide", "furosemid", "lasix"] },
-  { value: "Lansoprazole", label: "Lansoprazole", aliases: ["lansoprazole", "lansoprazol"] },
-  { value: "Heparin", label: "Heparin (tanpa BB)", aliases: ["heparin", "heparin tanpa bb"] }
+  { value: "Lansoprazole", label: "Lansoprazole", aliases: ["lansoprazole", "lansoprazol"] }
 ];
 
 function normalizeDrugText(text){
@@ -103,7 +104,7 @@ function initDrugSearch(){
 
 function selectedDrug(){ return el("drugSelect").value; }
 function updateHeparinDoseUnit(){
-  if(selectedDrug() !== "Heparin") return;
+  if(selectedDrug() !== "Heparin_NoBB") return;
   const mode = el("heparinDoseMode")?.value || "hour";
   el("doseUnit").textContent = mode === "day" ? "IU/24 jam" : "IU/jam";
   el("doseInput").placeholder = mode === "day" ? "Contoh: 18.000" : "Contoh: 750";
@@ -111,6 +112,7 @@ function updateHeparinDoseUnit(){
 function isNoWeightDrug(drug){ return NO_WEIGHT_DRUGS.includes(drug); }
 
 const BB_DOSE_META = {
+  Heparin: { unit: "IU/kgBB/jam", formula: "iu_per_kg_hour", example: "Contoh: 18" },
   NE: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,05" },
   Adrenalin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 0,1" },
   Dopamin: { unit: "mcg/kgBB/menit", formula: "mcg_per_kg_min", example: "Contoh: 5" },
@@ -524,15 +526,16 @@ function setDefaultConcNoBB(){
   const d = selectedDrug();
   const label = el("ppiLabel");
   el("doseInput").value = "";
-  const heparinMode = el("heparinDoseMode");
+
   const heparinModeWrap = el("heparinDoseModeWrap");
+  const heparinMode = el("heparinDoseMode");
+  if(heparinModeWrap) heparinModeWrap.classList.toggle("hidden", d !== "Heparin_NoBB");
   if(heparinMode) heparinMode.value = "hour";
-  if(heparinModeWrap) heparinModeWrap.classList.toggle("hidden", d !== "Heparin");
   if(d === "NTG") el("doseUnit").textContent = "mcg/menit";
-  else if(d === "Heparin") el("doseUnit").textContent = "IU/jam";
+  else if(d === "Heparin_NoBB") el("doseUnit").textContent = "IU/jam";
   else el("doseUnit").textContent = "mg/jam";
 
-  if(d === "Heparin"){
+  if(d === "Heparin_NoBB"){
     el("concWrapperPPI").classList.remove("hidden");
     label.textContent = "Konsentrasi Heparin";
     el("ppiConc").innerHTML = '<option value="500">25.000 IU/50 ml (500 IU/ml)</option>' + '<option value="1000">50.000 IU/50 ml (1.000 IU/ml)</option>';
@@ -571,7 +574,7 @@ function setDefaultConcNoBB(){
 function getActiveConcentrationNoBB(){
   const d = selectedDrug();
 
-  if(d === "Heparin"){
+  if(d === "Heparin_NoBB"){
     if(!el("ppiConc").classList.contains("hidden")) return parseFloat(el("ppiConc").value);
     const iu = parseFloat(el("ppiCustomDose").value);
     const ml = parseFloat(el("ppiCustomVolume").value);
@@ -609,7 +612,7 @@ function calculateNoBB(){
   let html = `<h3 class='font-semibold'>${d}</h3><p>Konsentrasi: ${c.toFixed(1)} mcg/ml</p><hr class='my-2'>`;
   const customDose = parseFloat(el("doseInput").value);
 
-  if(d === "Heparin"){
+  if(d === "Heparin_NoBB"){
     if(!Number.isFinite(customDose) || customDose <= 0){
       result.innerHTML = "<p class='text-amber-700'>Masukkan dosis Heparin dalam IU/jam atau IU/24 jam untuk menghitung kecepatan.</p>";
       return;
@@ -620,7 +623,7 @@ function calculateNoBB(){
     const mlPerHour = iuPerHour / c;
     const mlPer24h = mlPerHour * 24;
     const doseLabel = mode === "day" ? `${customDose.toLocaleString("id-ID")} IU/24 jam` : `${customDose.toLocaleString("id-ID")} IU/jam`;
-    result.innerHTML = `<h3 class="font-semibold mb-1">Heparin</h3><p class="text-xs">Dosis input: <b>${doseLabel}</b></p><p class="text-xs">Konsentrasi: <b>${c.toLocaleString("id-ID")} IU/ml</b></p><hr class="my-2"><div class="rounded-xl bg-blue-50 p-4 space-y-2"><div><p class="text-xs font-bold uppercase tracking-wider text-blue-600">Kecepatan syringe pump</p><p class="text-2xl font-bold text-blue-700">${mlPerHour.toFixed(2)} ml/jam</p></div><div class="grid grid-cols-2 gap-3 border-t border-blue-100 pt-2"><div><p class="text-xs text-slate-500">Dosis per jam</p><p class="font-bold">${iuPerHour.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div><div><p class="text-xs text-slate-500">Dosis per 24 jam</p><p class="font-bold">${iuPer24h.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div><div><p class="text-xs text-slate-500">Volume per 24 jam</p><p class="font-bold">${mlPer24h.toFixed(2)} ml</p></div></div></div><p class="mt-3 text-xs leading-5 text-slate-500">Kalkulator hanya mengonversi dosis dan konsentrasi, bukan menentukan dosis terapi. Verifikasi instruksi, konsentrasi akhir, dan protokol rumah sakit.</p>`;
+    result.innerHTML = `<h3 class="font-semibold mb-1">Heparin (tanpa BB)</h3><p class="text-xs">Dosis input: <b>${doseLabel}</b></p><p class="text-xs">Konsentrasi: <b>${c.toLocaleString("id-ID")} IU/ml</b></p><hr class="my-2"><div class="rounded-xl bg-blue-50 p-4 space-y-2"><div><p class="text-xs font-bold uppercase tracking-wider text-blue-600">Kecepatan syringe pump</p><p class="text-2xl font-bold text-blue-700">${mlPerHour.toFixed(2)} ml/jam</p></div><div class="grid grid-cols-2 gap-3 border-t border-blue-100 pt-2"><div><p class="text-xs text-slate-500">Dosis per jam</p><p class="font-bold">${iuPerHour.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div><div><p class="text-xs text-slate-500">Dosis per 24 jam</p><p class="font-bold">${iuPer24h.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div><div><p class="text-xs text-slate-500">Volume per 24 jam</p><p class="font-bold">${mlPer24h.toFixed(2)} ml</p></div></div></div><p class="mt-3 text-xs leading-5 text-slate-500">Kalkulator hanya mengonversi dosis dan konsentrasi, bukan menentukan dosis terapi. Verifikasi instruksi, konsentrasi akhir, dan protokol rumah sakit.</p>`;
     return;
   }
 
