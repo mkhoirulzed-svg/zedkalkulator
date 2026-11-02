@@ -317,6 +317,7 @@
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Nicardipin" data-label="Nicardipin">Nicardipin</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Herbeser" data-label="Herbeser">Herbeser</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="NTG_BB" data-label="NTG (dengan BB)">NTG (dengan BB)</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin">Heparin</button>
               
               <div class="px-3 py-2 text-xs font-semibold text-slate-500 bg-slate-50 border-t border-b border-slate-100 sticky top-[45px]">
                 Tanpa Berat Badan
@@ -326,7 +327,7 @@
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="PPI" data-label="OMZ / Panto">OMZ / Panto</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Furosemide" data-label="Furosemide">Furosemide</button>
               <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Lansoprazole" data-label="Lansoprazole">Lansoprazole</button>
-              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin" data-label="Heparin (tanpa BB)">Heparin (tanpa BB)</button>
+              <button type="button" class="drug-option w-full text-left px-3 py-2 text-sm hover:bg-blue-50" data-value="Heparin_NoBB" data-label="Heparin (tanpa BB)">Heparin (tanpa BB)</button>
 
               <div id="drugEmptyState" class="hidden px-3 py-3 text-sm text-slate-500">
                 Obat tidak ditemukan.
@@ -342,19 +343,47 @@
           <label class="text-sm font-medium text-slate-700">Berat badan (kg)</label>
           <input id="weightInput" type="number" min="1" class="w-full rounded-lg border px-3 py-2 shadow-sm" placeholder="contoh: 60" />
         </div>
-<div id="doseWrapperNoBB" class="hidden space-y-2">
-          <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis</label>
-          <div id="heparinDoseModeWrap" class="hidden">
-            <select id="heparinDoseMode" class="w-full rounded-lg border px-3 py-2 text-sm" onchange="updateHeparinDoseUnit()">
-              <option value="hour">Masukkan dosis per jam (IU/jam)</option>
-              <option value="day">Masukkan dosis per 24 jam (IU/24 jam)</option>
-            </select>
-          </div>
+<div id="doseWrapperHeparin" class="hidden space-y-1">
+  <label class="text-sm font-medium text-slate-700">Dosis Heparin custom</label>
+
+  <div class="flex items-center gap-2">
+    <input
+      id="doseInputHeparin"
+      type="number"
+      step="0.01"
+      min="0"
+      placeholder="Contoh: 18"
+      class="w-full rounded-lg border px-3 py-2 shadow-sm"
+    />
+
+    <span class="text-xs text-slate-600 whitespace-nowrap">
+      IU/kgBB/jam
+    </span>
+  </div>
+
+  <p class="text-[11px] text-slate-400">
+    Opsional. Kosongkan jika ingin melihat tabel standar.
+  </p>
+</div>
+        <div id="doseWrapperNoBB" class="hidden">
+          <div id="heparinDoseModeWrap" class="hidden mb-2"><label class="mb-1 block text-sm font-medium text-slate-700">Mode input dosis Heparin</label><select id="heparinDoseMode" class="w-full rounded-lg border px-3 py-2 text-sm" onchange="updateHeparinDoseUnit()"><option value="hour">Dosis per jam (IU/jam)</option><option value="day">Dosis per 24 jam (IU/24 jam)</option></select></div>
+          <label for="doseInput" class="text-sm font-medium text-slate-700">Dosis (opsional)</label>
           <div class="mt-1 flex items-center gap-2">
-            <input type="number" id="doseInput" step="any" min="0" placeholder="Masukkan dosis" class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border" />
+            <input type="number" id="doseInput" step="0.01" min="0" placeholder="Contoh: 20" class="w-full px-3 py-2 rounded-lg border-slate-300 text-sm shadow-sm border" />
             <span id="doseUnit" class="text-xs text-slate-600 whitespace-nowrap">mg/jam</span>
           </div>
+          <p class="mt-1 text-[11px] text-slate-400">Kosongkan jika ingin melihat tabel dosis standar.</p>
         </div>
+
+        <div id="concWrapperNE" class="hidden space-y-1">
+          <label class="text-sm font-medium text-slate-700">Konsentrasi Norepinefrin</label>
+          <div class="flex gap-2">
+            <select id="neConc" class="flex-1 mt-1 block rounded-lg border px-3 py-2 text-sm shadow-sm">
+              <option value="80">1 ampul (4 mg/50 ml)</option>
+              <option value="160">2 ampul (8 mg/50 ml)</option>
+            </select>
+            <button id="neToggleBtn" type="button" onclick="toggleNEMode()" class="border rounded-lg px-3 py-2 text-xs">Custom</button>
+          </div>
           <div id="neCustomWrapper" class="hidden">
             <div class="grid grid-cols-2 gap-2 mt-2">
               <input id="neCustomDose" type="number" placeholder="mg" class="rounded-lg border px-3 py-2 text-sm" />
