@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>Uji Coba Heparin Tanpa BB | ZED Kalkulator</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+*{box-sizing:border-box}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.field{width:100%;min-height:46px;border:1px solid #cbd5e1;border-radius:12px;padding:10px 12px;background:white}
+.field:focus{outline:3px solid #0d948822;border-color:#0f766e}
+.result-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed #cbd5e1}
+.result-row strong{text-align:right}
+</style>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900 p-3 sm:p-6">
+<main class="mx-auto max-w-xl space-y-4">
+<header class="rounded-2xl bg-white p-5 shadow-sm border border-slate-200">
+<p class="text-xs font-bold uppercase tracking-widest text-teal-700">ZED Kalkulator · halaman staging</p>
+<h1 class="mt-1 text-2xl font-extrabold">Heparin tanpa berat badan</h1>
+<p class="mt-2 text-sm text-slate-600">Halaman uji coba terpisah. Tidak mengubah kalkulator produksi.</p>
+</header>
+
+<section class="rounded-2xl bg-white p-5 shadow-sm border border-slate-200 space-y-4">
+<div>
+<label for="concentration" class="mb-2 block text-sm font-bold">Konsentrasi pengenceran</label>
+<select id="concentration" class="field">
+<option value="500">25.000 IU / 50 ml (500 IU/ml)</option>
+<option value="1000">50.000 IU / 50 ml (1.000 IU/ml)</option>
+<option value="custom">Custom</option>
+</select>
+</div>
+<div id="customFields" class="hidden grid grid-cols-2 gap-3">
+<div><label for="totalIU" class="mb-2 block text-sm font-semibold">Total Heparin (IU)</label><input id="totalIU" class="field" type="number" min="1" step="any" placeholder="Contoh: 25000"></div>
+<div><label for="totalML" class="mb-2 block text-sm font-semibold">Volume akhir (ml)</label><input id="totalML" class="field" type="number" min="0.01" step="any" placeholder="Contoh: 50"></div>
+</div>
+<div>
+<label class="mb-2 block text-sm font-bold">Satuan dosis yang diresepkan</label>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 rounded-xl border border-slate-200 p-3 text-sm"><input type="radio" name="doseMode" value="hour" checked> IU/jam</label>
+<label class="flex items-center gap-2 rounded-xl border border-slate-200 p-3 text-sm"><input type="radio" name="doseMode" value="day"> IU/24 jam</label>
+</div>
+</div>
+<div>
+<label id="doseLabel" for="dose" class="mb-2 block text-sm font-bold">Dosis sesuai instruksi (IU/jam)</label>
+<input id="dose" class="field" type="number" min="0.000001" step="any" inputmode="decimal" placeholder="Masukkan dosis yang diresepkan">
+<p class="mt-1 text-xs text-slate-500">Masukkan dosis sesuai instruksi klinis; halaman ini hanya mengonversi dosis ke laju syringe pump.</p>
+</div>
+<button id="calculate" class="w-full rounded-xl bg-teal-700 px-4 py-3 font-bold text-white hover:bg-teal-800">Hitung</button>
+</section>
+
+<section class="rounded-2xl bg-white p-5 shadow-sm border border-slate-200">
+<h2 class="font-extrabold">Hasil perhitungan</h2>
+<div id="result" class="mt-3 text-sm text-slate-500">Hasil akan tampil setelah tombol Hitung ditekan.</div>
+</section>
+<section class="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-xs leading-5 text-amber-950">
+<strong>Catatan keselamatan:</strong> Ini alat konversi matematis, bukan penentu dosis atau pengganti protokol. Pastikan dosis, konsentrasi akhir, kompatibilitas, dan satuan diverifikasi dengan instruksi dokter, protap rumah sakit, serta pemeriksaan independen sebelum pemberian. Jangan menggunakan angka contoh sebagai rekomendasi dosis pasien.
+</section>
+<footer class="pb-4 text-center text-xs text-slate-500">STAGING / UJI COBA — bukan halaman produksi</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const concentration = $('concentration');
+const customFields = $('customFields');
+const doseLabel = $('doseLabel');
+const result = $('result');
+
+concentration.addEventListener('change', () => {
+  customFields.classList.toggle('hidden', concentration.value !== 'custom');
+  result.textContent = 'Pengaturan berubah. Hitung kembali untuk memperbarui hasil.';
+});
+document.querySelectorAll('input[name="doseMode"]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const mode = document.querySelector('input[name="doseMode"]:checked').value;
+    doseLabel.textContent = mode === 'hour' ? 'Dosis sesuai instruksi (IU/jam)' : 'Dosis sesuai instruksi (IU/24 jam)';
+    $('dose').placeholder = mode === 'hour' ? 'Masukkan dosis IU per jam' : 'Masukkan dosis total IU per 24 jam';
+    result.textContent = 'Satuan dosis berubah. Hitung kembali untuk memperbarui hasil.';
+  });
+});
+
+function fmt(value, digits=2) {
+  return Number(value).toLocaleString('id-ID', {minimumFractionDigits:digits, maximumFractionDigits:digits});
+}
+$('calculate').addEventListener('click', () => {
+  const mode = document.querySelector('input[name="doseMode"]:checked').value;
+  const dose = Number($('dose').value);
+  let conc = Number(concentration.value);
+  let concDescription = concentration.options[concentration.selectedIndex].text;
+
+  if (concentration.value === 'custom') {
+    const iu = Number($('totalIU').value);
+    const ml = Number($('totalML').value);
+    if (!(iu > 0) || !(ml > 0)) {
+      result.innerHTML = '<p class="text-red-600">Isi total IU dan volume akhir custom dengan angka lebih dari nol.</p>';
+      return;
+    }
+    conc = iu / ml;
+    concDescription = fmt(iu,0) + ' IU / ' + fmt(ml,2) + ' ml';
+  }
+  if (!(conc > 0) || !Number.isFinite(conc)) {
+    result.innerHTML = '<p class="text-red-600">Konsentrasi tidak valid.</p>';
+    return;
+  }
+  if (!(dose > 0) || !Number.isFinite(dose)) {
+    result.innerHTML = '<p class="text-red-600">Masukkan dosis lebih dari nol.</p>';
+    return;
+  }
+
+  const iuPerHour = mode === 'hour' ? dose : dose / 24;
+  const iuPer24h = iuPerHour * 24;
+  const mlPerHour = iuPerHour / conc;
+  const mlPer24h = mlPerHour * 24;
+  const doseDescription = mode === 'hour' ? fmt(dose,2) + ' IU/jam' : fmt(dose,2) + ' IU/24 jam';
+
+  result.innerHTML = `
+    <p class="text-xs text-slate-500">Konsentrasi: <strong>${concDescription}</strong></p>
+    <p class="text-xs text-slate-500 mt-1">Dosis input: <strong>${doseDescription}</strong> · Konsentrasi terhitung: <strong>${fmt(conc,2)} IU/ml</strong></p>
+    <div class="my-4 rounded-xl bg-teal-50 p-4">
+      <p class="text-xs font-bold uppercase tracking-wider text-teal-800">Kecepatan syringe pump</p>
+      <p class="mt-1 text-3xl font-extrabold text-teal-800">${fmt(mlPerHour,3)} ml/jam</p>
+    </div>
+    <div class="space-y-1">
+      <div class="result-row"><span>Dosis per jam</span><strong>${fmt(iuPerHour,2)} IU/jam</strong></div>
+      <div class="result-row"><span>Total dosis 24 jam</span><strong>${fmt(iuPer24h,2)} IU</strong></div>
+      <div class="result-row"><span>Total volume 24 jam</span><strong>${fmt(mlPer24h,3)} ml</strong></div>
+    </div>
+    <p class="mt-3 text-xs text-slate-500">Rumus: IU/jam ÷ konsentrasi (IU/ml) = ml/jam. Total 24 jam dihitung dengan asumsi laju konstan selama 24 jam.</p>
+  `;
+});
+</script>
+</body>
+</html>
