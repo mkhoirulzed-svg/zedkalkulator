@@ -3,8 +3,8 @@
 // BB + Non BB dalam 1 halaman
 // ===============================
 
-const NO_WEIGHT_DRUGS = ["NTG", "PPI", "Furosemide", "Lansoprazole"];
-const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB", "Heparin"];
+const NO_WEIGHT_DRUGS = ["NTG", "PPI", "Furosemide", "Lansoprazole", "Heparin"];
+const BB_DRUGS = ["NE", "Adrenalin", "Dopamin", "Dobutamin", "Milrinone", "Nicardipin", "Herbeser", "NTG_BB"];
 
 function el(id){ return document.getElementById(id); }
 
@@ -26,11 +26,11 @@ const DRUG_SEARCH_ITEMS = [
   { value: "Nicardipin", label: "Nicardipin", aliases: ["nicardipin", "nicardipine", "cardene"] },
   { value: "Herbeser", label: "Herbeser", aliases: ["herbeser", "diltiazem"] },
   { value: "NTG_BB", label: "NTG (dengan BB)", aliases: ["ntg dengan bb", "nitrogliserin bb", "nitroglycerin bb"] },
-  {value: "Heparin",label: "Heparin",aliases: ["heparin"]},
   { value: "NTG", label: "NTG (tanpa BB)", aliases: ["ntg tanpa bb", "ntg", "nitrogliserin", "nitroglycerin"] },
   { value: "PPI", label: "OMZ / Panto", aliases: ["ppi", "omz", "omeprazole", "omeprazol", "panto", "pantoprazole", "pantoprazol"] },
   { value: "Furosemide", label: "Furosemide", aliases: ["furosemide", "furosemid", "lasix"] },
-  { value: "Lansoprazole", label: "Lansoprazole", aliases: ["lansoprazole", "lansoprazol"] }
+  { value: "Lansoprazole", label: "Lansoprazole", aliases: ["lansoprazole", "lansoprazol"] },
+  { value: "Heparin", label: "Heparin (tanpa BB)", aliases: ["heparin", "heparin tanpa bb"] }
 ];
 
 function normalizeDrugText(text){
@@ -102,6 +102,13 @@ function initDrugSearch(){
 }
 
 function selectedDrug(){ return el("drugSelect").value; }
+
+function updateHeparinDoseUnit(){
+  if(selectedDrug() !== "Heparin") return;
+  const mode = el("heparinDoseMode")?.value || "hour";
+  el("doseUnit").textContent = mode === "day" ? "IU/24 jam" : "IU/jam";
+  el("doseInput").placeholder = mode === "day" ? "Contoh: 18.000" : "Contoh: 750";
+}
 function isNoWeightDrug(drug){ return NO_WEIGHT_DRUGS.includes(drug); }
 
 const BB_DOSE_META = {
@@ -519,9 +526,21 @@ function setDefaultConcNoBB(){
   const d = selectedDrug();
   const label = el("ppiLabel");
   el("doseInput").value = "";
-
+  const heparinMode = el("heparinDoseMode");
+  const heparinModeWrap = el("heparinDoseModeWrap");
+  if(heparinModeWrap) heparinModeWrap.classList.toggle("hidden", d !== "Heparin");
   if(d === "NTG") el("doseUnit").textContent = "mcg/menit";
+  else if(d === "Heparin") el("doseUnit").textContent = heparinMode?.value === "day" ? "IU/24 jam" : "IU/jam";
   else el("doseUnit").textContent = "mg/jam";
+
+  if(d === "Heparin"){
+    el("concWrapperPPI").classList.remove("hidden");
+    label.textContent = "Konsentrasi Heparin";
+    el("ppiConc").innerHTML = '<option value="500">25.000 IU/50 ml (500 IU/ml)</option>' +
+      '<option value="1000">50.000 IU/50 ml (1.000 IU/ml)</option>';
+    el("ppiCustomDose").placeholder = "Jumlah Heparin (IU)";
+    el("ppiCustomVolume").placeholder = "Volume akhir (ml)";
+  }
 
   if(d === "NTG"){
     el("concWrapperPPI").classList.remove("hidden");
@@ -554,6 +573,14 @@ function setDefaultConcNoBB(){
 function getActiveConcentrationNoBB(){
   const d = selectedDrug();
 
+  if(d === "Heparin"){
+    if(!el("ppiConc").classList.contains("hidden")) return parseFloat(el("ppiConc").value);
+    const iu = parseFloat(el("ppiCustomDose").value);
+    const ml = parseFloat(el("ppiCustomVolume").value);
+    if(!Number.isFinite(iu) || !Number.isFinite(ml) || iu <= 0 || ml <= 0) return NaN;
+    return iu / ml;
+  }
+
   if(d === "Furosemide"){
     if(!el("furoConcPreset").classList.contains("hidden")) return parseFloat(el("furoConcPreset").value);
 
@@ -581,8 +608,37 @@ function calculateNoBB(){
     return;
   }
 
-  let html = `<h3 class='font-semibold'>${d}</h3><p>Konsentrasi: ${c.toFixed(1)} mcg/ml</p><hr class='my-2'>`;
   const customDose = parseFloat(el("doseInput").value);
+
+  if(d === "Heparin"){
+    if(!Number.isFinite(customDose) || customDose <= 0){
+      result.innerHTML = "<p class='text-amber-700'>Masukkan dosis Heparin dalam IU/jam atau IU/24 jam untuk menghitung kecepatan.</p>";
+      return;
+    }
+    const mode = el("heparinDoseMode")?.value || "hour";
+    const iuPerHour = mode === "day" ? customDose / 24 : customDose;
+    const iuPer24h = iuPerHour * 24;
+    const mlPerHour = iuPerHour / c;
+    const mlPer24h = mlPerHour * 24;
+    const doseLabel = mode === "day" ? `${customDose.toLocaleString("id-ID")} IU/24 jam` : `${customDose.toLocaleString("id-ID")} IU/jam`;
+    result.innerHTML = `
+      <h3 class="font-semibold mb-1">Heparin</h3>
+      <p class="text-xs">Dosis input: <b>${doseLabel}</b></p>
+      <p class="text-xs">Konsentrasi: <b>${c.toLocaleString("id-ID")} IU/ml</b></p>
+      <hr class="my-2">
+      <div class="rounded-xl bg-blue-50 p-4 space-y-2">
+        <div><p class="text-xs font-bold uppercase tracking-wider text-blue-600">Kecepatan syringe pump</p><p class="text-2xl font-bold text-blue-700">${mlPerHour.toFixed(2)} ml/jam</p></div>
+        <div class="grid grid-cols-2 gap-3 border-t border-blue-100 pt-2">
+          <div><p class="text-xs text-slate-500">Dosis per jam</p><p class="font-bold">${iuPerHour.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div>
+          <div><p class="text-xs text-slate-500">Dosis per 24 jam</p><p class="font-bold">${iuPer24h.toLocaleString("id-ID", {maximumFractionDigits:2})} IU</p></div>
+          <div><p class="text-xs text-slate-500">Volume per 24 jam</p><p class="font-bold">${mlPer24h.toFixed(2)} ml</p></div>
+        </div>
+      </div>
+      <p class="mt-3 text-xs leading-5 text-slate-500">Kalkulator hanya mengonversi dosis dan konsentrasi, bukan menentukan dosis terapi. Verifikasi instruksi, konsentrasi akhir, dan protokol rumah sakit.</p>`;
+    return;
+  }
+
+  let html = `<h3 class='font-semibold'>${d}</h3><p>Konsentrasi: ${c.toFixed(1)} mcg/ml</p><hr class='my-2'>`;
 
   if(!isNaN(customDose) && customDose > 0){
     let mlH, label;
